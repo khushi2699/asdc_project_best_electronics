@@ -8,5 +8,10 @@ public class BestElectronicsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BestElectronicsApplication.class, args);
+		System.out.println(firstMethod());
+	}
+
+	public static String firstMethod() {
+		return "Best Electronics";
 	}
 }
