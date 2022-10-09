@@ -1,0 +1,62 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  image: maven:latest
+  tags:
+    - ugrad
+  script:
+    - echo "Building the pipeline"
+    - mvn clean package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - target/group4-0.0.1-SNAPSHOT.jar
+
+test:
+  stage: test
+  image: maven:latest
+  tags:
+    - ugrad
+  script:
+    - echo "Pipeline test started"
+    - mvn verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/group4/TEST_*.xml
+
+deploy_develop:
+  stage: deploy
+  image: ruby:latest
+  tags:
+    - dalfcs_gitlab_docker_ci
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=$HEROKU_DEV_API_KEY
+  artifacts:
+    paths:
+      - target
+  only:
+    - develop
+
+deploy_main:
+  stage: deploy
+  image: ruby:latest
+  tags:
+    - dalfcs_gitlab_docker_ci
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+  artifacts:
+    paths:
+      - target
+  only:
+    - main
