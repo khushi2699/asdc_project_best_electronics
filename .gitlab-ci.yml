@@ -25,7 +25,7 @@ test:
     - mvn verify
   artifacts:
     paths:
-      - target/TEST_*.xml
+      - target
 
 deploy_develop:
   stage: deploy
