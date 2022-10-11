@@ -24,10 +24,8 @@ test:
     - echo "Pipeline test started"
     - mvn verify
   artifacts:
-    when: always
-    reports:
-      junit:
-        - target/group4/TEST_*.xml
+    paths:
+      - target
 
 deploy_develop:
   stage: deploy
