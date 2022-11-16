@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.bestelectonics</groupId>
+  <artifactId>BestElectronics</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>BestElectronics</name>
+  <description>maven project to build application for best electronics</description>
+  
+  
+  <modules>
+  <module>BestElectronicsCommon</module>
+  <module>BestElectronicsWebParent </module>
+  </modules>
+  
+</project>
