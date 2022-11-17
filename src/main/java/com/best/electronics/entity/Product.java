@@ -2,12 +2,12 @@ package com.best.electronics.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
+
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+
 import java.io.Serializable;
 
 @Entity

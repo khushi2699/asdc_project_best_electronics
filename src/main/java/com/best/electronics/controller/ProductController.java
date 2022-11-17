@@ -13,6 +13,11 @@ import java.util.List;
 public class ProductController {
 
     @Autowired private ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping("/products")
     public String products(Model model){
         List<Product> listProducts = productService.listAll();
