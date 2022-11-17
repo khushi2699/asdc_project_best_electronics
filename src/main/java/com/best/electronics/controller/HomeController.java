@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class HomeController {
 
-    @GetMapping("/welcome")
+    @GetMapping("/home")
     public String homePage(Model model){
         model.addAttribute("message", "Hello World!");
         return "welcome";
