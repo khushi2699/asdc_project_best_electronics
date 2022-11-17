@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head> 
-<meta charset="ISO-8859-1">
-<title> Best Electronics Admin Control Panel</title>
+	<meta http-equiv= "Content-Type" content = "text/html; charset=UTF-8">
+	<meta name ="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+	<title> Home - Best Electronics Admin</title>
+	
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<script type = "text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
+	<script type = "text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+	
 </head>
 <body>
-	<h1> Welcome to Best Electronics Admin Control Panel! </h1>
+<div class="container-fluid">
+	<div>
+		<nav class="navbar navbar-expand">
+			<img th:src="@{/images/dal_logo.png}"/>
+		</nav>
+	</div>
+	
+	<div>
+		 <h1> Best Electronics Admin Control Panel! </h1> 
+	</div>
+	
+	
+	<div>
+		 <p> Best Electronics Admin Control Panel - Copyright &copy; BestElectronics </p> 
+	</div>
+</div>
+	
 </body>
 </html>
