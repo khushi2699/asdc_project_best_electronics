@@ -1,31 +1,18 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.entity.User;
-import com.best.electronics.service.UserPersistenceService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.best.electronics.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
-
-    @Autowired
-    UserPersistenceService userPersistenceService;
 
     @PostMapping("/process_registration")
     public String processRegistration(User user){
-        try{
-            if(isUserAlreadyPresent(user.getEmailAddress())){
-                return "registerFail";
-            }else{
-                userPersistenceService.saveUser(user);
-                return "registerSuccess";
-            }
-        } catch (Exception e){
-            return "registerFail";
-        }
-
+        //save user
+        return "registerSuccess";
     }
 
     @GetMapping("/register")
@@ -34,7 +21,14 @@ public class UserController {
         return "registrationForm";
     }
 
-    public boolean isUserAlreadyPresent(String userEmail) throws Exception {
-        return userPersistenceService.findUserByEmailAddress(userEmail) != null;
+    @GetMapping("/login")
+    public String login(Model model){
+        model.addAttribute("user", new User());
+        return "userLogin";
+    }
+
+    @GetMapping("/resetPassword")
+    public String resetPassword(Model model){
+        return null;
     }
 }
