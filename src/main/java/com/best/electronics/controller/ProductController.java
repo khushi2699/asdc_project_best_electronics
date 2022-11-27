@@ -15,10 +15,10 @@ public class ProductController {
 
     @GetMapping("/products")
     public String products(Model model){
-        Product p = new Product();
-        List<Product> listProducts = p.findProductByID(IDatabasePersistence db);
-
-        model.addAttribute("listProducts", listProducts);
+//        Product p = new Product();
+//        List<Product> listProducts = p.findProductByID(IDatabasePersistence db);
+//
+//        model.addAttribute("listProducts", listProducts);
         return "productList";
     }
 
