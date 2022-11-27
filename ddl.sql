@@ -85,10 +85,11 @@
                                       -- -----------------------------------------------------
                                       CREATE TABLE IF NOT EXISTS `mydb`.`Products` (
                                         `Product_id` INT NOT NULL,
-                                        `Product_name` VARCHAR(45) NULL,
-                                        `price` FLOAT NULL,
+                                        `Product_name` VARCHAR(45) NOT NULL,
+                                        `price` FLOAT NOT NULL,
                                         `description` VARCHAR(45) NULL,
-                                        `category_id` INT NULL,
+                                        `category_id` INT NOT NULL,
+                                        `category` VARCHAR(10) NOT NULL,
                                         `order_item_id` INT NOT NULL,
                                         PRIMARY KEY (`Product_id`),
                                         UNIQUE INDEX `Product_id_UNIQUE` (`Product_id` ASC) VISIBLE,
