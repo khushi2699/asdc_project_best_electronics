@@ -3,8 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 </head>
 <body>
 
@@ -26,7 +33,8 @@
                                 <label class="col-4 col-form-label">First Name: </label>
                                 <div class="col-8">
                                     <input type="text" th:field="*{firstName}" class="form-control"
-                                           required minlength="2" maxlength="20"/>
+                                           required minlength="3" maxlength="20" pattern="[A-Za-z]+"
+                                           data-error="Please enter valid First Name!"/>
                                 </div>
                             </div>
 
@@ -34,46 +42,79 @@
                                 <label class="col-4 col-form-label">Last Name: </label>
                                 <div class="col-8">
                                     <input type="text" th:field="*{lastName}" class="form-control"
-                                           required minlength="2" maxlength="20" />
+                                           required minlength="3" maxlength="20" pattern="[A-Za-z]+"
+                                           data-error="Please enter valid Last Name!"/>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">E-mail: </label>
                                 <div class="col-8">
-                                    <input type="email" th:field="*{emailAddress}" class="form-control" required />
+                                    <input type="email" th:field="*{emailAddress}" class="form-control" required
+                                           data-error="Please enter valid Email Address!"/>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">Password: </label>
                                 <div class="col-8">
-                                    <input type="password" th:field="*{password}" class="form-control"
-                                           required minlength="8" />
+                                    <input type="password" th:field="*{password}" id="password" class="form-control"
+                                           required minlength="8"
+                                           data-error="Please enter password of correct length and format!"/>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">Confirm Password: </label>
                                 <div class="col-8">
-                                    <input type="password" th:field="*{reEnterPassword}" class="form-control"
-                                           required minlength="8" />
+                                    <input type="password" th:field="*{reEnterPassword}" id="re_enter_password" class="form-control"
+                                           required minlength="8"
+                                           data-error="Please enter password of at least 8 length!"/>
+                                    <span id='message'></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">Date of Birth: </label>
-                                <div class="col-8">
-                                    <input type="text" th:field="*{dateOfBirth}" class="form-control"
-                                           required minlength="2" maxlength="20" />
+                                <div class='col-8'>
+                                    <div class="form-group">
+                                        <div class="input-group date" id="datepicker">
+                                            <input type='text' class="form-control" th:field="*{dateOfBirth}" required
+                                                   data-error="Please enter the date of birth!"/>
+                                            <span class="input-group-append">
+                                                    <span class="input-group-text bg-white">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">Gender: </label>
                                 <div class="col-8">
-                                    <input type="text" th:field="*{gender}" class="form-control"
-                                           required minlength="2" maxlength="20" />
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{gender}" name="gender" id="radios1" value="male" required
+                                           data-error="Please select one option!">
+                                    <label class="form-check-label" for="radios1">
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{gender}" name="gender" id="radios2" value="female"
+                                           data-error="Please select one option!">
+                                    <label class="form-check-label" for="radios2">
+                                        Female
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" th:field="*{gender}" name="gender" id="radio3" value="others"
+                                           data-error="Please select one option!">
+                                    <label class="form-check-label" for="radio3">
+                                        Others
+                                    </label>
+                                </div>
                                 </div>
                             </div>
 
@@ -81,12 +122,13 @@
                                 <label class="col-4 col-form-label">Address: </label>
                                 <div class="col-8">
                                     <input type="text" th:field="*{address}" class="form-control"
-                                           required minlength="2" maxlength="20" />
+                                           required minlength="10" maxlength="30"
+                                           data-error="Please enter correct address!"/>
                                 </div>
                             </div>
 
                             <div>
-                                <button type="submit" class="btn btn-primary">Sign Up</button>
+                                <button type="submit" class="btn btn-primary" onclick="return matchPassword()">Sign Up</button>
                             </div>
                         </div>
                     </form>
@@ -97,9 +139,39 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script type="text/javascript">
+        $(function() {
+            $('#datepicker').datepicker({
+            endDate: '-18y'
+            });
+        });
+</script>
+
+<script type="text/javascript">
+        $(function () {
+            var inputs = document.getElementsByTagName("INPUT");
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].oninvalid = function (e) {
+                    e.target.setCustomValidity("");
+                    if (!e.target.validity.valid) {
+                        e.target.setCustomValidity(e.target.getAttribute("data-error"));
+                    }
+                };
+            }
+        });
+</script>
+
+<script>
+    function matchPassword() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("re_enter_password").value;
+        if (password != confirmPassword) {
+            alert("Passwords do not match. Kindly check!");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 </body>
 </html>

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabasePersistence implements IDatabasePersistence{
+public class MySQLDatabasePersistence implements IDatabasePersistence{
 
     @Override
     public Integer saveData(String query) throws Exception {

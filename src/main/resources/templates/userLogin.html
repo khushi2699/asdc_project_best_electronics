@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <h5>User Sign In</h5>
 
-                    <form th:action="@{user/login}" th:object="${user}"
+                    <form th:action="@{process_login}" th:object="${user}"
                           method="post">
                         <div class="form-group row">
                             <label for="inputEmail" class="col-4 col-form-label">Email address:</label>
@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        <p><a href="/forgotPassword">Forgot Password?</a></p>
+                        <p><a href="/user/forgotPassword">Forgot Password?</a></p>
 
                         <div>
                             <button type="submit" class="btn btn-primary">Sign In</button>
