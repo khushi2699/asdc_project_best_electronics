@@ -1,4 +1,4 @@
-package com.best.electronics.authentication;
+package com.best.electronics.login;
 
 public interface ILoginValidationHandler {
 

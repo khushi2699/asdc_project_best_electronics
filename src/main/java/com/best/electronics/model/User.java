@@ -1,5 +1,12 @@
 package com.best.electronics.model;
 
+import com.best.electronics.register.*;
+import com.best.electronics.login.EncryptPassword;
+import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.database.MySQLDatabasePersistence;
+
+import java.util.ArrayList;
+
 public class User {
 
     private String userId;
@@ -102,3 +109,4 @@ public class User {
         this.resetPasswordToken = resetPasswordToken;
     }
 }
+

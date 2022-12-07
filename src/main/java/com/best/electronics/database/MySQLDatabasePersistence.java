@@ -1,9 +1,6 @@
 package com.best.electronics.database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,47 +8,30 @@ import java.util.Map;
 public class MySQLDatabasePersistence implements IDatabasePersistence{
 
     @Override
-    public Integer saveData(String query) throws Exception {
-        Connection conn = null;
-        PreparedStatement smt = null;
-        Integer success = -1;
-        try{
-            DatabaseConnection dbConnectionInstance = DatabaseConnection.getInstance();
-            conn = dbConnectionInstance.getDBConnection();
-            if (conn != null) {
-                smt = conn.prepareStatement(query);
-                return smt.executeUpdate();
-            }
-        } catch (Exception e){
-            System.out.println("Exception occurred while executing query: " + query);
-        }
-        finally {
-            smt.close();
-            conn.close();
-        }
-        return success;
-    }
-
-    @Override
     public ArrayList<Map<String, Object>> loadData(String query) throws Exception {
         Connection conn = null;
-        PreparedStatement smt = null;
+        CallableStatement smt = null;
         ArrayList<Map<String, Object>> result= new ArrayList<>();
         try{
             DatabaseConnection dbConnectionInstance = DatabaseConnection.getInstance();
             conn = dbConnectionInstance.getDBConnection();
             if (conn != null) {
-                smt = conn.prepareStatement(query);
-                ResultSet rs = smt.executeQuery();
-                ResultSetMetaData meta = rs.getMetaData();
-                int cols = meta.getColumnCount();
-                while(rs.next()){
-                    Map<String, Object> map = new HashMap<>();
-                    for(int j=1; j<cols+1; j++){
-                        map.put(meta.getColumnName(j), rs.getObject(j));
-                        System.out.println(meta.getColumnName(j) + " : " + rs.getObject(j));
+                smt = conn.prepareCall(query);
+                boolean hadResults = smt.execute();
+
+                while(hadResults){
+                    ResultSet rs = smt.executeQuery();
+                    ResultSetMetaData meta = rs.getMetaData();
+                    int cols = meta.getColumnCount();
+                    while(rs.next()){
+                        Map<String, Object> map = new HashMap<>();
+                        for(int j=1; j<cols+1; j++){
+                            map.put(meta.getColumnName(j), rs.getObject(j));
+                            System.out.println(meta.getColumnName(j) + " : " + rs.getObject(j));
+                        }
+                        result.add(map);
                     }
-                    result.add(map);
+                    hadResults = smt.getMoreResults();
                 }
             }
         }catch (Exception e){
@@ -61,5 +41,32 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
             conn.close();
         }
         return result;
+    }
+
+    @Override
+    public Boolean saveData(String query, ArrayList<Object> parameters) throws Exception {
+        Connection conn = null;
+        CallableStatement smt = null;
+        try{
+            DatabaseConnection dbConnectionInstance = DatabaseConnection.getInstance();
+            conn = dbConnectionInstance.getDBConnection();
+            if (conn != null) {
+                smt = conn.prepareCall(query);
+
+                int i = 0;
+                for(Object parameter: parameters) {
+                    smt.setObject(++i, parameter);
+                }
+                smt.execute();
+                return true;
+            }
+        }catch (Exception e){
+            System.out.println("Exception occurred while executing query: " + e.getMessage());
+            return false;
+        } finally{
+            smt.close();
+            conn.close();
+        }
+        return false;
     }
 }

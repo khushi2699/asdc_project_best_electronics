@@ -1,11 +1,10 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.database.AdminLoginHandler;
-import com.best.electronics.database.ILoginHandler;
-import com.best.electronics.database.UserLoginHandler;
-import com.best.electronics.model.Admin;
-import com.best.electronics.model.User;
-import com.best.electronics.session.SessionManager;
+import com.best.electronics.login.AdminLoginHandler;
+import com.best.electronics.login.ILoginHandler;
+import com.best.electronics.login.UserLoginHandler;
+import com.best.electronics.login.LoginState;
+import com.best.electronics.model.Login;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +18,25 @@ public class AdminController {
 
     @GetMapping("/login")
     public String login(Model model){
-        model.addAttribute("admin", new Admin());
+        model.addAttribute("admin", new Login());
         return "adminLogin";
     }
 
     @GetMapping("/process_login")
-    public String processLogin(Admin admin, HttpServletRequest request){
+    public String processLogin(Login admin, Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new AdminLoginHandler();
+        LoginState loginState = loginHandler.login(admin.getEmailAddress(), admin.getPassword(), request);
+        model.addAttribute("msg", loginState.getLoginStatus());
+        return loginState.getNextPage();
+    }
 
-        if(loginHandler.login(admin.getEmailAddress(), admin.getPassword(), request)){
-            SessionManager sessionManager = new SessionManager();
-            sessionManager.getSession(request);
+    @GetMapping("/logout")
+    public String logout(Model model, HttpServletRequest request){
+        ILoginHandler loginHandler = new UserLoginHandler();
+        loginHandler.logout(request);
 
-            return "";
-        }
-        return "";
+        model.addAttribute("admin", new Login());
+        model.addAttribute("logoutMessage", "Successfully logged out!");
+        return "userLogin";
     }
 }

@@ -1,8 +1,12 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.database.ILoginHandler;
-import com.best.electronics.database.UserLoginHandler;
+import com.best.electronics.login.ILoginHandler;
+import com.best.electronics.login.UserLoginHandler;
+import com.best.electronics.login.LoginState;
+import com.best.electronics.model.Login;
 import com.best.electronics.model.User;
+import com.best.electronics.register.RegisterHandler;
+import com.best.electronics.register.RegisterState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +20,11 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     @PostMapping("/process_registration")
-    public String processRegistration(User user){
-        return "registerSuccess";
+    public String processRegistration(User user, Model model){
+        RegisterHandler registerHandler = new RegisterHandler();
+        RegisterState registerState = registerHandler.register(user);
+        model.addAttribute("msg", registerState.getLoginStatus());
+        return registerState.getNextPage();
     }
 
     @GetMapping("/register")
@@ -27,17 +34,17 @@ public class UserController {
     }
 
     @PostMapping("/process_login")
-    public String processLogin(User user, HttpServletRequest request) {
+    public String processLogin(Login user, Model model, HttpServletRequest request) {
         ILoginHandler loginHandler = new UserLoginHandler();
-        if(loginHandler.login(user.getEmailAddress(), user.getPassword(), request)){
-            return "productList";
-        }
-        return "products";
+        LoginState loginState = loginHandler.login(user.getEmailAddress(), user.getPassword(), request);
+        model.addAttribute("msg", loginState.getLoginStatus());
+        model.addAttribute("user", new Login());
+        return loginState.getNextPage();
     }
 
     @GetMapping("/login")
     public String login(Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new Login());
         return "userLogin";
     }
 
@@ -47,9 +54,12 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new UserLoginHandler();
         loginHandler.logout(request);
+
+        model.addAttribute("user", new Login());
+        model.addAttribute("logoutMessage", "Successfully logged out!");
         return "userLogin";
     }
 }

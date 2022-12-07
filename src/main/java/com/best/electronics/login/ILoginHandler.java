@@ -1,10 +1,10 @@
-package com.best.electronics.database;
+package com.best.electronics.login;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface ILoginHandler {
 
-    Boolean login(String emailAddress, String password, HttpServletRequest request);
+    LoginState login(String emailAddress, String password, HttpServletRequest request);
 
     void logout(HttpServletRequest request);
 
