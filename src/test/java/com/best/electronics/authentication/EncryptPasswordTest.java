@@ -1,5 +1,6 @@
 package com.best.electronics.authentication;
 
+import com.best.electronics.login.EncryptPassword;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
