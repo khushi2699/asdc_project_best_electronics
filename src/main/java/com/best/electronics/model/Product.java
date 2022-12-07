@@ -4,6 +4,11 @@ import com.best.electronics.database.IDatabasePersistence;
 
 public class Product {
 
+    private static Product single_instance = null;
+
+    private Product(){}
+
+
     private String productId;
 
     private String productCode;
@@ -52,12 +57,12 @@ public class Product {
         this.productPrice = productPrice;
     }
 
-    public Integer getProductQuantity() {
-        return productQuantity;
+    public Integer getAvailableQuantity() {
+        return availableQuantity;
     }
 
-    public void setProductQuantity(Integer productQuantity) {
-        this.productQuantity = productQuantity;
+    public void setAvailableQuantity(Integer productQuantity) {
+        this.availableQuantity = availableQuantity;
     }
 
     public void setProductId(String productId) {
@@ -72,9 +77,7 @@ public class Product {
 
     private Double productPrice;
 
-    private Integer productQuantity;
+    private Integer availableQuantity;
 
-//    public void findProductByID(IDatabasePersistence db) throws Exception {
-//        db.loadData("Select * from Products");
     }
 
