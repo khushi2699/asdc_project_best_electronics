@@ -23,7 +23,7 @@ public class UserController {
     public String processRegistration(User user, Model model){
         RegisterHandler registerHandler = new RegisterHandler();
         RegisterState registerState = registerHandler.register(user);
-        model.addAttribute("msg", registerState.getLoginStatus());
+        model.addAttribute("msg", registerState.getRegisterStatus());
         return registerState.getNextPage();
     }
 

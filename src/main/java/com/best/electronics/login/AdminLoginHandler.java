@@ -14,7 +14,7 @@ public class AdminLoginHandler implements ILoginHandler {
         try{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ILoginValidationHandler loginValidationHandler = new GenericLoginValidationHandler
-                    ("Select emailAddress,password from Admin", databasePersistence);
+                    ("{call get_admin_login_details()}", databasePersistence);
             AuthHandler authHandler = new EmailAuthHandler(loginValidationHandler);
             authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
 

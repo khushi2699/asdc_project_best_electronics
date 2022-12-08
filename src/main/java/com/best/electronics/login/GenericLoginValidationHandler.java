@@ -15,7 +15,7 @@ public class GenericLoginValidationHandler implements ILoginValidationHandler{
 
     @Override
     public Boolean isValidEmailAddress(String emailAddress) {
-        if(data.size() > 0){
+        if(data != null && data.size() > 0){
             for(Map<String, Object> userData: data){
                 if(emailAddress.equals(userData.get("emailAddress").toString())){
                     return true;

@@ -14,7 +14,7 @@ public class SuccessLoginState extends LoginState{
     @Override
     public void setNextPage(String type) {
         if("admin".equalsIgnoreCase(type)){
-            nextPage = "adminLogin.html";
+            nextPage = "adminLandingPage.html";
         }else{
             nextPage = "productList.html";
         }

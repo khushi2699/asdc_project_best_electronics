@@ -11,7 +11,7 @@ public abstract class RegisterState {
         setNextPage();
     }
 
-    public String getLoginStatus() {
+    public String getRegisterStatus() {
         return registerStatus;
     }
 

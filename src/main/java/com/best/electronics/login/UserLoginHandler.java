@@ -14,7 +14,7 @@ public class UserLoginHandler implements ILoginHandler {
         try{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ILoginValidationHandler loginValidationHandler = new GenericLoginValidationHandler
-                    ("Select emailAddress,password from User", databasePersistence);
+                    ("{call get_user_login_details()}", databasePersistence);
             AuthHandler authHandler = new EmailAuthHandler(loginValidationHandler);
             authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
 
