@@ -15,8 +15,8 @@ public class FilterRegistrationConfig {
         registration.setFilter(AuthenticationFilter());
         registration.addUrlPatterns("/*");
         registration.addInitParameter("excluded_urls", "/welcome,/user/login,/user/process_login," +
-                "/user/register,/user/process_registration,/user/resetPassword," +
-                "/admin/login,/admin/process_login,/admin/resetPassword,/admin,/user");
+                "/user/register,/user/process_registration,/user/forgotPassword, /user/getCode," +
+                "/admin/login,/admin/process_login,/admin,/user");
         registration.setName("filter");
         registration.setOrder(1);
         return registration;
