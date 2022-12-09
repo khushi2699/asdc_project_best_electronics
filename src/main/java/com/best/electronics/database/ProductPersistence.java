@@ -2,6 +2,10 @@ package com.best.electronics.database;
 import java.util.ArrayList;
 import java.util.Map;
 
+import exceptions.DataNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ProductPersistence {
 
@@ -10,6 +14,7 @@ public class ProductPersistence {
     private ProductPersistence()
     {}
 
+    Logger logger = (Logger) LoggerFactory.getLogger(ProductPersistence.class);
     public static ProductPersistence getInstance()
     {
         if (single_instance == null)
@@ -20,8 +25,12 @@ public class ProductPersistence {
     public ArrayList<Map<String, Object>> getDetails(IDatabasePersistence p) throws Exception {
 
         ArrayList<Map<String, Object>> result = new ArrayList<>();
-       result = p.loadData("Select * from Product");
-
-       return result;
+       result = p.loadData("{call get_product_list()}");
+       if(result.isEmpty()){
+           throw new DataNotFoundException("Unable to load product list");
+       }
+       else {
+           return result;
+       }
     }
 }

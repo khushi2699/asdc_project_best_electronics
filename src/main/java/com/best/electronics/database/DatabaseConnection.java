@@ -1,5 +1,4 @@
 package com.best.electronics.database;
-
 import com.best.electronics.properties.DatabaseProperties;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;

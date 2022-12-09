@@ -4,10 +4,6 @@ import com.best.electronics.database.IDatabasePersistence;
 
 public class Product {
 
-    private static Product single_instance = null;
-
-    private Product(){}
-
 
     private String productId;
 
@@ -78,6 +74,16 @@ public class Product {
     private Double productPrice;
 
     private Integer availableQuantity;
+
+    public Integer getUserQuantity() {
+        return userQuantity;
+    }
+
+    public void setUserQuantity(Integer userQuantity) {
+        this.userQuantity = userQuantity;
+    }
+
+    private Integer userQuantity;
 
     }
 

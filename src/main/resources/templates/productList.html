@@ -11,11 +11,36 @@
 table, th, td {
   border:1px solid black;
 }
-.productlist td:first-child:before
-{
-  counter-increment: Serial;      /* Increment the Serial counter */
-  content: " " counter(Serial); /* Display the counter */
+<!--th, td {-->
+<!--  border-color: #96D4D4;-->
+<!--}-->
+.plus-minus-input {
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
+
+.plus-minus-input .input-group-field {
+  text-align: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 1rem;
+}
+
+.plus-minus-input .input-group-field::-webkit-inner-spin-button,
+.plus-minus-input .input-group-field ::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.plus-minus-input .input-group-button .circle {
+  border-radius: 50%;
+  padding: 0.25em 0.8em;
+}
+.addtocartbutton{
+background: none;
+}
+
 </style>
 <body>
 
@@ -27,29 +52,41 @@ table, th, td {
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <h5>Product List</h5>
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for products">
             <div class="products">
                 <div class="products-body">
-                    <table class = "productlist" style="table-layout: float ; width: 100%;">
+                    <table class = "productlist" id="products" style="table-layout: float ; width: 100%" align="left">
                         <thead class="thead-dark">
                         <tr>
-                            <th style="text-align: center">Sl No.</th>
                             <th style="text-align: center">ID</th>
                             <th style="text-align: center">Name</th>
                             <th style="text-align: center">Price</th>
                             <th style="text-align: center">Description</th>
                             <th style="text-align: center">Brand</th>
                             <th style="text-align: center">Quantity</th>
-
+                            <th style="text-align: center">Select Quantity</th>
+                            <th style="text-align: center">Cart</th>
                         </tr>
                         </thead>
-                        <tr th:each="products:${listProducts}">
-                            <td></td>
-                            <td th:text="${products.productId}"></td>
-                            <td th:text="${products.productName}"></td>
-                            <td th:text="${products.productPrice}"></td>
-                            <td th:text="${products.productDescription}"></td>
-                            <td th:text="${products.productBrand}"></td>
-                            <td th:text="${products.availableQuantity}"></td>
+                        <tr th:each="products:${listProducts}" th:object = "${product}">
+
+                            <td style="text-align: center" th:text="${products.productId}"></td>
+                            <td style="text-align: center" th:text="${products.productName}"></td>
+                            <td style="text-align: center" th:text="${products.productPrice}"></td>
+                            <td style="text-align: center" th:text="${products.productDescription}"></td>
+                            <td style="text-align: center" th:text="${products.productBrand}"></td>
+                            <td style="text-align: center" th:text="${products.availableQuantity}"></td>
+                            <td class="cart_quantity" style="text-align: center">
+<!--                                <input type='button' style="width: 30px; text-align: center" value='-' name='qtyminus' class='qtyminus' field='quantity'/>-->
+<!--                                <input type='text' id='quantity' style="width: 30px; text-align: center" name='quantity' value='1' class='qty'/>-->
+                                <input style="width: 50px" min="1" max="${products.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>
+<!--                                <input type='button' style="width: 30px; text-align: center" value='+' name='qtyplus' class='qtyplus' field='quantity'/>-->
+                            </td>
+                            <td class="add to cart">
+                                <a th:href="@{/CartController/{product_id}/{quantity}(product_id=${products.productId},quantity=${userQuantity})}">
+                                    <button id="btn" name="addtocartbutton" class="addtocartbutton" data-item-quantity="${quantity.value}"> Add to cart</button>
+                                </a>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -61,16 +98,98 @@ table, th, td {
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
 <script>
-let tr = document.querySelectorAll("table tbody tr");
-Array.from(tr).forEach(function(trArray) {
-let button = document.createElement("button");
-let td = document.createElement("td");
-button.innerText = "Add to Cart";
-button.className = "btn_add";
-td.append(button);
-trArray.append(td);
+var qty = $("#quantity");
+
+$('.qtyplus').click(function (e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $target = $this.prev('input[name=' + $this.attr('field') + ']');
+    var currentVal = parseInt($target.val());
+    if (!isNaN(currentVal)) {
+        $target.val(currentVal+1);
+    } else {
+        $target.val(0);
+    }
+
+
 });
+var qty = $("#quantity");
+$(".qtyminus").click(function (e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $target = $this.next('input[name=' + $this.attr('field') + ']');
+    var currentVal = parseInt($target.val());
+    if (!isNaN(currentVal)) {
+        $target.val((currentVal == 0) ? 0 :currentVal-1);
+    } else {
+        $target.val(0);
+    }
+
+});
+
+ $( ".addtocartbutton" ).click(function() {
+    $(this).css('background', 'green');
+  });
+
+  function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("products");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
+<!--$(function() {-->
+<!--  $('#qtyminus').on("click",function() {-->
+<!--    var $qty = $('#quantity');-->
+<!--    var current = parseInt($qty.val());-->
+<!--    if ( current > 0 ) {-->
+<!--        $qty.val(current-1);-->
+<!--        $('#quantity').val(current-1);-->
+<!--    } else {-->
+<!--        $('#quantity').val(0);-->
+<!--    }-->
+<!--  });-->
+
+<!--  $('#qtyplus').on("click",function() {-->
+<!--    var $qty = $('#quantity');-->
+<!--    var current = parseInt($qty.val());-->
+<!--    $qty.val(current+1);-->
+<!--    $('#quantity').val(current+1);-->
+<!--  });-->
+<!--});-->
+
+<!--var url = $('#dynamic-url');-->
+<!--var quantity = $('#quantity');-->
+<!--quantity.on('change', function() {-->
+
+<!--  if($(this).val() !== "" && quantity.val() !== "") {-->
+<!--    url.attr('href', '/CartController(age=' + $(this).val() + ', name=' + name.val() + ')');-->
+<!--  } else if ($(this).val() !== "") {-->
+<!--    url.attr('href', '/userinfo(age=' + $(this).val() + ')');-->
+<!--  } else if (nameInput.val() !== "") {-->
+<!--    url.attr('href', '/userinfo(name=' + quantity.val() + ')');-->
+<!--  }-->
+
+<!--});-->
+
 </script>
 </body>
 </html>
