@@ -6,6 +6,8 @@ public class Login {
 
     private String password;
 
+    private int token;
+
     public String getEmailAddress() {
         return emailAddress;
     }
@@ -20,5 +22,13 @@ public class Login {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getToken() {
+        return token;
+    }
+
+    public void setToken(int token) {
+        this.token = token;
     }
 }

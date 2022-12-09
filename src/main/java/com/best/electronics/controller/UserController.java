@@ -1,5 +1,6 @@
 package com.best.electronics.controller;
 
+import com.best.electronics.controller.email.ResetPasswordCombinationValidationHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
@@ -10,6 +11,7 @@ import com.best.electronics.register.RegisterState;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -50,7 +52,20 @@ public class UserController {
 
     @GetMapping("/resetPassword")
     public String resetPassword(Model model){
-        return null;
+        model.addAttribute("login", new Login());
+        System.out.println("Printing reset Password");
+        return "resetPassword";
+    }
+
+    @PostMapping("/checkValidToken")
+    public String checkValidToken(@ModelAttribute Login login, Model model) {
+        ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
+        System.out.println("Email address" + login.getEmailAddress());
+        System.out.println("Token" + login.getToken());
+        model.addAttribute("login", new Login());
+        System.out.println(resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress()));
+        model.addAttribute("msg",resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress()));
+        return "resetPassword";
     }
 
     @GetMapping("/logout")

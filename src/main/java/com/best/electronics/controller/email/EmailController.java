@@ -1,5 +1,7 @@
 package com.best.electronics.controller.email;
 
+import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.model.Login;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ public class EmailController {
         System.out.println("Email address" + login.getEmailAddress());
         emailControl(login.getEmailAddress());
         model.addAttribute("login", new Login());
+        model.addAttribute("msg", "Password reset link and token will be sent to you email if the email exists!");
         return "forgotPassword";
     }
 
@@ -57,13 +60,19 @@ public class EmailController {
     private MimeMessage draftEmail(int randomNumber, String email) throws MessagingException {
         String toEmail = email;
         String emailSubject = "Token for new password request";
+        saveToDB(randomNumber,email);
         mimeMessage = new MimeMessage(newSession);
         mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
         mimeMessage.setSubject(emailSubject);
         mimeMessage.setText("We have received a password change request from your ID. Below is your code: "+randomNumber+". " +
-                "Go to below link to change your password");
+                "Go to below link to change your password: http://localhost:8080/user/resetPassword");
         return mimeMessage;
 
+    }
+
+    private void saveToDB(int randomNumber, String email){
+        EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
+        emailControllerPinResetStore.storePinToDB(randomNumber,email);
     }
     private void sendMail() throws MessagingException {
         String fromUser = "khshah2699@gmail.com";
