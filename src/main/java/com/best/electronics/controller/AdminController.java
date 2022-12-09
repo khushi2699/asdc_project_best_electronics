@@ -8,6 +8,7 @@ import com.best.electronics.model.Login;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +23,12 @@ public class AdminController {
         return "adminLogin";
     }
 
-    @GetMapping("/process_login")
+    @PostMapping("/process_login")
     public String processLogin(Login admin, Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new AdminLoginHandler();
         LoginState loginState = loginHandler.login(admin.getEmailAddress(), admin.getPassword(), request);
         model.addAttribute("msg", loginState.getLoginStatus());
+        model.addAttribute("admin", new Login());
         return loginState.getNextPage();
     }
 
