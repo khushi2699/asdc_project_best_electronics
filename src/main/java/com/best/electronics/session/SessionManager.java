@@ -5,15 +5,13 @@ import javax.servlet.http.HttpSession;
 
 public class SessionManager {
 
-    public void getSession(HttpServletRequest request){
+    public HttpSession getSession(HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             oldSession.invalidate();
         }
         //generate a new session
-        HttpSession newSession = request.getSession(true);
-//        newSession.setAttribute("isUser", true);
-//        System.out.println(newSession.getAttribute("isUser"));
+        return request.getSession(true);
     }
 
     public void invalidateSession(HttpServletRequest request) {
