@@ -14,7 +14,7 @@
     <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
     <div class="navbar-nav w-100">
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/user/profile">My Account</a>
+            <a class="nav-link nav-link active" href="/user/products">Home</a>
         </div>
         <div class="ml-auto">
             <a class="nav-link nav-link active" href="/user/wishList">WishList</a>
@@ -33,7 +33,32 @@
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-body">
-
+                    <h5>User Profile</h5>
+                    <p><a href="/user/editProfile">Edit</a></p>
+                    <table class="table table-dark">
+                        <tbody>
+                        <tr>
+                            <th scope="row">First Name</th>
+                            <td data-th-text="${firstName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Last Name</th>
+                            <td data-th-text="${lastName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date of Birth</th>
+                            <td data-th-text="${dateOfBirth}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td data-th-text="${email}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Address</th>
+                            <td data-th-text="${address}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

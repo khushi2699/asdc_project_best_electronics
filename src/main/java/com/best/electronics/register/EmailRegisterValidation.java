@@ -13,7 +13,7 @@ public class EmailRegisterValidation extends RegisterAuthHandler{
     private final ArrayList<Map<String, Object>> usersData;
 
     public EmailRegisterValidation(IDatabasePersistence databasePersistence) throws Exception {
-        usersData = databasePersistence.loadData("{call get_user_emailAddress()}");
+        usersData = databasePersistence.loadData("{call get_user_emailAddress()}", new ArrayList<>());
     }
 
     @Override
