@@ -8,7 +8,7 @@ import java.util.Map;
 public class MySQLDatabasePersistence implements IDatabasePersistence{
 
     @Override
-    public ArrayList<Map<String, Object>> loadData(String query) throws Exception {
+    public ArrayList<Map<String, Object>> loadData(String query, ArrayList<Object> parameters) throws Exception {
         Connection conn = null;
         CallableStatement smt = null;
         ArrayList<Map<String, Object>> result= new ArrayList<>();
@@ -17,6 +17,13 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
             conn = dbConnectionInstance.getDBConnection();
             if (conn != null) {
                 smt = conn.prepareCall(query);
+
+                if(!parameters.isEmpty()){
+                    int i = 0;
+                    for(Object parameter: parameters) {
+                        smt.setObject(++i, parameter);
+                    }
+                }
                 boolean hadResults = smt.execute();
 
                 while(hadResults){
@@ -53,9 +60,11 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
             if (conn != null) {
                 smt = conn.prepareCall(query);
 
-                int i = 0;
-                for(Object parameter: parameters) {
-                    smt.setObject(++i, parameter);
+                if(!parameters.isEmpty()){
+                    int i = 0;
+                    for(Object parameter: parameters) {
+                        smt.setObject(++i, parameter);
+                    }
                 }
                 smt.execute();
                 return true;
@@ -70,5 +79,3 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
         return false;
     }
 }
-
-
