@@ -1,13 +1,28 @@
 package com.best.electronics.model;
 
-import com.best.electronics.database.IDatabasePersistence;
-
 public class Product {
 
-
-    private String productId;
+    private Integer productId;
 
     private String productCode;
+
+    private String productName;
+
+    private String productBrand;
+
+    private String productDescription;
+
+    private Double productPrice;
+
+    private Integer productQuantity;
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
 
     public String getProductCode() {
         return productCode;
@@ -15,10 +30,6 @@ public class Product {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
-    }
-
-    public String getProductId() {
-        return productId;
     }
 
     public String getProductName() {
@@ -53,37 +64,12 @@ public class Product {
         this.productPrice = productPrice;
     }
 
-    public Integer getAvailableQuantity() {
-        return availableQuantity;
+    public Integer getProductQuantity() {
+        return productQuantity;
     }
 
-    public void setAvailableQuantity(Integer productQuantity) {
-        this.availableQuantity = availableQuantity;
+    public void setProductQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
     }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    private String productName;
-
-    private String productBrand;
-
-    private String productDescription;
-
-    private Double productPrice;
-
-    private Integer availableQuantity;
-
-    public Integer getUserQuantity() {
-        return userQuantity;
-    }
-
-    public void setUserQuantity(Integer userQuantity) {
-        this.userQuantity = userQuantity;
-    }
-
-    private Integer userQuantity;
-
-    }
+}
 

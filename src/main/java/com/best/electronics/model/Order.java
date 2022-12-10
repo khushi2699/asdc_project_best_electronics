@@ -12,7 +12,16 @@ public class Order {
 
     private String orderStatus;
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     private String paymentMethod;
+    private Integer userId;
 
     private User user;
 
