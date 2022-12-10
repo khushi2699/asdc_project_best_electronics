@@ -8,12 +8,12 @@ public class MissMatchPassword {
     public String checkMissMatch(String password, String confirmPassword){
         if(isPasswordValid(password)){
             if(confirmPassword.equals(password)){
-                return "Password matches and in correct format";
+                return "OK";
             }else{
                 return "Password and Confirm password does not match";
             }
         }else{
-            return "Invalid password state";
+            return "Invalid password pattern";
         }
     }
 

@@ -28,8 +28,8 @@ public class EmailControllerPinStoreHandler implements EmailControllerPinResetSt
     }
 
     @Override
-    public void storeNewPassword(String password, String confirmPassword, String email) {
-
+    public String storeNewPassword(String password, String confirmPassword, String email) {
+        return null;
     }
 }
 

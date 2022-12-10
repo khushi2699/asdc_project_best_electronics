@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -24,12 +25,25 @@ public class EmailController {
     }
 
     @PostMapping("/enterNewPassword")
-    public String enterNewPassword(@ModelAttribute Login login, Model model){
+    public String enterNewPassword(@ModelAttribute Login login, Model model) throws NoSuchAlgorithmException {
         model.addAttribute("login", new Login());
-        model.addAttribute("msg", "Message set successfully");
         ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
-        changePasswordHandler.storeNewPassword(login.getPassword(), login.getConfirmPassword(), login.getEmailAddress());
-        return "changePassword";
+        String status = changePasswordHandler.storeNewPassword(login.getPassword(), login.getConfirmPassword(), login.getEmailAddress());
+        if(status.equalsIgnoreCase("Password changed")){
+            model.addAttribute("msg", "Password changed. Click here to login! http://localhost:8080/user/login");
+            return "changePassword";
+
+        }else if (status.equalsIgnoreCase("No match")) {
+            model.addAttribute("msg", "Password and Confirm Password does not match");
+            return "changePassword";
+        }
+        else if (status.equalsIgnoreCase("Invalid pattern")){
+            model.addAttribute("msg", "Invalid password pattern");
+            return "changePassword";
+        }
+        else {
+            return null;
+        }
     }
 
     @GetMapping("/userLogin")
@@ -101,5 +115,3 @@ public class EmailController {
         System.out.println("Email successfully sent!!!");
     }
 }
-
-
