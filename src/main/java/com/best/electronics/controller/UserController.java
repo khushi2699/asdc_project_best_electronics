@@ -7,6 +7,7 @@ import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
 import com.best.electronics.model.Login;
+import com.best.electronics.model.Order;
 import com.best.electronics.model.User;
 import com.best.electronics.register.RegisterHandler;
 import com.best.electronics.register.RegisterState;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Controller
@@ -87,7 +89,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String userProfile(Model model, HttpServletRequest request) {
+    public String userProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
             Integer id = (Integer) oldSession.getAttribute("userId");
@@ -101,6 +103,9 @@ public class UserController {
                 model.addAttribute("email", userDetail.get("emailAddress"));
                 model.addAttribute("address", userDetail.get("address"));
             }
+
+            ArrayList<Order> orderDetails = user.getOrderDetails(id, databasePersistence);
+            model.addAttribute("orders", orderDetails);
             return "userProfile";
         }
        return "userLogin";

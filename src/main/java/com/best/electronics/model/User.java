@@ -148,5 +148,43 @@ public class User {
         }
     }
 
+    public ArrayList<Order> getOrderDetails(Integer userId, IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Order> orderList = new ArrayList<>();
+            ArrayList<Map<String, Object>> orders = databasePersistence.loadData("Select * from OrderDetails where userId=" + userId, new ArrayList<>());
+            System.out.println("Order Details: " + orders);
+
+            for(Map<String, Object> order: orders){
+                Order o = new Order();
+                o.setOrderId((Integer) order.get("orderId"));
+                o.setOrderStatus((String) order.get("orderStatus"));
+                o.setOrderDate(String.valueOf(order.get("orderDate")));
+                o.setOrderAmount((Double) order.get("orderAmount"));
+                o.setPaymentMethod((String) order.get("paymentMethod"));
+                o.setAddress((String) order.get("address"));
+
+                Integer orderId = (Integer) order.get("orderId");
+                ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("Select * from OrderItem where orderId=" + orderId, new ArrayList<>());
+                ArrayList<Product> product = new ArrayList<>();
+                for(Map<String, Object> orderItem: orderItems){
+                    Integer productId = (Integer) orderItem.get("productId");
+                    ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("Select * from Product where productId=" + productId, new ArrayList<>());
+                    Map<String, Object> productDetail = productDetails.get(0);
+
+                    Product p = new Product();
+                    p.setProductId((Integer) orderItem.get("productId"));
+                    p.setProductQuantity((Integer) orderItem.get("quantity"));
+                    p.setProductPrice((Double) orderItem.get("subTotal"));
+                    p.setProductName((String) productDetail.get("productName"));
+                    product.add(p);
+                }
+                o.setProducts(product);
+                orderList.add(o);
+            }
+            return orderList;
+        }catch(Exception e){
+            return null;
+        }
+    }
 }
 
