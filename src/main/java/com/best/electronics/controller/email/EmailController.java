@@ -11,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
@@ -53,7 +55,7 @@ public class EmailController {
     }
 
     @PostMapping("/getCode")
-    public String getCode(@ModelAttribute Login login, Model model) throws MessagingException {
+    public String getCode(@ModelAttribute Login login, Model model) throws Exception {
         System.out.println("Email address" + login.getEmailAddress());
         emailControl(login.getEmailAddress());
         model.addAttribute("login", new Login());
@@ -63,12 +65,22 @@ public class EmailController {
 
     Session newSession = null;
     MimeMessage mimeMessage = null;
-    public void emailControl (String email) throws MessagingException {
+    public void emailControl (String email) throws Exception {
         EmailController emailController = new EmailController();
         int randomNumber = emailController.generateRandomNumber(); //generating a random number
         emailController.setUpProperties();
-        emailController.draftEmail(randomNumber,email);
-        emailController.sendMail();
+
+        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+        ArrayList<Object> tokenDetails = new ArrayList<>();
+        tokenDetails.add(email);
+        ArrayList<Map<String, Object>> result= new ArrayList<>();
+
+        result = databasePersistence.loadData("{call get_email_check(?)}",tokenDetails);
+        if(result.size()== 1){
+            emailController.draftEmail(randomNumber,email);
+            emailController.sendMail();
+        }
+
     }
 
     public int generateRandomNumber(){
