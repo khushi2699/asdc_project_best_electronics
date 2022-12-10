@@ -23,8 +23,13 @@ public class EmailControllerPinStoreHandler implements EmailControllerPinResetSt
     }
 
     @Override
-    public String checkCombination(int token, String email) {
-        return null;
+    public boolean checkCombination(int token, String email) {
+        return true;
+    }
+
+    @Override
+    public void storeNewPassword(String password, String confirmPassword, String email) {
+
     }
 }
 

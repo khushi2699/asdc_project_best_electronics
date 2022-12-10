@@ -5,6 +5,9 @@ import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.session.SessionManager;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class AdminLoginHandler implements ILoginHandler {
 
@@ -21,7 +24,15 @@ public class AdminLoginHandler implements ILoginHandler {
             loginState = authHandler.doHandler(emailAddress, password, "admin");
             if(loginState.getNextPage().equals("adminLandingPage.html")){
                 SessionManager sessionManager = new SessionManager();
-                sessionManager.getSession(request);
+                HttpSession session = sessionManager.getSession(request);
+
+                ArrayList<Object> parameters = new ArrayList<>();
+                parameters.add(emailAddress);
+                ArrayList<Map<String, Object>> userDetails = databasePersistence.loadData("{call get_admin_details_based_on_email(?)}", parameters);
+                Map<String, Object> userDetail = userDetails.get(0);
+                session.setAttribute("adminId", userDetail.get("adminId"));
+                session.setAttribute("adminName", userDetail.get("firstName"));
+
                 return loginState;
             }
             return loginState;

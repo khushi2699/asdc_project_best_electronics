@@ -6,5 +6,7 @@ public interface EmailControllerPinResetStore {
 
     public void storePinToDB(int token, String email);
 
-    public String checkCombination(int token, String email);
+    public boolean checkCombination(int token, String email);
+
+    public void storeNewPassword(String password, String confirmPassword, String email);
 }

@@ -12,7 +12,7 @@ public class UserMockDatabasePersistence implements IDatabasePersistence{
     }
 
     @Override
-    public ArrayList<Map<String, Object>> loadData(String query){
+    public ArrayList<Map<String, Object>> loadData(String query, ArrayList<Object> parameters){
         if(query.equals("{call get_user_login_details()}")){
             ArrayList<Map<String, Object>> dataList = new ArrayList<>();
             HashMap<String, Object> dataMap = new HashMap<>();

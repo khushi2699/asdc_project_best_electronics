@@ -1,11 +1,11 @@
 package com.best.electronics.model;
 
-import com.best.electronics.register.*;
-import com.best.electronics.login.EncryptPassword;
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.database.MySQLDatabasePersistence;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User {
 
@@ -108,5 +108,45 @@ public class User {
     public void setResetPasswordToken(Integer resetPasswordToken) {
         this.resetPasswordToken = resetPasswordToken;
     }
+
+    public String updateUserDetails(IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+
+            if(isUsernameValid(this.getFirstName()) && isUsernameValid(this.getLastName())){
+                updatedDetails.add(this.getEmailAddress());
+                updatedDetails.add(this.getFirstName());
+                updatedDetails.add(this.getLastName());
+                updatedDetails.add(this.getAddress());
+                if(databasePersistence.saveData("{call update_user_details(?, ?, ?, ?)}", updatedDetails)){
+                    return "User Profile Updated Successfully";
+                }
+            }else{
+                return "Either firstName or lastName are not in correct format!";
+            }
+        }catch(Exception e){
+            return "User Profile Updated Failed! Please try again!";
+        }
+        return "User Profile Updated Failed! Please try again!";
+    }
+
+    private Boolean isUsernameValid(String name) {
+        String urlPattern = "^[a-zA-Z]{2,20}$";
+        Pattern pattern = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        return matcher.find();
+    }
+
+    public Map<String, Object> getUserDetails(Integer userId, IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(userId);
+            ArrayList<Map<String, Object>> userDetails = databasePersistence.loadData("{call get_user_details_for_update(?)}", parameters);
+            return userDetails.get(0);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
 }
 

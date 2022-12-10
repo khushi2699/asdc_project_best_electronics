@@ -2,11 +2,11 @@ package com.best.electronics.controller.email;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.register.MissMatchPasswordState;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-public class ResetPasswordCombinationValidationHandler implements EmailControllerPinResetStore{
+public class ChangePasswordHandler implements EmailControllerPinResetStore{
     @Override
     public void storePinToDB(int token, String email) {
 
@@ -14,28 +14,25 @@ public class ResetPasswordCombinationValidationHandler implements EmailControlle
 
     @Override
     public boolean checkCombination(int token, String email) {
+        return false;
+    }
+
+    @Override
+    public void storeNewPassword(String password, String confirmPassword, String email) {
+        MissMatchPassword missMatchPassword = new MissMatchPassword();
+        String passwordValidation = missMatchPassword.checkMissMatch(password, confirmPassword);
+        System.out.println("Password Validation "+ passwordValidation);
+
+
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
-        ArrayList<Map<String, Object>> result= new ArrayList<>();
-        tokenDetails.add(token);
+        tokenDetails.add(password);
         tokenDetails.add(email);
         try {
-            result = databasePersistence.loadData("{call get_check_combinations(?, ?)}",tokenDetails);
-            if(result.size() == 0){
-                return false;
+            if(!databasePersistence.saveData("{call save_new_password(?, ?)}", tokenDetails)){
             }
-            else {
-                return true;
-            }
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public void storeNewPassword(String password,String confirmPassword, String email) {
-
-    }
 }
-

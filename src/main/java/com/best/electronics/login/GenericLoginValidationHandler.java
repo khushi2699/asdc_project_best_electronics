@@ -10,7 +10,7 @@ public class GenericLoginValidationHandler implements ILoginValidationHandler{
     private final ArrayList<Map<String, Object>> data;
 
     public GenericLoginValidationHandler(String query, IDatabasePersistence databasePersistence) throws Exception {
-        data = databasePersistence.loadData(query);
+        data = databasePersistence.loadData(query, new ArrayList<>());
     }
 
     @Override

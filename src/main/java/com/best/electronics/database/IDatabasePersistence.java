@@ -7,5 +7,5 @@ public interface IDatabasePersistence {
 
     Boolean saveData(String query, ArrayList<Object> parameters) throws Exception;
 
-    ArrayList<Map<String, Object>> loadData(String query) throws Exception;
+    ArrayList<Map<String, Object>> loadData(String query, ArrayList<Object> parameters) throws Exception;
 }

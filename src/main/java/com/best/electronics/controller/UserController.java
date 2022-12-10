@@ -1,6 +1,8 @@
 package com.best.electronics.controller;
 
 import com.best.electronics.controller.email.ResetPasswordCombinationValidationHandler;
+import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -60,12 +64,16 @@ public class UserController {
     @PostMapping("/checkValidToken")
     public String checkValidToken(@ModelAttribute Login login, Model model) {
         ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
-        System.out.println("Email address" + login.getEmailAddress());
-        System.out.println("Token" + login.getToken());
         model.addAttribute("login", new Login());
-        System.out.println(resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress()));
-        model.addAttribute("msg",resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress()));
-        return "resetPassword";
+        model.addAttribute("emailAddress", login.getEmailAddress());
+        if(resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress())){
+            return "changePassword";
+        }
+        else {
+            model.addAttribute("msg","Please enter correct combination");
+            return "resetPassword";
+
+        }
     }
 
     @GetMapping("/logout")
@@ -75,6 +83,68 @@ public class UserController {
 
         model.addAttribute("user", new Login());
         model.addAttribute("logoutMessage", "Successfully logged out!");
+        return "userLogin";
+    }
+
+    @GetMapping("/profile")
+    public String userProfile(Model model, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession != null){
+            Integer id = (Integer) oldSession.getAttribute("userId");
+            User user = new User();
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            if(userDetail != null){
+                model.addAttribute("firstName", userDetail.get("firstName"));
+                model.addAttribute("lastName", userDetail.get("lastName"));
+                model.addAttribute("dateOfBirth", userDetail.get("dob"));
+                model.addAttribute("email", userDetail.get("emailAddress"));
+                model.addAttribute("address", userDetail.get("address"));
+            }
+            return "userProfile";
+        }
+       return "userLogin";
+    }
+
+    @GetMapping("/editProfile")
+    public String editProfile(Model model, HttpServletRequest request){
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession != null){
+            Integer id = (Integer) oldSession.getAttribute("userId");
+            String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
+            System.out.println(updatedStatus);
+            if(updatedStatus != null){
+                oldSession.removeAttribute("updatedStatus");
+            }
+
+            User user = new User();
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            if(userDetail == null){
+                model.addAttribute("updatedStatus", "Some exception occurred! Please try again!");
+            }
+
+            model.addAttribute("firstName", userDetail.get("firstName"));
+            model.addAttribute("lastName", userDetail.get("lastName"));
+            model.addAttribute("dateOfBirth", userDetail.get("dob"));
+            model.addAttribute("email", userDetail.get("emailAddress"));
+            model.addAttribute("address", userDetail.get("address"));
+            model.addAttribute("user", user);
+            model.addAttribute("updatedStatus", updatedStatus);
+            return "editUserDetails";
+        }
+        return "userLogin";
+    }
+
+    @PostMapping("/update_profile")
+    public String processUpdateProfile(User user, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession != null){
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            String message = user.updateUserDetails(databasePersistence);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/user/editProfile";
+        }
         return "userLogin";
     }
 }

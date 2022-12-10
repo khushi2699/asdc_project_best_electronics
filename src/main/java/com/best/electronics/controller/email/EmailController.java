@@ -23,6 +23,21 @@ public class EmailController {
         return "forgotPassword";
     }
 
+    @PostMapping("/enterNewPassword")
+    public String enterNewPassword(@ModelAttribute Login login, Model model){
+        model.addAttribute("login", new Login());
+        model.addAttribute("msg", "Message set successfully");
+        ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
+        changePasswordHandler.storeNewPassword(login.getPassword(), login.getConfirmPassword(), login.getEmailAddress());
+        return "changePassword";
+    }
+
+    @GetMapping("/userLogin")
+    public String userLogin(Model model){
+        model.addAttribute("user", new Login());
+        return "login";
+    }
+
     @PostMapping("/getCode")
     public String getCode(@ModelAttribute Login login, Model model) throws MessagingException {
         System.out.println("Email address" + login.getEmailAddress());
