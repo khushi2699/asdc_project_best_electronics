@@ -19,7 +19,7 @@ public class MissMatchPassword {
 
     private Boolean isPasswordValid(String password) {
         String urlPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*_?])[A-Za-z\\d!@#$%^&*_?]{8,}$";
-        Pattern pattern = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(urlPattern);
         Matcher matcher = pattern.matcher(password);
         return matcher.find();
     }

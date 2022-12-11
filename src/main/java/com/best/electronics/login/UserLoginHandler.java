@@ -23,7 +23,7 @@ public class UserLoginHandler implements ILoginHandler {
 
             loginState = authHandler.doHandler(emailAddress, password, "user");
 
-            if(loginState.getNextPage().equals("productList.html")){
+            if(loginState.getNextPage().equals("userLandingPage")){
                 SessionManager sessionManager = new SessionManager();
                 HttpSession session = sessionManager.getSession(request);
 
@@ -47,10 +47,5 @@ public class UserLoginHandler implements ILoginHandler {
     public void logout(HttpServletRequest request) {
         SessionManager sessionManager = new SessionManager();
         sessionManager.invalidateSession(request);
-    }
-
-    @Override
-    public Boolean resetPassword(String emailAddress, String newPassword) {
-        return null;
     }
 }

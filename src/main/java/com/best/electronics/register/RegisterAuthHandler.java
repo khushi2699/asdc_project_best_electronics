@@ -1,6 +1,6 @@
 package com.best.electronics.register;
 
-import com.best.electronics.model.User;
+import com.best.electronics.model.Account;
 
 public abstract class RegisterAuthHandler {
 
@@ -11,12 +11,12 @@ public abstract class RegisterAuthHandler {
         return nextHandler;
     }
 
-    public abstract RegisterState validate(User user);
+    public abstract RegisterState validate(Account account);
 
-    protected RegisterState nextHandler(User user) {
+    protected RegisterState nextHandler(Account account) {
         if(nextHandler == null){
             return new RegisterSuccessState();
         }
-        return nextHandler.validate(user);
+        return nextHandler.validate(account);
     }
 }
