@@ -11,6 +11,14 @@ public class Admin extends Account{
 
     private String firstName;
 
+    public Integer getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Integer adminId) {
+        this.adminId = adminId;
+    }
+
     private String lastName;
 
     private String emailAddress;
@@ -94,7 +102,16 @@ public class Admin extends Account{
         this.password = password;
     }
 
-
+    public Map<String, Object> getAdminDetails(Integer adminId, IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(adminId);
+            ArrayList<Map<String, Object>> adminDetails = databasePersistence.loadData("{call get_admin_details(?)}", parameters);
+            return adminDetails.get(0);
+        }catch(Exception e){
+            return null;
+        }
+    }
     public ArrayList<Order> getOrderDetails(IDatabasePersistence databasePersistence) {
         try {
             ArrayList<Order> orderList = new ArrayList<>();
