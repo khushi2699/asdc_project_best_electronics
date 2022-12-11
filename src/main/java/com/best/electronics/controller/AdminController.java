@@ -61,7 +61,7 @@ public class AdminController {
         ArrayList<Order> orderDetails = admin1.getOrderDetails(databasePersistence);
         System.out.println(orderDetails);
         model.addAttribute("orders", orderDetails);
-        return "orderList";
+        return "adminOrderList";
     }
     @GetMapping("/users")
     public String adminUsers(Model model) throws Exception{
