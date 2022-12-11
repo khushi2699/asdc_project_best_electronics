@@ -1,8 +1,10 @@
 package com.best.electronics.controller;
 
+import com.best.electronics.cart.AddProductToCart;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.database.ProductPersistence;
+import com.best.electronics.database.ProductToCartPersistence;
 import com.best.electronics.model.Product;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +21,13 @@ public class CartController {
     @PostMapping("/CartController/{product_id}")
     public String index(Product product, HttpServletRequest request, @PathVariable Integer product_id, Model model) throws Exception {
 
-        System.out.println(request.getParameter("userQuantity"));
+        System.out.println("Quantity" +request.getParameter("userQuantity"));
         Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
         ProductPersistence productPersistence = ProductPersistence.getInstance();
+
+        AddProductToCart addProductToCart = AddProductToCart.getInstance();
+        addProductToCart.saveProductToCart(product.getProductId(), quantity);
+
         IDatabasePersistence db = new MySQLDatabasePersistence();
         ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
         model.addAttribute("listProducts", productList);

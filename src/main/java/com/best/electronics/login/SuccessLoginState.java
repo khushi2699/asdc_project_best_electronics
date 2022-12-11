@@ -16,7 +16,8 @@ public class SuccessLoginState extends LoginState{
         if("admin".equalsIgnoreCase(type)){
             nextPage = "adminLandingPage.html";
         }else{
-            nextPage = "productList.html";
+//            nextPage = "productList.html";
+            nextPage = "redirect:/products";
         }
     }
 

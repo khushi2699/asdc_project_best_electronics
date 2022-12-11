@@ -23,7 +23,7 @@ public class UserLoginHandler implements ILoginHandler {
 
             loginState = authHandler.doHandler(emailAddress, password, "user");
 
-            if(loginState.getNextPage().equals("productList.html")){
+            if(loginState.getNextPage().equals("redirect:/products")){
                 SessionManager sessionManager = new SessionManager();
                 HttpSession session = sessionManager.getSession(request);
 
