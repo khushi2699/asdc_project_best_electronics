@@ -31,4 +31,17 @@ public class ProductPersistence {
            return result;
        }
     }
+
+    public ArrayList<Map<String, Object>> getAllUsersDetails(IDatabasePersistence p) throws Exception {
+
+        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+        ArrayList<Map<String, Object>> result = new ArrayList<>();
+        result = p.loadData("{call get_all_user_details()}", new ArrayList<>());
+        if(result.isEmpty()){
+            throw new DataNotFoundException("Unable to load users list");
+        }
+        else {
+            return result;
+        }
+    }
 }
