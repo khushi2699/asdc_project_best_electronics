@@ -9,77 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
 
-<style>
-table, th, td {
-  border:1px solid black;
-  border-spacing: 30px;
-}
-
-.productlist{
-border-collapse: collapse;
-    margin: 40px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 500px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-
-    }
-
-.plus-minus-input {
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.plus-minus-input .input-group-field {
-  text-align: center;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  padding: 1rem;
-}
-
-.plus-minus-input .input-group-field::-webkit-inner-spin-button,
-.plus-minus-input .input-group-field ::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-          appearance: none;
-}
-
-.plus-minus-input .input-group-button .circle {
-  border-radius: 50%;
-  padding: 0.25em 0.8em;
-}
-.addtocartbutton{
-border: none;
-  outline: 0;
-  padding: 12px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  font-size: 15px;
-}
-.search{
-width: 66%;
-  border-radius: 26px;
-  border: 1px solid #ada9a9;
-  padding: 1% 6%;
-  margin: 1% 1%;
-  background-image: url(https://www.pngarea.com/pngm/109/1164446_searchicon-png-search-icon-png-download.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  outline: 0;
-  background-position: 12px;
-  background-size: 16px;}
-</style>
 <body>
-
 <nav class="navbar navbar-expand navbar-dark bg-dark py-3">
     <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
     <div class="navbar-nav w-100">
-        <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/user/profile">My Account</a>
-        </div>
         <div class="ml-auto">
             <a class="nav-link nav-link active" href="/user/wishList">WishList</a>
         </div>
@@ -92,116 +25,19 @@ width: 66%;
     </div>
 </nav>
 
-<div class="container p-2 text-left">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <p>&nbsp</p>
-            <h3>Product List</h3>
-            <input type="text" class="search" id="myInput" onkeyup="myFunction()" placeholder="Search for products">
-            <p></p>
-            <div class="products">
-                <div class="products-body">
-                    <table class = "productlist" id="products" style="table-layout: float ; width: 100%" align="left">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th style="text-align: center">ID</th>
-                            <th style="text-align: center">Name</th>
-                            <th style="text-align: center">Price</th>
-                            <th style="text-align: center">Description</th>
-                            <th style="text-align: center">Brand</th>
-                            <th style="text-align: center">Quantity</th>
-                            <th style="text-align: center">Select Quantity</th>
-                            <th style="text-align: center">Cart</th>
-                            <th style="text-align: center">Whishlist</th>
-                        </tr>
-                        </thead>
-                        <tr th:each="products:${listProducts}" th:object = "${product}">
+<a style="position: absolute;right: 0;" href="/reports">Generate and Send Report</a>
 
-                            <td style="text-align: center" th:text="${products.productId}"></td>
-                            <td style="text-align: center" th:text="${products.productName}"></td>
-                            <td style="text-align: center" th:text="${products.productPrice}"></td>
-                            <td style="text-align: center" th:text="${products.productDescription}"></td>
-                            <td style="text-align: center" th:text="${products.productBrand}"></td>
-                            <td style="text-align: center" th:text="${products.availableQuantity}"></td>
-
-                            <form method="post" th:action="@{/CartController/{product_id}(product_id=${products.productId})}">
-
-                                    <td class="cart_quantity" style="text-align: center">
-                                        <input style="width: 50px" min="1" th:max="${products.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>
-
-                                    <td class="add to cart">
-                                            <button type="submit" id="btn" name="CartController" class="addtocartbutton"> Add to cart</button>
-                                    </td>
-
-                            </form>
-
-                            <form method="post" th:action="@{/WishlistController/{product_id}(product_id=${products.productId})}">
-
-                                <td class="add to whishlist">
-                                    <button type="submit" id="btn_whishlist" name="WhishlistController" class="addtocartbutton"> Add to whishlist</button>
-
-                                </td>
-                            </form>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
+<div class="container p-2 text-center">
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to BestElectronics</h1>
+        <p class="lead">One place to find all your electronics...</p>
+        <hr class="my-4">
+        <p>Make your selection!</p>
+        <h3><a class="btn btn-primary btn-lg"  th:href="@{/user/profile}" role="button">My Account</a></h3>
+        <h4><a class="btn btn-primary btn-lg"  th:href="@{/products}" role="button">Shop NOW</a></h4>
     </div>
 </div>
 
-<script>
-$('.qtyplus').click(function (e) {
-    e.preventDefault();
-    var $this = $(this);
-    var $target = $this.prev('input[name=' + $this.attr('field') + ']');
-    var currentVal = parseInt($target.val());
-    if (!isNaN(currentVal)) {
-        $target.val(currentVal+1);
-    } else {
-        $target.val(0);
-    }
-});
-$(".qtyminus").click(function (e) {
-    e.preventDefault();
-    var $this = $(this);
-    var $target = $this.next('input[name=' + $this.attr('field') + ']');
-    var currentVal = parseInt($target.val());
-    if (!isNaN(currentVal)) {
-        $target.val((currentVal == 0) ? 0 :currentVal-1);
-    } else {
-        $target.val(0);
-    }
-
-});
-
- $( ".addtocartbutton" ).click(function() {
-    $(this).css('background', 'green');
-  });
-
-  function myFunction() {
-  // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("products");
-  tr = table.getElementsByTagName("tr");
-
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
-
-</script>
 </body>
 </html>
 
