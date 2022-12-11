@@ -25,7 +25,7 @@ public class UserLoginHandlerTest {
         authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
 
         LoginState loginState = authHandler.doHandler("p@gmail.com", "Newuser@123", "user");
-        Assertions.assertEquals(loginState.getNextPage(), "productList.html");
+        Assertions.assertEquals(loginState.getNextPage(), "userLandingPage");
         Assertions.assertEquals(loginState.getLoginStatus(), "Successfully logged in");
     }
 
@@ -35,7 +35,7 @@ public class UserLoginHandlerTest {
         authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
 
         LoginState loginState = authHandler.doHandler("g@gmail.com", "Newuser@123", "user");
-        Assertions.assertEquals(loginState.getNextPage(), "userLogin.html");
+        Assertions.assertEquals(loginState.getNextPage(), "userLogin");
         Assertions.assertEquals(loginState.getLoginStatus(), "EmailAddress does not Exists!");
     }
 
@@ -45,7 +45,7 @@ public class UserLoginHandlerTest {
         authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
 
         LoginState loginState = authHandler.doHandler("p@gmail.com", "Newuser@125", "user");
-        Assertions.assertEquals(loginState.getNextPage(), "userLogin.html");
+        Assertions.assertEquals(loginState.getNextPage(), "userLogin");
         Assertions.assertEquals(loginState.getLoginStatus(), "Password is incorrect!");
     }
 }

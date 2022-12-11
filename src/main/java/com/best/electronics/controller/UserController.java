@@ -7,7 +7,6 @@ import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
-import com.best.electronics.model.Login;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
@@ -47,33 +46,33 @@ public class UserController {
     }
 
     @PostMapping("/process_login")
-    public String processLogin(Login user, Model model, HttpServletRequest request) {
+    public String processLogin(User user, Model model, HttpServletRequest request) {
         ILoginHandler loginHandler = new UserLoginHandler();
         LoginState loginState = loginHandler.login(user.getEmailAddress(), user.getPassword(), request);
         model.addAttribute("msg", loginState.getLoginStatus());
-        model.addAttribute("user", new Login());
+        model.addAttribute("user", new User());
         return loginState.getNextPage();
     }
 
     @GetMapping("/login")
     public String login(Model model){
-        model.addAttribute("user", new Login());
+        model.addAttribute("user", new User());
         return "userLogin";
     }
 
     @GetMapping("/resetPassword")
     public String resetPassword(Model model){
-        model.addAttribute("login", new Login());
+        model.addAttribute("login", new User());
         System.out.println("Printing reset Password");
         return "resetPassword";
     }
 
     @PostMapping("/checkValidToken")
-    public String checkValidToken(@ModelAttribute Login login, Model model) {
+    public String checkValidToken(@ModelAttribute User user, Model model) {
         ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
-        model.addAttribute("login", new Login());
-        model.addAttribute("emailAddress", login.getEmailAddress());
-        if(resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress())){
+        model.addAttribute("login", new User());
+        model.addAttribute("emailAddress", user.getEmailAddress());
+        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress())){
             return "changePassword";
         }
         else {
@@ -88,7 +87,7 @@ public class UserController {
         ILoginHandler loginHandler = new UserLoginHandler();
         loginHandler.logout(request);
 
-        model.addAttribute("user", new Login());
+        model.addAttribute("user", new User());
         model.addAttribute("logoutMessage", "Successfully logged out!");
         return "userLogin";
     }

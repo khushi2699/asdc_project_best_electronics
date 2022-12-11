@@ -1,17 +1,16 @@
 package com.best.electronics.model;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.database.MySQLDatabasePersistence;
-import exceptions.DataNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class User {
+public class User extends Account{
 
-    private String userId;
+    private Integer userId;
 
     private String firstName;
 
@@ -21,7 +20,7 @@ public class User {
 
     private String password;
 
-    private String reEnterPassword;
+    private String confirmPassword;
 
     private String dateOfBirth;
 
@@ -29,20 +28,24 @@ public class User {
 
     private String address;
 
-    private Integer resetPasswordToken;
+    private Integer token;
 
-    public String getUserId() {
+    @Override
+    public Integer getAccountId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    @Override
+    public void setAccountId(Integer userId) {
         this.userId = userId;
     }
 
+    @Override
     public String getFirstName() {
         return firstName;
     }
 
+    @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -63,20 +66,22 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public String getPassword() {
-        return password;
-    }
+    @Override
+    public String getPassword() {return password;}
 
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getReEnterPassword() {
-        return reEnterPassword;
+    @Override
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setReEnterPassword(String reEnterPassword) {
-        this.reEnterPassword = reEnterPassword;
+    @Override
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getDateOfBirth() {
@@ -103,12 +108,14 @@ public class User {
         this.address = address;
     }
 
-    public Integer getResetPasswordToken() {
-        return resetPasswordToken;
+    @Override
+    public Integer getToken() {
+        return token;
     }
 
-    public void setResetPasswordToken(Integer resetPasswordToken) {
-        this.resetPasswordToken = resetPasswordToken;
+    @Override
+    public void setToken(Integer token) {
+        this.token = token;
     }
 
     public String updateUserDetails(IDatabasePersistence databasePersistence){
@@ -188,18 +195,5 @@ public class User {
             return null;
         }
     }
-    public ArrayList<Map<String, Object>> getAllUsersDetails(IDatabasePersistence p) throws Exception {
-
-        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> result = new ArrayList<>();
-        result = p.loadData("{call get_all_user_details()}", new ArrayList<>());
-        if(result.isEmpty()){
-            throw new DataNotFoundException("Unable to load users list");
-        }
-        else {
-            return result;
-        }
-    }
-
 }
 
