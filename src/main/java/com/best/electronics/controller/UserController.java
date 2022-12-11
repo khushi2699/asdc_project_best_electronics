@@ -3,14 +3,19 @@ package com.best.electronics.controller;
 import com.best.electronics.controller.email.ResetPasswordCombinationValidationHandler;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
 import com.best.electronics.model.Login;
 import com.best.electronics.model.Order;
+import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
 import com.best.electronics.register.RegisterHandler;
 import com.best.electronics.register.RegisterState;
+import exceptions.NullPointerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -152,4 +157,35 @@ public class UserController {
         }
         return "userLogin";
     }
+
+    @GetMapping("/adminUsers")
+    public String adminUsers(Model model) throws Exception{
+
+        ProductPersistence productPersistence = ProductPersistence.getInstance();
+        IDatabasePersistence db = new MySQLDatabasePersistence();
+
+        ArrayList<Map<String, Object>> userList = null;
+        userList = productPersistence.getAllUsersDetails(db);
+        Logger logger = (Logger) LoggerFactory.getLogger(UserController.class);
+
+        if(userList == null){
+            throw new NullPointerException("Users List could not be fetched from the database");
+        }
+        else {
+            model.addAttribute("user", new User());
+            model.addAttribute("listUser", userList);
+            return "adminUsersList";
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

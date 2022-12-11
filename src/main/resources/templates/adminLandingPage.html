@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv= "Content-Type" content = "text/html; charset=UTF-8">
+    <meta name ="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+    <title> Home - Best Electronics Admin</title>
+
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <script type = "text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" ></script>
+    <script type = "text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" ></script>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div>
+        <nav class="navbar navbar-expand bg-dark navbar-dark">
+            <a class="navbar-brand" th:href="@{/}">
+                <img th:src="@{/images/DAL_LogoHorz_RGB_Gold_Wingtip.png}" width="120" height="50" />
+            </a>
+            <div class = "collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/adminUsers}">Users </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/adminProducts}">Products </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/orderDetails}">Orders </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/address}">Address </a>
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+
+    <div>
+        <h1> Best Electronics Admin Control Panel! </h1>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div>
+        <p> Best Electronics Admin Control Panel - Copyright &copy; BestElectronics </p>
+    </div>
+</div>
+
+</body>
+</html>

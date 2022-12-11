@@ -5,7 +5,8 @@ import com.best.electronics.database.IDatabasePersistence;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Admin {
+public class Adminn {
+
     private String adminId;
 
     private String firstName;
@@ -16,7 +17,13 @@ public class Admin {
 
     private String password;
 
-    private int userId;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getAdminId() {
         return adminId;
@@ -50,22 +57,6 @@ public class Admin {
         this.emailAddress = emailAddress;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-//    public int getUserId() {
-//        return userId;
-//    }
-
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public ArrayList<Order> getOrderDetails(IDatabasePersistence databasePersistence) {
         try {
             ArrayList<Order> orderList = new ArrayList<>();
@@ -89,11 +80,11 @@ public class Admin {
                 System.out.println("User Details: " + userInfo);
                 Map<String, Object> user = userInfo.get(0);
 
-                    User u = new User();
-                    u.setFirstName((String) user.get("firstName"));
-                    u.setLastName((String) user.get("lastName"));
-                    u.setEmailAddress((String) user.get("emailAddress"));
-                    u.setAddress((String) user.get("address"));
+                User u = new User();
+                u.setFirstName((String) user.get("firstName"));
+                u.setLastName((String) user.get("lastName"));
+                u.setEmailAddress((String) user.get("emailAddress"));
+                u.setAddress((String) user.get("address"));
 
                 o.setUser(u);
                 orderList.add(o);
@@ -104,6 +95,6 @@ public class Admin {
         } catch (Exception e) {
             return null;
         }
-    }
 
+    }
 }

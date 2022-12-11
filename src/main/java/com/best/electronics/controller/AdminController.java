@@ -6,7 +6,7 @@ import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
-import com.best.electronics.model.Admin;
+import com.best.electronics.model.Adminn;
 import com.best.electronics.model.Login;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.User;
@@ -38,6 +38,7 @@ public class AdminController {
         model.addAttribute("msg", loginState.getLoginStatus());
         model.addAttribute("admin", new Login());
         return loginState.getNextPage();
+//        return "adminProfile";
     }
 
     @GetMapping("/logout")
@@ -53,9 +54,11 @@ public class AdminController {
     @GetMapping("/orderDetails")
     public String orderDetails(Login admin, Model model, HttpServletRequest request){
 
-        Admin admin1 = new Admin();
+        Adminn admin1 = new Adminn();
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Order> orderDetails = admin1.getOrderDetails(databasePersistence);
+        System.out.println(orderDetails);
+        System.out.println(orderDetails);
         System.out.println(orderDetails);
         model.addAttribute("orders", orderDetails);
         return "orderList";

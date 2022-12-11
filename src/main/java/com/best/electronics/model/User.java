@@ -1,6 +1,8 @@
 package com.best.electronics.model;
 
 import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.database.MySQLDatabasePersistence;
+import exceptions.DataNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -186,5 +188,18 @@ public class User {
             return null;
         }
     }
+    public ArrayList<Map<String, Object>> getAllUsersDetails(IDatabasePersistence p) throws Exception {
+
+        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+        ArrayList<Map<String, Object>> result = new ArrayList<>();
+        result = p.loadData("{call get_all_user_details()}", new ArrayList<>());
+        if(result.isEmpty()){
+            throw new DataNotFoundException("Unable to load users list");
+        }
+        else {
+            return result;
+        }
+    }
+
 }
 
