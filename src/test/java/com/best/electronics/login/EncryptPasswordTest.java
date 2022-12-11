@@ -27,7 +27,7 @@ public class EncryptPasswordTest {
 
     @Test
     public void failEncryptPasswordTest() throws NoSuchAlgorithmException {
-        String password = "password";
+        String password = "Admin@123";
         String encryptedPassword = "5f4dcc3b5aa765d61d8327deb882cf77";
 
         Assertions.assertNotEquals(encryptedPassword, encryptPassword.encryptString(password));

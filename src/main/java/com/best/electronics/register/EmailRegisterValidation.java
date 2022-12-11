@@ -1,7 +1,7 @@
 package com.best.electronics.register;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.model.User;
+import com.best.electronics.model.Account;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,18 +10,18 @@ import java.util.regex.Pattern;
 
 public class EmailRegisterValidation extends RegisterAuthHandler{
 
-    private final ArrayList<Map<String, Object>> usersData;
+    private final ArrayList<Map<String, Object>> data;
 
     public EmailRegisterValidation(IDatabasePersistence databasePersistence) throws Exception {
-        usersData = databasePersistence.loadData("{call get_user_emailAddress()}", new ArrayList<>());
+        data = databasePersistence.loadData("{call get_user_emailAddress()}", new ArrayList<>());
     }
 
     @Override
-    public RegisterState validate(User user) {
-        String emailAddress = user.getEmailAddress();
+    public RegisterState validate(Account account) {
+        String emailAddress = account.getEmailAddress();
 
         if(isEmailAddressValid(emailAddress) && isNewEmailAddress(emailAddress)){
-            return nextHandler(user);
+            return nextHandler(account);
         }
         return new EmailAlreadyExistsState();
     }
@@ -34,8 +34,8 @@ public class EmailRegisterValidation extends RegisterAuthHandler{
     }
 
     private Boolean isNewEmailAddress(String emailAddress) {
-        if (!usersData.isEmpty()) {
-            for (Map<String, Object> userData : usersData) {
+        if (!data.isEmpty()) {
+            for (Map<String, Object> userData : data) {
                 String dbEmailAddress = (String) userData.get("emailAddress");
                 if (dbEmailAddress.equalsIgnoreCase(emailAddress)) {
                     return false;

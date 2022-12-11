@@ -28,7 +28,7 @@ public class RegisterHandlerTest {
         user.setLastName("User");
         user.setEmailAddress("test@gmail.com");
         user.setPassword("Newuser@123");
-        user.setReEnterPassword("Newuser@123");
+        user.setConfirmPassword("Newuser@123");
         user.setDateOfBirth("12/12/1992");
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
@@ -48,7 +48,7 @@ public class RegisterHandlerTest {
         user.setLastName("User");
         user.setEmailAddress("p@gmail.com");
         user.setPassword("Newuser@123");
-        user.setReEnterPassword("Newuser@123");
+        user.setConfirmPassword("Newuser@123");
         user.setDateOfBirth("12/12/1992");
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
@@ -68,7 +68,7 @@ public class RegisterHandlerTest {
         user.setLastName("User");
         user.setEmailAddress("test@gmail.com");
         user.setPassword("Newuser@123");
-        user.setReEnterPassword("Newuser@123");
+        user.setConfirmPassword("Newuser@123");
         user.setDateOfBirth("12/12/1992");
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
@@ -88,7 +88,7 @@ public class RegisterHandlerTest {
         user.setLastName("oj0_");
         user.setEmailAddress("test@gmail.com");
         user.setPassword("Newuser@123");
-        user.setReEnterPassword("Newuser@123");
+        user.setConfirmPassword("Newuser@123");
         user.setDateOfBirth("12/12/1992");
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
@@ -107,8 +107,8 @@ public class RegisterHandlerTest {
         user.setFirstName("Test");
         user.setLastName("User");
         user.setEmailAddress("test@gmail.com");
-        user.setPassword("Newuser1");
-        user.setReEnterPassword("Newuser1");
+        user.setPassword("admin@123");
+        user.setConfirmPassword("admin@123");
         user.setDateOfBirth("12/12/1992");
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
@@ -129,7 +129,7 @@ public class RegisterHandlerTest {
         user.setLastName("User");
         user.setEmailAddress("test@gmail.com");
         user.setPassword("Newuser@123");
-        user.setReEnterPassword("Newuser@125");
+        user.setConfirmPassword("Newuser@125");
         user.setDateOfBirth("12/12/1992");
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
