@@ -80,7 +80,6 @@ public class EmailController {
             emailController.draftEmail(randomNumber,email);
             emailController.sendMail();
         }
-
     }
 
     public int generateRandomNumber(){
@@ -108,7 +107,6 @@ public class EmailController {
         mimeMessage.setText("We have received a password change request from your ID. Below is your code: "+randomNumber+". " +
                 "Go to below link to change your password: http://localhost:8080/user/resetPassword");
         return mimeMessage;
-
     }
 
     private void saveToDB(int randomNumber, String email){
