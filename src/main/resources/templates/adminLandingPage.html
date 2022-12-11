@@ -14,28 +14,30 @@
     <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
     <div class="navbar-nav w-100">
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminProducts">Products</a>
+            <a class="nav-link nav-link active" href="/admin/products">Products</a>
         </div>
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminUsers">Users</a>
+            <a class="nav-link nav-link active" href="/admin/users">Users</a>
         </div>
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminProfile">Profile</a>
+            <a class="nav-link nav-link active" href="/admin/profile">Profile</a>
         </div>
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminLogout">Logout</a>
+            <a class="nav-link nav-link active" href="/reports">Generate & Send Report</a>
+        </div>
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/admin/logout">Logout</a>
         </div>
     </div>
 </nav>
 
-<a style="position: absolute;right: 0;" href="/reports">Generate and Send Report</a>
 
 <div class="container p-2 text-center">
     <div class="jumbotron">
         <h1 class="display-4">Welcome to BestElectronics Admin Panel!</h1>
         <p class="lead">One place to find all your Users, Products and Orders!...</p>
         <hr class="my-4">
-        <h3><a class="btn btn-primary btn-lg"  th:href="@{/admin/adminProfile}" role="button">My Account</a></h3>
+        <h3><a class="btn btn-primary btn-lg"  th:href="@{/admin/profile}" role="button">My Account</a></h3>
     </div>
 </div>
 

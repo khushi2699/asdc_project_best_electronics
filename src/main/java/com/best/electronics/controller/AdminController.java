@@ -44,7 +44,7 @@ public class AdminController {
         return loginState.getNextPage();
     }
 
-    @GetMapping("/adminLogout")
+    @GetMapping("/logout")
     public String logout(Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new UserLoginHandler();
         loginHandler.logout(request);
@@ -63,7 +63,7 @@ public class AdminController {
         model.addAttribute("orders", orderDetails);
         return "orderList";
     }
-    @GetMapping("/adminUsers")
+    @GetMapping("/users")
     public String adminUsers(Model model) throws Exception{
 
         ProductPersistence productPersistence = ProductPersistence.getInstance();
@@ -83,7 +83,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/adminProducts")
+    @GetMapping("/products")
     public String adminProducts(Model model) throws Exception{
 
         ProductPersistence productPersistence = ProductPersistence.getInstance();
@@ -103,7 +103,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/adminProfile")
+    @GetMapping("/profile")
     public String adminProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
@@ -121,7 +121,7 @@ public class AdminController {
         return "adminLogin";
     }
 
-    @GetMapping("/adminEditProfile")
+    @GetMapping("/editProfile")
     public String adminEditProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){

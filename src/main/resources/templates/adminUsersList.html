@@ -9,24 +9,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
 
+<body>
 <nav class="navbar navbar-expand navbar-dark bg-dark py-3">
     <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
     <div class="navbar-nav w-100">
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminProducts">Products</a>
+            <a class="nav-link nav-link active" href="/admin/products">Products</a>
         </div>
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminUsers">Users</a>
+            <a class="nav-link nav-link active" href="/admin/users">Users</a>
         </div>
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminProfile">Profile</a>
+            <a class="nav-link nav-link active" href="/admin/profile">Profile</a>
         </div>
         <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/adminLogout">Logout</a>
+            <a class="nav-link nav-link active" href="/reports">Generate & Send Report</a>
+        </div>
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/admin/logout">Logout</a>
         </div>
     </div>
 </nav>
-<a style="position: absolute;right: 0;" href="/reports">Generate and Send Report</a>
 <style>
 table, th, td {
   border:1px solid black;
@@ -57,9 +60,9 @@ width: 66%;
   background-position: 12px;
   background-size: 16px;}
 </style>
+</body>
+
 <body>
-
-
 <div class="container p-2 text-left">
     <div class="row">
         <div class="col-md-6 offset-md-3">
@@ -99,11 +102,6 @@ width: 66%;
 
 
 <script>
-
-
-
-
-
   function myFunction() {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
