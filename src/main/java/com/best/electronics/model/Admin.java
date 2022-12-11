@@ -11,13 +11,6 @@ public class Admin extends Account{
 
     private String firstName;
 
-    public Integer getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(Integer adminId) {
-        this.adminId = adminId;
-    }
 
     private String lastName;
 
@@ -29,7 +22,6 @@ public class Admin extends Account{
 
     private Integer token;
 
-//    private int userId;
 
     @Override
     public Integer getAccountId() {
@@ -89,14 +81,6 @@ public class Admin extends Account{
         this.token = token;
     }
 
-//    public int getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
-
     @Override
     public void setPassword(String password) {
         this.password = password;
@@ -143,7 +127,6 @@ public class Admin extends Account{
 
                 o.setUser(u);
                 orderList.add(o);
-//
             }
 
             return orderList;
