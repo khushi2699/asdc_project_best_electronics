@@ -1,4 +1,4 @@
-package exceptions;
+package com.best.electronics.exceptions;
 import java.util.Date;
 public class ErrorMessage {
         private int statusCode;

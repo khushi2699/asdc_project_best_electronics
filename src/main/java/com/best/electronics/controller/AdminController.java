@@ -11,7 +11,7 @@ import com.best.electronics.model.Admin;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
-import exceptions.NullPointerException;
+import com.best.electronics.exceptions.NullPointerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
