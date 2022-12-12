@@ -53,7 +53,7 @@ public class AdminController {
         loginHandler.logout(request);
         model.addAttribute("admin", new Admin());
         model.addAttribute("logoutMessage", "Successfully logged out!");
-        return "adminLogin";
+        return "adminLogout";
     }
 
     @GetMapping("/orderDetails")
