@@ -11,7 +11,6 @@ public class Admin extends Account{
 
     private String firstName;
 
-
     private String lastName;
 
     private String emailAddress;
@@ -21,7 +20,6 @@ public class Admin extends Account{
     private String confirmPassword;
 
     private Integer token;
-
 
     @Override
     public Integer getAccountId() {
@@ -62,6 +60,9 @@ public class Admin extends Account{
     }
 
     @Override
+    public void setPassword(String password) {this.password = password;}
+
+    @Override
     public String getConfirmPassword() {
         return confirmPassword;
     }
@@ -79,11 +80,6 @@ public class Admin extends Account{
     @Override
     public void setToken(Integer token) {
         this.token = token;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Map<String, Object> getAdminDetails(Integer adminId, IDatabasePersistence databasePersistence){

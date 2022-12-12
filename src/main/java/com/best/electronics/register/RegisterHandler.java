@@ -13,12 +13,12 @@ public class RegisterHandler {
         RegisterState registerState = new GenericFailedRegisterState();
         try{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            RegisterAuthHandler registerHandler = new EmailRegisterValidation(databasePersistence);
+            RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", databasePersistence);
             registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
             registerState = registerHandler.validate(user);
 
-            if(registerState.getNextPage().equals("registerSuccess.html")){
+            if(registerState.getNextPage().equals("registerSuccess")){
                 ArrayList<Object> userDetails = new ArrayList<>();
                 userDetails.add(user.getFirstName());
                 userDetails.add(user.getLastName());

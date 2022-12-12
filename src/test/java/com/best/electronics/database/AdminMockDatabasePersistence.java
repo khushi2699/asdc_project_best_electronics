@@ -16,6 +16,7 @@ public class AdminMockDatabasePersistence implements IDatabasePersistence{
         if(query.equals("{call get_admin_login_details()}")){
             ArrayList<Map<String, Object>> dataList = new ArrayList<>();
             HashMap<String, Object> dataMap = new HashMap<>();
+            dataMap.put("id", 1);
             dataMap.put("emailAddress", "admin@gmail.com");
             dataMap.put("password", "d1b2547eec96cabc2d4ab655cd1b1ba9");
             dataList.add(dataMap);

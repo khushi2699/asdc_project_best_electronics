@@ -113,34 +113,36 @@ width: 66%;
               <th style="text-align: center">Brand</th>
               <th style="text-align: center">Quantity</th>
               <th style="text-align: center">Select Quantity</th>
-              <th style="text-align: center">Cart</th>
-              <th style="text-align: center">Whishlist</th>
+              <th style="text-align: center">Update Cart</th>
+              <th style="text-align: center">Remove</th>
             </tr>
             </thead>
-            <tr th:each="products:${listProducts}" th:object = "${product}">
+            <tr th:each="carts:${listCart}" th:object = "${cart}">
 
-              <td style="text-align: center" th:text="${products.productId}"></td>
-              <td style="text-align: center" th:text="${products.productName}"></td>
-              <td style="text-align: center" th:text="${products.productPrice}"></td>
-              <td style="text-align: center" th:text="${products.productDescription}"></td>
-              <td style="text-align: center" th:text="${products.productBrand}"></td>
-              <td style="text-align: center" th:text="${products.availableQuantity}"></td>
+              <td style="text-align: center" th:text="${carts.cartItemId}"></td>
+              <td style="text-align: center" th:text="${carts.productName}"></td>
+              <td style="text-align: center" th:text="${carts.productPrice}"></td>
+              <td style="text-align: center" th:text="${carts.productDescription}"></td>
+              <td style="text-align: center" th:text="${carts.productBrand}"></td>
+              <td style="text-align: center" th:text="${carts.quantity}"></td>
 
-              <form method="post" th:action="@{/CartController/{product_id}(product_id=${products.productId})}">
+<!--              <form method="post" th:action="@{/CartController/{product_id}(product_id=${carts.productId})}">-->
+                <form method="post">
 
                 <td class="cart_quantity" style="text-align: center">
-                  <input style="width: 50px" min="1" th:max="${products.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>
+                  <input style="width: 50px" min="1" th:max="${carts.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>
 
                 <td class="add to cart">
-                  <button type="submit" id="btn" name="CartController" class="addtocartbutton"> Add to cart</button>
+                  <button type="submit" id="btn" name="CartController" class="addtocartbutton"> Update cart</button>
                 </td>
 
               </form>
 
-              <form method="post" th:action="@{/WishlistController/{product_id}(product_id=${products.productId})}">
+<!--              <form method="post" th:action="@{/WishlistController/{product_id}(product_id=${carts.productId})}">-->
+                <form method="post">
 
                 <td class="add to whishlist">
-                  <button type="submit" id="btn_whishlist" name="WhishlistController" class="addtocartbutton"> Add to whishlist</button>
+                  <button type="submit" id="btn_whishlist" name="WhishlistController" class="addtocartbutton"> Remove from cart</button>
 
                 </td>
               </form>

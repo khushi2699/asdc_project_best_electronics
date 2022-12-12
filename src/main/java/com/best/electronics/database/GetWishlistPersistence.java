@@ -22,10 +22,6 @@ public class GetWishlistPersistence {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(id);
         result = databasePersistence.loadData("{call getWishlistDetails(?)}", tokenDetails);
-        if(result.isEmpty()){
-            throw new DataNotFoundException("Unable to load wish list");
-        }
-        else {
-            return result;
-        }
-    }}
+        return result;
+    }
+}

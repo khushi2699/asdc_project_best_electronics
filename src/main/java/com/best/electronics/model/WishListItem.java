@@ -8,6 +8,9 @@ public class WishListItem {
 
     private Integer userId;
 
+    private Integer wishListItemIdNumber;
+
+
     public WishListItem()
     {
 
@@ -16,6 +19,14 @@ public class WishListItem {
         this.wishListItemId = wishListItemId;
         this.userId = userId;
         this.identifier = identifier;
+        this.wishListItemIdNumber = null;
+    }
+
+    public WishListItem(Integer wishListItemId, String identifier, Integer userId, Integer wishListItemIdNumber){
+        this.wishListItemId = wishListItemId;
+        this.userId = userId;
+        this.identifier = identifier;
+        this.wishListItemIdNumber = wishListItemIdNumber;
     }
 
     public Integer getUserId() {
@@ -39,5 +50,13 @@ public class WishListItem {
 
     public void setWishListItemId(Integer wishListItemId) {
         this.wishListItemId = wishListItemId;
+    }
+
+    public Integer getWishListItemIdNumber() {
+        return wishListItemIdNumber;
+    }
+
+    public void setWishListItemIdNumber(Integer wishListItemIdNumber) {
+        this.wishListItemIdNumber = wishListItemIdNumber;
     }
 }
