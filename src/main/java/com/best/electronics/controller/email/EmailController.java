@@ -78,7 +78,6 @@ public class EmailController {
             emailController.draftEmail(randomNumber,email);
             emailController.sendMail();
         }
-
     }
 
     public int generateRandomNumber(){

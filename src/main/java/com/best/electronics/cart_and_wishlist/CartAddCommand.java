@@ -1,0 +1,22 @@
+package com.best.electronics.cart_and_wishlist;
+
+import com.best.electronics.database.ProductToCartPersistence;
+import com.best.electronics.login.EncryptPassword;
+import com.best.electronics.model.CartItem;
+
+import javax.servlet.http.HttpServletRequest;
+
+public class CartAddCommand implements CommandForProduct{
+
+    CartItem cartItem;
+
+    public CartAddCommand(CartItem cartItem){
+        this.cartItem = cartItem;
+    }
+
+    @Override
+    public void execute() {
+        ProductToCartPersistence productToCartPersistence = ProductToCartPersistence.getInstance();
+        productToCartPersistence.addProductsToCart(cartItem);
+    }
+}
