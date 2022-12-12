@@ -8,6 +8,6 @@ public class InvalidUsernameState extends RegisterState{
 
     @Override
     public void setNextPage() {
-        nextPage = "registrationForm.html";
+        nextPage = "registrationForm";
     }
 }

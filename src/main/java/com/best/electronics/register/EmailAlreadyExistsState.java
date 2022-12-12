@@ -8,6 +8,6 @@ public class EmailAlreadyExistsState extends RegisterState{
 
     @Override
     public void setNextPage() {
-        nextPage = "registrationForm.html";
+        nextPage = "registrationForm";
     }
 }

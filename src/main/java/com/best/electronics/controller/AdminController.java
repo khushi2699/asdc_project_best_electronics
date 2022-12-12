@@ -12,8 +12,6 @@ import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
 import exceptions.NullPointerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +36,7 @@ public class AdminController {
     @PostMapping("/process_login")
     public String processLogin(Admin admin, Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new AdminLoginHandler();
-        LoginState loginState = loginHandler.login(admin.getEmailAddress(), admin.getPassword(), request);
+        LoginState loginState = loginHandler.login(admin, request);
         model.addAttribute("msg", loginState.getLoginStatus());
         model.addAttribute("admin", new Admin());
         return loginState.getNextPage();
@@ -55,24 +53,19 @@ public class AdminController {
 
     @GetMapping("/orderDetails")
     public String orderDetails(Admin admin, Model model, HttpServletRequest request){
-
         Admin admin1 = new Admin();
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Order> orderDetails = admin1.getOrderDetails(databasePersistence);
         System.out.println(orderDetails);
         model.addAttribute("orders", orderDetails);
-        return "adminOrderList";
+        return "orderList";
     }
     @GetMapping("/users")
-    public String users(Model model) throws Exception{
-
+    public String adminUsers(Model model) throws Exception{
         ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
 
-        ArrayList<Map<String, Object>> userList = null;
-        userList = productPersistence.getAllUsersDetails(db);
-        Logger logger = (Logger) LoggerFactory.getLogger(UserController.class);
-
+        ArrayList<Map<String, Object>> userList = productPersistence.getAllUsersDetails(db);
         if(userList == null){
             throw new NullPointerException("Users List could not be fetched from the database");
         }
@@ -84,15 +77,11 @@ public class AdminController {
     }
 
     @GetMapping("/products")
-    public String products(Model model) throws Exception{
-
+    public String adminProducts(Model model) throws Exception{
         ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
 
-        ArrayList<Map<String, Object>> productList = null;
-        productList = productPersistence.getDetails(db);
-        Logger logger = (Logger) LoggerFactory.getLogger(ProductController.class);
-
+        ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
         if(productList == null){
             throw new NullPointerException("Product List could not be fetched from the database");
         }
@@ -104,10 +93,10 @@ public class AdminController {
     }
 
     @GetMapping("/profile")
-    public String profile(Model model, HttpServletRequest request){
+    public String adminProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
-            Integer id = (Integer) oldSession.getAttribute("adminId");
+            Integer id = (Integer) oldSession.getAttribute("id");
             Admin admin = new Admin();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             Map<String, Object> adminDetail = admin.getAdminDetails(id, databasePersistence);
@@ -122,10 +111,10 @@ public class AdminController {
     }
 
     @GetMapping("/editProfile")
-    public String editProfile(Model model, HttpServletRequest request){
+    public String adminEditProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
-            Integer id = (Integer) oldSession.getAttribute("adminId");
+            Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
             System.out.println(updatedStatus);
             if(updatedStatus != null){

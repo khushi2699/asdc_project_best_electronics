@@ -1,6 +1,8 @@
 package com.best.electronics.login;
 
-public class EmailAuthHandler extends AuthHandler {
+import com.best.electronics.model.Account;
+
+public class EmailAuthHandler extends LoginAuthHandler {
 
     private final ILoginValidationHandler loginValidation;
 
@@ -9,9 +11,9 @@ public class EmailAuthHandler extends AuthHandler {
     }
 
     @Override
-    public LoginState doHandler(String emailAddress, String password, String type) throws Exception {
-        if(loginValidation.isValidEmailAddress(emailAddress)){
-            return nextHandler(emailAddress, password, type);
+    public LoginState doHandler(Account account, String type) throws Exception {
+        if(loginValidation.isValidEmailAddress(account.getEmailAddress())){
+            return nextHandler(account, type);
         }else{
             return new InvalidEmailAddressState(type);
         }

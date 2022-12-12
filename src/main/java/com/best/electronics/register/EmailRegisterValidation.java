@@ -12,8 +12,8 @@ public class EmailRegisterValidation extends RegisterAuthHandler{
 
     private final ArrayList<Map<String, Object>> data;
 
-    public EmailRegisterValidation(IDatabasePersistence databasePersistence) throws Exception {
-        data = databasePersistence.loadData("{call get_user_emailAddress()}", new ArrayList<>());
+    public EmailRegisterValidation(String query, IDatabasePersistence databasePersistence) throws Exception {
+        data = databasePersistence.loadData(query, new ArrayList<>());
     }
 
     @Override
