@@ -11,6 +11,7 @@ public class Admin extends Account{
 
     private String firstName;
 
+
     private String lastName;
 
     private String emailAddress;
@@ -21,7 +22,6 @@ public class Admin extends Account{
 
     private Integer token;
 
-//    private int userId;
 
     @Override
     public Integer getAccountId() {
@@ -81,20 +81,21 @@ public class Admin extends Account{
         this.token = token;
     }
 
-//    public int getUserId() {
-//        return userId;
-//    }
-//
-//    public void setUserId(int userId) {
-//        this.userId = userId;
-//    }
-
     @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
-
+    public Map<String, Object> getAdminDetails(Integer adminId, IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(adminId);
+            ArrayList<Map<String, Object>> adminDetails = databasePersistence.loadData("{call get_admin_details(?)}", parameters);
+            return adminDetails.get(0);
+        }catch(Exception e){
+            return null;
+        }
+    }
     public ArrayList<Order> getOrderDetails(IDatabasePersistence databasePersistence) {
         try {
             ArrayList<Order> orderList = new ArrayList<>();
@@ -126,7 +127,6 @@ public class Admin extends Account{
 
                 o.setUser(u);
                 orderList.add(o);
-//
             }
 
             return orderList;

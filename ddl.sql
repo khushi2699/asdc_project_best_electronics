@@ -170,3 +170,13 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+---@Author = Aishwarya----
+------Adding the stored procedure get all users-------
+use CSCI5308_4_DEVINT;
+
+CREATE PROCEDURE `get_all_user_details` ()
+BEGIN
+	select * from User;
+END;
