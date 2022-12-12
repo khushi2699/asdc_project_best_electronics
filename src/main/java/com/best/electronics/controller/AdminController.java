@@ -142,4 +142,16 @@ public class AdminController {
         return "adminLogin";
     }
 
+    @PostMapping("/update_profile")
+    public String processUpdateProfile(Admin admin, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession != null){
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            String message = admin.updateAdminDetails(databasePersistence);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/admin/editProfile";
+        }
+        return "AdminLogin";
+    }
+
 }

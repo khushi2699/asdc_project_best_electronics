@@ -4,6 +4,8 @@ import com.best.electronics.database.IDatabasePersistence;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Admin extends Account{
 
@@ -129,5 +131,30 @@ public class Admin extends Account{
         } catch (Exception e) {
             return null;
         }
+    }
+    private Boolean isUsernameValid(String name) {
+        String urlPattern = "^[a-zA-Z]{2,20}$";
+        Pattern pattern = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        return matcher.find();
+    }
+    public String updateAdminDetails(IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+
+            if(isUsernameValid(this.getFirstName()) && isUsernameValid(this.getLastName())){
+                updatedDetails.add(this.getEmailAddress());
+                updatedDetails.add(this.getFirstName());
+                updatedDetails.add(this.getLastName());
+                if(databasePersistence.saveData("{call update_admin_details(?, ?, ?)}", updatedDetails)){
+                    return "Admin Profile Updated Successfully";
+                }
+            }else{
+                return "Either firstName or lastName are not in correct format!";
+            }
+        }catch(Exception e){
+            return "Admin Profile Updated Failed! Please try again!";
+        }
+        return "Admin Profile Updated Failed! Please try again!";
     }
 }
