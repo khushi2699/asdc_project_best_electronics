@@ -28,6 +28,7 @@ public class User {
     private String address;
 
     private Integer resetPasswordToken;
+    private String confirmPassword;
 
     public String getUserId() {
         return userId;
@@ -99,6 +100,15 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Integer getResetPasswordToken() {
