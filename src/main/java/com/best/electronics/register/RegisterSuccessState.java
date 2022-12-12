@@ -8,6 +8,6 @@ public class RegisterSuccessState extends RegisterState{
 
     @Override
     public void setNextPage() {
-        nextPage = "registerSuccess.html";
+        nextPage = "registerSuccess";
     }
 }
