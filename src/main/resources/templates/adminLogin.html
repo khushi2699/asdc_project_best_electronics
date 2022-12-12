@@ -11,50 +11,49 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-dark bg-dark py-3">
-        <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
-    </nav>
+<nav class="navbar navbar-dark bg-dark py-3">
+    <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
+</nav>
+<div class="container p-2 text-center">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Admin Sign In</h5>
 
-    <div class="container p-2 text-center">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Admin Sign In</h5>
+                    <form th:action="@{process_login}" th:object="${admin}"
+                          method="post">
+                        <div th:if="${logoutMessage} != null">
+                            <p style="color: red" data-th-text="${logoutMessage}"></p>
+                        </div>
+                        <div th:if="${msg} != null">
+                            <p style="color: red" data-th-text="${msg}"></p>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputEmail" class="col-4 col-form-label">Email address:</label>
+                            <div class="col-8">
+                                <input id="inputEmail" type="email" th:field="*{emailAddress}" class="form-control" required/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-4 col-form-label">Password:</label>
+                            <div class="col-8">
+                                <input id="inputPassword" type="password" th:field="*{password}" class="form-control"
+                                       required />
+                            </div>
+                        </div>
 
-                        <form th:action="@{process_login}" th:object="${admin}"
-                              method="post">
-                            <div th:if="${logoutMessage} != null">
-                                <p style="color: red" data-th-text="${logoutMessage}"></p>
-                            </div>
-                            <div th:if="${msg} != null">
-                                <p style="color: red" data-th-text="${msg}"></p>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputEmail" class="col-4 col-form-label">Email address:</label>
-                                <div class="col-8">
-                                    <input id="inputEmail" type="email" th:field="*{emailAddress}" class="form-control" required/>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputPassword" class="col-4 col-form-label">Password:</label>
-                                <div class="col-8">
-                                    <input id="inputPassword" type="password" th:field="*{password}" class="form-control"
-                                           required />
-                                </div>
-                            </div>
+                        <p><a href="/admin/forgotPassword">Forgot Password?</a></p>
 
-                            <p><a href="/admin/forgotPassword">Forgot Password?</a></p>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+                    </form>
 
-                            <div>
-                                <button type="submit" class="btn btn-primary">Sign In</button>
-                            </div>
-                        </form>
-
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
