@@ -7,9 +7,7 @@ import javax.servlet.http.HttpSession;
 
 public class SessionCreationHandler extends LoginAuthHandler{
 
-    HttpServletRequest request;
-
-    HttpSession session;
+    private final HttpServletRequest request;
 
     public SessionCreationHandler(HttpServletRequest request) {
         this.request = request;
@@ -19,7 +17,6 @@ public class SessionCreationHandler extends LoginAuthHandler{
     public LoginState doHandler(Account account, String type){
         SessionManager sessionManager = new SessionManager();
         HttpSession session = sessionManager.getSession(request);
-        this.session = session;
 
         if(session == null){
             return new GenericFailedLoginState(type);

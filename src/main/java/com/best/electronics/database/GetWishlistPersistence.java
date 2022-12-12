@@ -1,7 +1,5 @@
 package com.best.electronics.database;
 
-import exceptions.DataNotFoundException;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -18,10 +16,8 @@ public class GetWishlistPersistence {
 
     public ArrayList<Map<String, Object>> getWishListDetails(int id) throws Exception {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> result = new ArrayList<>();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(id);
-        result = databasePersistence.loadData("{call getWishlistDetails(?)}", tokenDetails);
-        return result;
+        return databasePersistence.loadData("{call getWishlistDetails(?)}", tokenDetails);
     }
 }

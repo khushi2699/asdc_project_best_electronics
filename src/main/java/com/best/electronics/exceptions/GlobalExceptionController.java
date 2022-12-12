@@ -1,4 +1,4 @@
-package exceptions;
+package com.best.electronics.exceptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GlobalExceptionController
-
-{
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionController.class);
+public class GlobalExceptionController {
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleDataNotFoundException(DataNotFoundException ex) {
