@@ -6,7 +6,6 @@ import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
-import com.best.electronics.model.Login;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.User;
 import com.best.electronics.register.RegisterHandler;
@@ -41,34 +40,39 @@ public class UserController {
         return "registrationForm";
     }
 
+    @GetMapping("/home")
+    public String userHome(Model model){
+        return "userLandingPage";
+    }
+
     @PostMapping("/process_login")
-    public String processLogin(Login user, Model model, HttpServletRequest request) {
+    public String processLogin(User user, Model model, HttpServletRequest request) {
         ILoginHandler loginHandler = new UserLoginHandler();
-        LoginState loginState = loginHandler.login(user.getEmailAddress(), user.getPassword(), request);
+        LoginState loginState = loginHandler.login(user, request);
         model.addAttribute("msg", loginState.getLoginStatus());
-        model.addAttribute("user", new Login());
+        model.addAttribute("user", new User());
         return loginState.getNextPage();
     }
 
     @GetMapping("/login")
     public String login(Model model){
-        model.addAttribute("user", new Login());
+        model.addAttribute("user", new User());
         return "userLogin";
     }
 
     @GetMapping("/resetPassword")
     public String resetPassword(Model model){
-        model.addAttribute("login", new Login());
+        model.addAttribute("login", new User());
         System.out.println("Printing reset Password");
         return "resetPassword";
     }
 
     @PostMapping("/checkValidToken")
-    public String checkValidToken(@ModelAttribute Login login, Model model) {
+    public String checkValidToken(@ModelAttribute User user, Model model) {
         ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
-        model.addAttribute("login", new Login());
-        model.addAttribute("emailAddress", login.getEmailAddress());
-        if(resetPasswordCombinationValidationHandler.checkCombination(login.getToken(), login.getEmailAddress())){
+        model.addAttribute("login", new User());
+        model.addAttribute("emailAddress", user.getEmailAddress());
+        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress())){
             return "changePassword";
         }
         else {
@@ -83,7 +87,7 @@ public class UserController {
         ILoginHandler loginHandler = new UserLoginHandler();
         loginHandler.logout(request);
 
-        model.addAttribute("user", new Login());
+        model.addAttribute("user", new User());
         model.addAttribute("logoutMessage", "Successfully logged out!");
         return "userLogin";
     }
@@ -92,7 +96,7 @@ public class UserController {
     public String userProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
-            Integer id = (Integer) oldSession.getAttribute("userId");
+            Integer id = (Integer) oldSession.getAttribute("id");
             User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
@@ -115,7 +119,7 @@ public class UserController {
     public String editProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
-            Integer id = (Integer) oldSession.getAttribute("userId");
+            Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
             System.out.println(updatedStatus);
             if(updatedStatus != null){
@@ -153,4 +157,6 @@ public class UserController {
         }
         return "userLogin";
     }
+
+
 }

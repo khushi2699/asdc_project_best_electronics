@@ -1,6 +1,7 @@
 package com.best.electronics.login;
 
 import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.model.Account;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -16,8 +17,8 @@ public class GenericLoginValidationHandler implements ILoginValidationHandler{
     @Override
     public Boolean isValidEmailAddress(String emailAddress) {
         if(data != null && data.size() > 0){
-            for(Map<String, Object> userData: data){
-                if(emailAddress.equals(userData.get("emailAddress").toString())){
+            for(Map<String, Object> d: data){
+                if(emailAddress.equals(d.get("emailAddress").toString())){
                     return true;
                 }
             }
@@ -26,14 +27,18 @@ public class GenericLoginValidationHandler implements ILoginValidationHandler{
     }
 
     @Override
-    public Boolean isValidPassword(String emailAddress, String password) {
+    public Boolean isValidPassword(Account account) {
         if(data.size() > 0){
-            for(Map<String, Object> userData: data){
-                if(emailAddress.equals(userData.get("emailAddress"))){
-                    String dbPassword = (String) userData.get("password");
+            String emailAddress = account.getEmailAddress();
+            String password = account.getPassword();
+            for(Map<String, Object> d: data){
+                if(emailAddress.equals(d.get("emailAddress"))){
+                    String dbPassword = (String) d.get("password");
                     try{
                         String encryptedPassword = EncryptPassword.getInstance().encryptString(password);
                         if(encryptedPassword.equals(dbPassword)){
+                            account.setAccountId((Integer) d.get("id"));
+                            account.setFirstName((String) d.get("firstName"));
                             return true;
                         }
                     }catch(Exception e){

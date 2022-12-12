@@ -1,12 +1,12 @@
 package com.best.electronics.login;
 
+import com.best.electronics.model.Account;
+
 import javax.servlet.http.HttpServletRequest;
 
 public interface ILoginHandler {
 
-    LoginState login(String emailAddress, String password, HttpServletRequest request);
+    LoginState login(Account account, HttpServletRequest request);
 
     void logout(HttpServletRequest request);
-
-    Boolean resetPassword(String emailAddress, String newPassword);
 }

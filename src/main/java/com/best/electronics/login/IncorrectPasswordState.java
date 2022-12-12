@@ -13,11 +13,7 @@ public class IncorrectPasswordState extends LoginState{
 
     @Override
     public void setNextPage(String type) {
-        if("admin".equalsIgnoreCase(type)){
-            nextPage = "adminLogin.html";
-        }else{
-            nextPage = "userLogin.html";
-        }
+        nextPage = type + "Login";
     }
 
 }

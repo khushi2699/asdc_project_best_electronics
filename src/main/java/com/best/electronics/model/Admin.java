@@ -4,10 +4,12 @@ import com.best.electronics.database.IDatabasePersistence;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Admin {
+public class Admin extends Account{
 
-    private String adminId;
+    private Integer adminId;
 
     private String firstName;
 
@@ -17,13 +19,16 @@ public class Admin {
 
     private String password;
 
-    private int userId;
+    private String confirmPassword;
 
-    public String getAdminId() {
+    private Integer token;
+
+    @Override
+    public Integer getAccountId() {
         return adminId;
     }
-
-    public void setAdminId(String adminId) {
+    @Override
+    public void setAccountId(Integer adminId) {
         this.adminId = adminId;
     }
 
@@ -51,24 +56,44 @@ public class Admin {
         this.emailAddress = emailAddress;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public int getUserId() {
-        return userId;
+    @Override
+    public void setPassword(String password) {this.password = password;}
+
+    @Override
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    @Override
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public Integer getToken() {
+        return token;
     }
 
+    @Override
+    public void setToken(Integer token) {
+        this.token = token;
+    }
 
-
+    public Map<String, Object> getAdminDetails(Integer adminId, IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(adminId);
+            ArrayList<Map<String, Object>> adminDetails = databasePersistence.loadData("{call get_admin_details(?)}", parameters);
+            return adminDetails.get(0);
+        }catch(Exception e){
+            return null;
+        }
+    }
     public ArrayList<Order> getOrderDetails(IDatabasePersistence databasePersistence) {
         try {
             ArrayList<Order> orderList = new ArrayList<>();
@@ -124,5 +149,29 @@ public class Admin {
         }
     }
 
+    private Boolean isUsernameValid(String name) {
+        String urlPattern = "^[a-zA-Z]{2,20}$";
+        Pattern pattern = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(name);
+        return matcher.find();
+    }
+    public String updateAdminDetails(IDatabasePersistence databasePersistence){
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
 
+            if(isUsernameValid(this.getFirstName()) && isUsernameValid(this.getLastName())){
+                updatedDetails.add(this.getEmailAddress());
+                updatedDetails.add(this.getFirstName());
+                updatedDetails.add(this.getLastName());
+                if(databasePersistence.saveData("{call update_admin_details(?, ?, ?)}", updatedDetails)){
+                    return "Admin Profile Updated Successfully";
+                }
+            }else{
+                return "Either firstName or lastName are not in correct format!";
+            }
+        }catch(Exception e){
+            return "Admin Profile Updated Failed! Please try again!";
+        }
+        return "Admin Profile Updated Failed! Please try again!";
+    }
 }

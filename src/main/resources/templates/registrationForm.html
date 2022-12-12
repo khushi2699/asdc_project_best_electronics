@@ -67,7 +67,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">Confirm Password: </label>
                                 <div class="col-8">
-                                    <input type="password" th:field="*{reEnterPassword}" id="re_enter_password" class="form-control"
+                                    <input type="password" th:field="*{confirmPassword}" id="re_enter_password" class="form-control"
                                            required/>
                                     <span id='message'></span>
                                 </div>
@@ -125,6 +125,8 @@
                             <div>
                                 <button type="submit" class="btn btn-primary">Sign Up</button>
                             </div>
+
+                            <p>Already registered?<a href="/user/login">Login</a></p>
                         </div>
                     </form>
 

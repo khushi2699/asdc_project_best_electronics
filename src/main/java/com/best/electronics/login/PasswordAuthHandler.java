@@ -1,6 +1,8 @@
 package com.best.electronics.login;
 
-public class PasswordAuthHandler extends AuthHandler {
+import com.best.electronics.model.Account;
+
+public class PasswordAuthHandler extends LoginAuthHandler {
 
     private final ILoginValidationHandler loginValidation;
 
@@ -10,9 +12,9 @@ public class PasswordAuthHandler extends AuthHandler {
     }
 
     @Override
-    public LoginState doHandler(String emailAddress, String password, String type){
-        if(loginValidation.isValidPassword(emailAddress, password)){
-            return new SuccessLoginState(type);
+    public LoginState doHandler(Account account, String type) throws Exception {
+        if(loginValidation.isValidPassword(account)){
+            return nextHandler(account, type);
         }else{
             return new IncorrectPasswordState(type);
         }
