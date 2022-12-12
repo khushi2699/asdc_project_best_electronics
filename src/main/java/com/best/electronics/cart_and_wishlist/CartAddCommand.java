@@ -1,11 +1,7 @@
 package com.best.electronics.cart_and_wishlist;
 
 import com.best.electronics.database.ProductToCartPersistence;
-import com.best.electronics.login.EncryptPassword;
 import com.best.electronics.model.CartItem;
-
-import javax.servlet.http.HttpServletRequest;
-
 public class CartAddCommand implements CommandForProduct{
 
     CartItem cartItem;

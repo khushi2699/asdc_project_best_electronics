@@ -8,8 +8,10 @@ import com.best.electronics.database.ProductToCartPersistence;
 import com.best.electronics.model.CartItem;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
+import com.best.electronics.model.WishListItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -45,6 +47,12 @@ public class CartController {
         ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
         model.addAttribute("listProducts", productList);
         return "productList";
+    }
+
+    @GetMapping("/cart")
+    public String displayWishlist(Model model){
+        model.addAttribute("wishListItem",new WishListItem());
+        return "cart";
     }
 }
 
