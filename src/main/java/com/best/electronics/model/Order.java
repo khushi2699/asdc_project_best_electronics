@@ -1,5 +1,6 @@
 package com.best.electronics.model;
 
+
 import java.util.ArrayList;
 
 public class Order {
@@ -89,7 +90,9 @@ public class Order {
         return products;
     }
 
+
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
     }
-}
+
+    }

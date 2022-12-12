@@ -150,6 +150,7 @@ public class UserController {
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            System.out.println(user.getEmailAddress());
             String message = user.updateUserDetails(databasePersistence);
             oldSession.setAttribute("updatedStatus", message);
             return "redirect:/user/editProfile";
