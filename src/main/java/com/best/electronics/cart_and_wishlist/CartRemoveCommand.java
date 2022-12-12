@@ -2,11 +2,10 @@ package com.best.electronics.cart_and_wishlist;
 
 import com.best.electronics.database.ProductToCartPersistence;
 import com.best.electronics.model.CartItem;
-public class CartAddCommand implements CommandForProduct{
 
+public class CartRemoveCommand implements CommandForProduct{
     CartItem cartItem;
-
-    public CartAddCommand(CartItem cartItem){
+    public CartRemoveCommand(CartItem cartItem){
         this.cartItem = cartItem;
     }
 
@@ -15,4 +14,5 @@ public class CartAddCommand implements CommandForProduct{
         ProductToCartPersistence productToCartPersistence = ProductToCartPersistence.getInstance();
         productToCartPersistence.addProductsToCart(cartItem);
     }
+
 }
