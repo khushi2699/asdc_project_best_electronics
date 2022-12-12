@@ -42,6 +42,11 @@ public class AdminController {
         return loginState.getNextPage();
     }
 
+    @GetMapping("/adminHome")
+    public String adminHome(Admin admin, Model model, HttpServletRequest request){
+        return "adminLandingPage";
+    }
+
     @GetMapping("/logout")
     public String logout(Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new UserLoginHandler();
@@ -58,7 +63,7 @@ public class AdminController {
         ArrayList<Order> orderDetails = admin1.getOrderDetails(databasePersistence);
         System.out.println(orderDetails);
         model.addAttribute("orders", orderDetails);
-        return "orderList";
+        return "adminOrderList";
     }
     @GetMapping("/users")
     public String adminUsers(Model model) throws Exception{
@@ -78,6 +83,7 @@ public class AdminController {
 
     @GetMapping("/products")
     public String adminProducts(Model model) throws Exception{
+
         ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
 

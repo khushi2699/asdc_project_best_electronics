@@ -6,6 +6,7 @@ import com.best.electronics.model.User;
 import com.best.electronics.session.SessionManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -22,10 +23,10 @@ public class UserLoginHandlerTest {
 
     private static ILoginValidationHandler loginValidationHandler;
 
-    static HttpServletRequest servletRequest;
+    HttpServletRequest servletRequest;
 
-    @BeforeAll
-    public static void init() throws Exception {
+    @BeforeEach
+    public void init() throws Exception {
         IDatabasePersistence mockDatabasePersistence = new UserMockDatabasePersistence();
         loginValidationHandler = new GenericLoginValidationHandler
                 ("{call get_user_login_details()}", mockDatabasePersistence);

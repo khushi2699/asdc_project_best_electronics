@@ -29,4 +29,19 @@ public class Invoker {
         }
     }
 
+    public void Remove(){
+        if(this.cartItem != null && this.cartItem.getIdentifier().equalsIgnoreCase("Cart")){
+            //here adding product to cart logic
+            CartRemoveCommand cartRemoveCommand = new CartRemoveCommand(this.cartItem);
+            cartRemoveCommand.execute();
+        }
+        else if (this.wishListItem.getIdentifier().equalsIgnoreCase("Wishlist")){
+            //here adding product to wishlist logic
+            WishlistRemoveCommand wishlistRemoveCommand = new WishlistRemoveCommand(this.wishListItem);
+            wishlistRemoveCommand.execute();
+        } else {
+
+        }
+    }
+
 }
