@@ -2,11 +2,10 @@ package com.best.electronics.controller.email;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.model.Login;
+import com.best.electronics.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -22,15 +21,15 @@ public class EmailController {
 
     @GetMapping("/forgotPassword")
     public String forgotPassword(Model model){
-        model.addAttribute("login", new Login());
+        model.addAttribute("login", new User());
         return "forgotPassword";
     }
 
     @PostMapping("/enterNewPassword")
-    public String enterNewPassword(@ModelAttribute Login login, Model model) throws NoSuchAlgorithmException {
-        model.addAttribute("login", new Login());
+    public String enterNewPassword(@ModelAttribute User user, Model model) throws NoSuchAlgorithmException {
+        model.addAttribute("login", new User());
         ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
-        String status = changePasswordHandler.storeNewPassword(login.getPassword(), login.getConfirmPassword(), login.getEmailAddress());
+        String status = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress());
         if(status.equalsIgnoreCase("Password changed")){
             model.addAttribute("msg", "Password changed. Click here to login! http://localhost:8080/user/login");
             return "changePassword";
@@ -48,23 +47,22 @@ public class EmailController {
         }
     }
 
-    @GetMapping("/userLogin")
-    public String userLogin(Model model){
-        model.addAttribute("user", new Login());
-        return "login";
-    }
-
     @PostMapping("/getCode")
-    public String getCode(@ModelAttribute Login login, Model model) throws Exception {
-        System.out.println("Email address" + login.getEmailAddress());
-        emailControl(login.getEmailAddress());
-        model.addAttribute("login", new Login());
+    public String getCode(@ModelAttribute User user, Model model) throws Exception {
+        System.out.println("Email address" + user.getEmailAddress());
+        emailControl(user.getEmailAddress());
+        model.addAttribute("login", new User());
         model.addAttribute("msg", "Password reset link and token will be sent to you email if the email exists!");
         return "forgotPassword";
     }
 
     Session newSession = null;
     MimeMessage mimeMessage = null;
+
+    public void setMimeMessage(MimeMessage mimeMessage){
+        this.mimeMessage = mimeMessage;
+    }
+
     public void emailControl (String email) throws Exception {
         EmailController emailController = new EmailController();
         int randomNumber = emailController.generateRandomNumber(); //generating a random number
@@ -88,13 +86,14 @@ public class EmailController {
         return number;
     }
 
-    public void setUpProperties(){
+    public Session setUpProperties(){
         Properties properties = new Properties();
         properties.put("mail.smtp.port","587");
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
         newSession = Session.getDefaultInstance(properties,null);
+        return newSession;
     }
 
     private MimeMessage draftEmail(int randomNumber, String email) throws MessagingException {
@@ -113,7 +112,7 @@ public class EmailController {
         EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
         emailControllerPinResetStore.storePinToDB(randomNumber,email);
     }
-    private void sendMail() throws MessagingException {
+    public void sendMail() throws MessagingException {
         String fromUser = "khshah2699@gmail.com";
         String fromUserPassword = "negftgxahztglvpm";
         String emailHost = "smtp.gmail.com";

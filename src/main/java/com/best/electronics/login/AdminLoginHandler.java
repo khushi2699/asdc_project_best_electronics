@@ -22,16 +22,17 @@ public class AdminLoginHandler implements ILoginHandler {
             authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
 
             loginState = authHandler.doHandler(emailAddress, password, "admin");
-            if(loginState.getNextPage().equals("adminLandingPage.html")){
+            if(loginState.getNextPage().equals("adminLandingPage")){
                 SessionManager sessionManager = new SessionManager();
                 HttpSession session = sessionManager.getSession(request);
 
                 ArrayList<Object> parameters = new ArrayList<>();
                 parameters.add(emailAddress);
-                ArrayList<Map<String, Object>> userDetails = databasePersistence.loadData("{call get_admin_details_based_on_email(?)}", parameters);
-                Map<String, Object> userDetail = userDetails.get(0);
-                session.setAttribute("adminId", userDetail.get("adminId"));
-                session.setAttribute("adminName", userDetail.get("firstName"));
+                ArrayList<Map<String, Object>> adminDetails = databasePersistence.loadData("{call get_admin_details_based_on_email(?)}", parameters);
+                Map<String, Object> adminDetail = adminDetails.get(0);
+                session.setAttribute("adminId", adminDetail.get("adminId"));
+                session.setAttribute("adminName", adminDetail.get("firstName"));
+                session.setAttribute("adminEmailAddress", emailAddress);
 
                 return loginState;
             }
@@ -48,8 +49,4 @@ public class AdminLoginHandler implements ILoginHandler {
         sessionManager.invalidateSession(request);
     }
 
-    @Override
-    public Boolean resetPassword(String emailAddress, String newPassword) {
-        return null;
-    }
 }

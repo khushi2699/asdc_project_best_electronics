@@ -7,6 +7,4 @@ public interface ILoginHandler {
     LoginState login(String emailAddress, String password, HttpServletRequest request);
 
     void logout(HttpServletRequest request);
-
-    Boolean resetPassword(String emailAddress, String newPassword);
 }

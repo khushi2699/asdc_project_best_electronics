@@ -2,14 +2,13 @@ package com.best.electronics.controller.email;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.register.GenericFailedRegisterState;
 
 import java.util.ArrayList;
 
 public class EmailControllerPinStoreHandler implements EmailControllerPinResetStore {
 
     @Override
-    public void storePinToDB(int token, String email) {
+    public void storePinToDB(Integer token, String email) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(token);
@@ -23,7 +22,7 @@ public class EmailControllerPinStoreHandler implements EmailControllerPinResetSt
     }
 
     @Override
-    public boolean checkCombination(int token, String email) {
+    public boolean checkCombination(Integer token, String email) {
         return true;
     }
 

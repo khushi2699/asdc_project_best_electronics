@@ -8,12 +8,12 @@ import java.util.Map;
 
 public class ResetPasswordCombinationValidationHandler implements EmailControllerPinResetStore{
     @Override
-    public void storePinToDB(int token, String email) {
+    public void storePinToDB(Integer token, String email) {
 
     }
 
     @Override
-    public boolean checkCombination(int token, String email) {
+    public boolean checkCombination(Integer token, String email) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         ArrayList<Map<String, Object>> result= new ArrayList<>();

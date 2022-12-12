@@ -5,9 +5,9 @@ import com.best.electronics.database.IDatabasePersistence;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Admin {
+public class Admin extends Account{
 
-    private String adminId;
+    private Integer adminId;
 
     private String firstName;
 
@@ -17,13 +17,18 @@ public class Admin {
 
     private String password;
 
-    private int userId;
+    private String confirmPassword;
 
-    public String getAdminId() {
+    private Integer token;
+
+//    private int userId;
+
+    @Override
+    public Integer getAccountId() {
         return adminId;
     }
-
-    public void setAdminId(String adminId) {
+    @Override
+    public void setAccountId(Integer adminId) {
         this.adminId = adminId;
     }
 
@@ -51,22 +56,43 @@ public class Admin {
         this.emailAddress = emailAddress;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public int getUserId() {
-        return userId;
+    @Override
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    @Override
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
+    @Override
+    public Integer getToken() {
+        return token;
+    }
+
+    @Override
+    public void setToken(Integer token) {
+        this.token = token;
+    }
+
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
+
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 
     public ArrayList<Order> getOrderDetails(IDatabasePersistence databasePersistence) {
