@@ -128,21 +128,15 @@ width: 66%;
                             <td style="text-align: center" th:text="${products.availableQuantity}"></td>
 
                             <form method="post" th:action="@{/CartController/{product_id}(product_id=${products.productId})}">
-
                                     <td class="cart_quantity" style="text-align: center">
                                         <input style="width: 50px" min="1" th:max="${products.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>
-
                                     <td class="add to cart">
                                             <button type="submit" id="btn" name="CartController" class="addtocartbutton"> Add to cart</button>
                                     </td>
-
                             </form>
-
                             <form method="post" th:action="@{/WishlistController/{product_id}(product_id=${products.productId})}">
-
                                 <td class="add to whishlist">
                                     <button type="submit" id="btn_whishlist" name="WhishlistController" class="addtocartbutton"> Add to whishlist</button>
-
                                 </td>
                             </form>
                         </tr>

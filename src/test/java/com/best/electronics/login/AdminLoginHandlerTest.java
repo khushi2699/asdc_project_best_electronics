@@ -3,29 +3,35 @@ package com.best.electronics.login;
 import com.best.electronics.database.AdminMockDatabasePersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.model.Admin;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
-@Ignore
 public class AdminLoginHandlerTest {
 
     private static ILoginValidationHandler loginValidationHandler;
 
-    @BeforeAll
-    public static void init() throws Exception {
+    HttpServletRequest servletRequest;
+
+    @BeforeEach
+    public void init() throws Exception {
         IDatabasePersistence mockDatabasePersistence = new AdminMockDatabasePersistence();
         loginValidationHandler = new GenericLoginValidationHandler
                 ("{call get_admin_login_details()}", mockDatabasePersistence);
+        servletRequest = new MockHttpServletRequest();
     }
 
     @Test
     public void loginSuccessTest() throws Exception {
         LoginAuthHandler authHandler = new EmailAuthHandler(loginValidationHandler);
-        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
+        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler)).setNextHandler(new SessionCreationHandler(servletRequest));
 
         Admin admin = new Admin ();
         admin.setEmailAddress("admin@gmail.com");
@@ -38,7 +44,7 @@ public class AdminLoginHandlerTest {
     @Test
     public void loginFailTestWrongEmail() throws Exception {
         LoginAuthHandler authHandler = new EmailAuthHandler(loginValidationHandler);
-        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
+        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler)).setNextHandler(new SessionCreationHandler(servletRequest));
 
         Admin admin = new Admin ();
         admin.setEmailAddress("g@gmail.com");
@@ -51,7 +57,7 @@ public class AdminLoginHandlerTest {
     @Test
     public void loginFailTestWrongPassword() throws Exception {
         LoginAuthHandler authHandler = new EmailAuthHandler(loginValidationHandler);
-        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler));
+        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler)).setNextHandler(new SessionCreationHandler(servletRequest));
 
         Admin admin = new Admin ();
         admin.setEmailAddress("admin@gmail.com");
@@ -59,5 +65,19 @@ public class AdminLoginHandlerTest {
         LoginState loginState = authHandler.doHandler(admin,"admin");
         Assertions.assertEquals(loginState.getNextPage(), "adminLogin");
         Assertions.assertEquals(loginState.getLoginStatus(), "Password is incorrect!");
+    }
+
+    @Test
+    public void loginFailTestWhenSessionIsNull() throws Exception {
+        servletRequest = mock(HttpServletRequest.class);
+        LoginAuthHandler authHandler = new EmailAuthHandler(loginValidationHandler);
+        authHandler.setNextHandler(new PasswordAuthHandler(loginValidationHandler)).setNextHandler(new SessionCreationHandler(servletRequest));
+
+        Admin admin = new Admin ();
+        admin.setEmailAddress("admin@gmail.com");
+        admin.setPassword("Newuser@123");
+        LoginState loginState = authHandler.doHandler(admin, "admin");
+        Assertions.assertEquals(loginState.getNextPage(), "adminLogin");
+        Assertions.assertEquals(loginState.getLoginStatus(), "Unexpected exception occurred! Please try again!");
     }
 }
