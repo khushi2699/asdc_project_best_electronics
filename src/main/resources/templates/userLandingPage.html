@@ -14,6 +14,9 @@
     <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
     <div class="navbar-nav w-100">
         <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/user/profile">My Account</a>
+        </div>
+        <div class="ml-auto">
             <a class="nav-link nav-link active" href="/user/wishList">WishList</a>
         </div>
         <div class="ml-auto">
@@ -25,15 +28,11 @@
     </div>
 </nav>
 
-<a style="position: absolute;right: 0;" href="/reports">Generate and Send Report</a>
-
 <div class="container p-2 text-center">
     <div class="jumbotron">
         <h1 class="display-4">Welcome to BestElectronics</h1>
         <p class="lead">One place to find all your electronics...</p>
         <hr class="my-4">
-        <p>Make your selection!</p>
-        <h3><a class="btn btn-primary btn-lg"  th:href="@{/user/profile}" role="button">My Account</a></h3>
         <h4><a class="btn btn-primary btn-lg"  th:href="@{/products}" role="button">Shop NOW</a></h4>
     </div>
 </div>

@@ -22,12 +22,12 @@ public class ExcelReportController {
     public String sendUserExcelReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
-            String emailAddress = (String) oldSession.getAttribute("adminEmailAddress");
+            String emailAddress = (String) oldSession.getAttribute("emailAddress");
             String fileNameWithExtension = fileName + ".xlsx";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "Select * from User", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_all_user_details()}", fileNameWithExtension)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
                 if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
@@ -45,12 +45,12 @@ public class ExcelReportController {
     public String sendProductExcelReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
-            String emailAddress = (String) oldSession.getAttribute("adminEmailAddress");
+            String emailAddress = (String) oldSession.getAttribute("emailAddress");
             String fileNameWithExtension = fileName + ".xlsx";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "Select * from Product", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_product_list()}", fileNameWithExtension)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
                 if(sendReport.sendReport(emailAddress, fileNameWithExtension)){

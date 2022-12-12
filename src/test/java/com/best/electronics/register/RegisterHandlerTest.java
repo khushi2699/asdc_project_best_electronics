@@ -20,7 +20,7 @@ public class RegisterHandlerTest {
 
     @Test
     public void registerSuccessTest() throws Exception {
-        RegisterAuthHandler registerHandler = new EmailRegisterValidation(mockDatabasePersistence);
+        RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", mockDatabasePersistence);
         registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
         User user = new User();
@@ -34,13 +34,13 @@ public class RegisterHandlerTest {
         user.setAddress("Abc Street, Canada");
 
         RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registerSuccess.html");
+        Assertions.assertEquals(registerState.getNextPage(), "registerSuccess");
         Assertions.assertEquals(registerState.getRegisterStatus(), "Registered Successfully");
     }
 
     @Test
     public void registerFailTestExistingEmail() throws Exception {
-        RegisterAuthHandler registerHandler = new EmailRegisterValidation(mockDatabasePersistence);
+        RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", mockDatabasePersistence);
         registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
         User user = new User();
@@ -54,13 +54,13 @@ public class RegisterHandlerTest {
         user.setAddress("Abc Street, Canada");
 
         RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm.html");
+        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
         Assertions.assertEquals(registerState.getRegisterStatus(), "Email address already Exists!");
     }
 
     @Test
     public void registerFailTestWrongFirstName() throws Exception {
-        RegisterAuthHandler registerHandler = new EmailRegisterValidation(mockDatabasePersistence);
+        RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", mockDatabasePersistence);
         registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
         User user = new User();
@@ -74,13 +74,13 @@ public class RegisterHandlerTest {
         user.setAddress("Abc Street, Canada");
 
         RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm.html");
+        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
         Assertions.assertEquals(registerState.getRegisterStatus(), "Either firstName or lastName are not in correct format!");
     }
 
     @Test
     public void registerFailTestWrongLastName() throws Exception {
-        RegisterAuthHandler registerHandler = new EmailRegisterValidation(mockDatabasePersistence);
+        RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", mockDatabasePersistence);
         registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
         User user = new User();
@@ -94,13 +94,13 @@ public class RegisterHandlerTest {
         user.setAddress("Abc Street, Canada");
 
         RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm.html");
+        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
         Assertions.assertEquals(registerState.getRegisterStatus(), "Either firstName or lastName are not in correct format!");
     }
 
     @Test
     public void registerFailInvalidPassword() throws Exception {
-        RegisterAuthHandler registerHandler = new EmailRegisterValidation(mockDatabasePersistence);
+        RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", mockDatabasePersistence);
         registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
         User user = new User();
@@ -114,14 +114,14 @@ public class RegisterHandlerTest {
         user.setAddress("Abc Street, Canada");
 
         RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm.html");
+        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
         Assertions.assertEquals(registerState.getRegisterStatus(), "Password must contain at least one " +
                 "uppercase, lowercase, number and special character. Min 8 length!");
     }
 
     @Test
     public void registerFailMismatchPassword() throws Exception {
-        RegisterAuthHandler registerHandler = new EmailRegisterValidation(mockDatabasePersistence);
+        RegisterAuthHandler registerHandler = new EmailRegisterValidation("{call get_user_emailAddress()}", mockDatabasePersistence);
         registerHandler.setNextHandler(new UserNameRegisterValidation()).setNextHandler(new PasswordRegisterValidation());
 
         User user = new User();
@@ -135,7 +135,7 @@ public class RegisterHandlerTest {
         user.setAddress("Abc Street, Canada");
 
         RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm.html");
+        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
         Assertions.assertEquals(registerState.getRegisterStatus(), "The re-entered password and password are not matching!");
     }
 
