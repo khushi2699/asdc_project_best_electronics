@@ -2,8 +2,6 @@ package com.best.electronics.controller;
 
 import com.best.electronics.cartandwishlist.GetTotalOfProduct;
 import com.best.electronics.cartandwishlist.Invoker;
-import com.best.electronics.database.*;
-import com.best.electronics.model.User;
 import com.best.electronics.model.CardDetails;
 import com.best.electronics.model.Order;
 import com.best.electronics.database.IDatabasePersistence;
@@ -14,8 +12,6 @@ import com.best.electronics.repository.ProductRepository;
 import com.best.electronics.repository.UserRepository;
 import com.best.electronics.repository.CartRepository;
 import com.best.electronics.repository.OrderRepository;
-import com.best.electronics.repository.ProductRepository;
-import com.best.electronics.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -110,7 +106,6 @@ public class CartController {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
@@ -127,8 +122,7 @@ public class CartController {
                     model.addAttribute("address", userDetail.get("address"));
 
                     //getting payment method
-                    GetUserPaymentDetailPersistence getUserPaymentDetail = GetUserPaymentDetailPersistence.getInstance();
-                    ArrayList<Map<String, Object>> paymentListDetails = getUserPaymentDetail.getCardDetails(id);
+                    ArrayList<Map<String, Object>> paymentListDetails = cartRepository.getCardDetails(id);
 
                     model.addAttribute("cardDetails",paymentListDetails);
                     model.addAttribute("sumofcart",totalsum);
@@ -147,7 +141,6 @@ public class CartController {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
@@ -183,7 +176,7 @@ public class CartController {
     }
 
     @PostMapping("/RemoveFromCartlistController/{product_id}")
-    public String removeFromCart(Product product, HttpServletRequest request, Model model) throws Exception {
+    public String removeFromCart(HttpServletRequest request) throws Exception {
 
         int cardItemId = Integer.parseInt(request.getParameter("cartItemId"));
 
