@@ -30,22 +30,9 @@ public class ForgotPasswordController {
         model.addAttribute("login", new User());
         ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
         ForgotPasswordState forgotPasswordState = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress());
-        if(forgotPasswordState.getStatus().equalsIgnoreCase("Done")){
-            model.addAttribute("msg", "Password changed. Go to:  http://localhost:8080/user/login");
-            return "redirect:/user/login";
-
-        }else if (forgotPasswordState.getStatus().equalsIgnoreCase("Password and Confirm password do not match")) {
-            model.addAttribute("msg", forgotPasswordState.getStatus());
-            return "changePassword";
-        }
-        else if (forgotPasswordState.getStatus()
-                .equalsIgnoreCase("Invalid password format")){
-            model.addAttribute("msg", forgotPasswordState.getStatus());
-            return "changePassword";
-        }
-        else {
-            return null;
-        }
+        System.out.println("Next Page: "+forgotPasswordState.getNextPage());
+        model.addAttribute("msg", forgotPasswordState.getStatus());
+        return forgotPasswordState.getNextPage();
     }
     @PostMapping("/getCode")
     public String getCode(@ModelAttribute User user, Model model) throws Exception {

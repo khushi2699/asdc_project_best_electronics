@@ -9,4 +9,9 @@ public class GenericFailedState extends ForgotPasswordState{
     public void setStatus() {
         status = "Something unexpected happened";
     }
+
+    @Override
+    public void setNextPage() {
+        nextPage = "changePassword";
+    }
 }

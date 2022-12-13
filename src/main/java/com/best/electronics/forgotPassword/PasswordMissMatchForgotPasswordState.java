@@ -11,4 +11,10 @@ public class PasswordMissMatchForgotPasswordState extends ForgotPasswordState{
         status = "Password and Confirm password do not match";
 
     }
+
+    @Override
+    public void setNextPage() {
+        nextPage = "changePassword";
+
+    }
 }

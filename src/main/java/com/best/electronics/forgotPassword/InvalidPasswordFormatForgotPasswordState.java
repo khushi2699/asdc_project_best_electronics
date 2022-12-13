@@ -11,4 +11,10 @@ public class InvalidPasswordFormatForgotPasswordState extends ForgotPasswordStat
         status = "Invalid password format";
 
     }
+
+    @Override
+    public void setNextPage() {
+        nextPage = "changePassword";
+
+    }
 }
