@@ -1,7 +1,9 @@
 package com.best.electronics.cartandwishlist;
 
-import com.best.electronics.database.ProductRemovePersistence;
+import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.model.WishListItem;
+import com.best.electronics.repository.WishListRepository;
 
 public class WishlistRemoveCommand implements CommandForProduct {
     WishListItem wishListItem;
@@ -11,7 +13,8 @@ public class WishlistRemoveCommand implements CommandForProduct {
     }
     @Override
     public void execute() {
-        ProductRemovePersistence productRemovePersistence = ProductRemovePersistence.getInstance();
-        productRemovePersistence.removeProductFromWishlist(wishListItem);
+        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+        WishListRepository wishListRepository = new WishListRepository(databasePersistence);
+        wishListRepository.removeProductFromWishlist(wishListItem);
     }
 }

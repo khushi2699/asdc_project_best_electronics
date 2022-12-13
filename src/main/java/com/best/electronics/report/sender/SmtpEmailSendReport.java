@@ -19,9 +19,7 @@ public class SmtpEmailSendReport implements ISendReport{
         try{
             SendMail sendMail = new SendMail();
             Session session = sendMail.setUpProperties();
-
             MimeMessage mimeMessage = new MimeMessage(session);
-
             draftEmail(mimeMessage, emailAddress, fileName);
             sendMail.setMimeMessage(mimeMessage);
             sendMail.sendMail();

@@ -1,16 +1,14 @@
 package com.best.electronics.controller;
 
 import com.best.electronics.cartandwishlist.Invoker;
-import com.best.electronics.database.GetWishlistPersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.repository.ProductRepository;
 import com.best.electronics.repository.UserRepository;
-import com.best.electronics.model.User;
-import com.best.electronics.model.Product;
 import com.best.electronics.model.CartItem;
 import com.best.electronics.model.WishList;
 import com.best.electronics.model.WishListItem;
+import com.best.electronics.repository.WishListRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,8 +56,8 @@ public class WishListController {
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail != null){
-                GetWishlistPersistence getWishlistPersistence = GetWishlistPersistence.getInstance();
-                ArrayList<Map<String, Object>> wishListResult = getWishlistPersistence.getWishListDetails(id);
+                WishListRepository wishListRepository = new WishListRepository(databasePersistence);
+                ArrayList<Map<String, Object>> wishListResult = wishListRepository.getWishListDetails(id);
                 if(wishListResult == null){}
                 else {
                 model.addAttribute("wishlist",new WishList());
