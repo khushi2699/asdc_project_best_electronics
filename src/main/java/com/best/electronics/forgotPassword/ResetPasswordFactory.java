@@ -3,7 +3,6 @@ package com.best.electronics.forgotPassword;
 import com.best.electronics.email.SendMailForForgotPassword;
 
 public class ResetPasswordFactory {
-
     public GetCode sendCodeThrough(String medium){
         if(medium == null || medium.isEmpty()){
             return null;
@@ -16,5 +15,4 @@ public class ResetPasswordFactory {
 
         }
     }
-
 }
