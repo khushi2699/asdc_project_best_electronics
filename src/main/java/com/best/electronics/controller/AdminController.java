@@ -9,7 +9,6 @@ import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
 import com.best.electronics.model.*;
 import com.best.electronics.exceptions.NullPointerException;
-import com.best.electronics.sendEmail.ISendOrderStatusEmail;
 import com.best.electronics.sendEmail.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -173,12 +172,12 @@ public class AdminController {
 
     @PostMapping("/sendEmail")
     public String sendEmail(
-       @RequestParam(value = "orderId", required = false) Integer orderId,
-       @RequestParam(value = "orderAmount", required = false) Double orderAmount,
-       @RequestParam(value = "orderStatus", required = false) String orderStatus,
-       @RequestParam(value = "orderDate", required = false) String orderDate,
-       @RequestParam(value = "emailAddress", required = false) String emailAddress,
-       HttpServletRequest request) throws MessagingException {
+            @RequestParam(value = "orderId", required = false) Integer orderId,
+            @RequestParam(value = "orderAmount", required = false) Double orderAmount,
+            @RequestParam(value = "orderStatus", required = false) String orderStatus,
+            @RequestParam(value = "orderDate", required = false) String orderDate,
+            @RequestParam(value = "emailAddress", required = false) String emailAddress,
+            HttpServletRequest request) throws MessagingException {
 
         Admin admin = new Admin();
         HttpSession oldSession = request.getSession(false);
@@ -188,7 +187,7 @@ public class AdminController {
 
             for (Order order1 : orderDetails) {
                 ArrayList<Product> products = order1.getProducts();
-                ISendOrderStatusEmail email = new SendOrderStatusEmail();
+                SendOrderStatusEmail email = new SendOrderStatusEmail();
                 if (email.sendEmail(orderId, orderAmount, orderDate, emailAddress, orderStatus, products)) {
                     oldSession.setAttribute("msg", "Email is successfully sent!");
                     return "redirect:/admin/orderDetails";

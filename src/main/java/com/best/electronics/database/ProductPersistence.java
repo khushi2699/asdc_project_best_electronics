@@ -19,6 +19,20 @@ public class ProductPersistence {
 
         return single_instance;
     }
+
+    public ArrayList<Map<String, Object>> getProductCategory(IDatabasePersistence p) throws Exception {
+
+        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+        ArrayList<Map<String, Object>> result = new ArrayList<>();
+        result = p.loadData("{call get_product_category()}", new ArrayList<>());
+        if(result.isEmpty()){
+            throw new DataNotFoundException("Unable to load product category list");
+        }
+        else {
+            return result;
+        }
+    }
+
     public ArrayList<Map<String, Object>> getDetails(IDatabasePersistence p) throws Exception {
 
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
