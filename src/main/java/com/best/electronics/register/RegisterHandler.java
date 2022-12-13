@@ -4,6 +4,7 @@ import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.EncryptPassword;
 import com.best.electronics.model.User;
+import com.best.electronics.repository.UserRepository;
 
 import java.util.ArrayList;
 
@@ -27,9 +28,8 @@ public class RegisterHandler {
                 userDetails.add(user.getDateOfBirth());
                 userDetails.add(user.getGender());
                 userDetails.add(user.getAddress());
-                if(!databasePersistence.saveData("{call create_user(?, ?, ?, ?, ?, ?, ?)}", userDetails)){
-                    return new GenericFailedRegisterState();
-                }
+                UserRepository userRepository = new UserRepository(databasePersistence);
+                userRepository.saveUserData(userDetails);
             }
         } catch(Exception e){
             System.out.println("Exception occurred in Register Handler.");

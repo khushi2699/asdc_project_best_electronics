@@ -95,74 +95,80 @@ width: 66%;
   </div>
 </nav>
 
-<div class="container p-2 text-left">
+<div class="container p-2 text-center">
   <div class="row">
     <div class="col-md-6 offset-md-3">
-      <p>&nbsp</p>
-      <h3>Checkout</h3>
-      <p></p>
-      <div class="products">
-        <div class="products-body">
-          <a th:href = "@{cart}">Back</a>
-          <h3>Your total value: </h3>
-          <h4 th:text = "${sumofcart}"></h4>
-          <form method="post" th:action = "@{placeOrder}">
-            <h4> Select a payment option: </h4>
-          <label for="COD">
-          <input type="radio" id = "COD" th:name="payment" th:value = "COD" onclick="ShowHideDiv()"> Cash on delivery
-          </label>
-          <label for="Card">
-            <input type="radio" id = "Card" th:name="payment" th:value = "Card" onclick="ShowHideDiv()"> Card
-          </label>
-          <div id="cardDetails1" style="display: none">
-            <h4> Below are your card options: </h4>
+      <div class="card">
+        <div class="card-body">
+              <h3 style="text-align: center;">Checkout</h3>
+              <div class="products">
+                <div class="products-body">
+                  <a th:href = "@{cart}" style="text-align: center; display: block">Back</a>
+                  <h3 style="font-size: 20px;text-align: center; padding-top: 25px;">Your total value: </h3>
+                  <h4 style="font-size: 20px;text-align: center; color: blue;" th:text = "${sumofcart}"></h4>
 
-            <table class = "productlist" id="products" style="table-layout: float ; width: 100%" align="left">
-              <thead class="thead-dark">
-              <tr>
-                <th style="text-align: center">ID</th>
+                  <h4 style="font-size: 20px;text-align: center; padding-top: 25px;"> Below are your address details:</h4>
+                  <h4 style="font-size: 16px;text-align: center; color: blue;" th:text = "${address}"></h4>
 
-              </tr>
-              </thead>
-              <tr th:each="payments:${cardDetails}">
-                <td>
-                  <input type="radio" name="cardDetail" th:value="${payments.cardId}" style="text-align: center" th:text="${payments.cardType} + ${payments.cardNumber}"/>
-                </td>
-              </tr>
-            </table>
-          </div>
+                  <form method="post" th:action="@{placeOrder}" style="max-width: 600px; margin: 0 auto;">
+                    <h4 style="font-size: 20px;text-align: center; padding-top: 25px;"> Select a payment option: </h4>
+                    <label for="COD">
+                      <input type="radio" id = "COD" th:name="payment" th:value = "COD" onclick="ShowHideDiv()"> Cash on delivery
+                    </label>
+                    <label for="Card">
+                      <input type="radio" id = "Card" th:name="payment" th:value = "Card" onclick="ShowHideDiv()"> Card
+                    </label>
+                    <div id="cardDetails1" style="display: none">
+                      <table class = "productlist" id="products" style="table-layout: float ; width: 100%" align="left">
+                        <thead class="thead-dark">
+                          <h4 style="font-size: 15px;text-align: center;"> Below are your card options: </h4>
+                          <tr>
+                            <th style="text-align: center">Saved Cards</th>
+                          </tr>
+                        </thead>
+                        <tr th:each="payments:${cardDetails}">
+                          <td>
+                            <input type="radio" name="cardDetail" th:value="${payments.cardId}" style="text-align: center" th:text="${payments.cardType} + ${payments.cardNumber}"/>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
 
-          <hr/>
-            <button type = "submit">Place Order</button>
-          </form>
-          <div id="cardDetails" style="display: none">
-            Add card details:
-            <form method="post" th:action = "@{addCardDetails}">
-              <label for = "cardName"> Card Holder Name: </label>
-              <input type="text" id="cardName" name = "cardName" required>
-              <br>
-              <label for = "cardType"> Card Type: </label>
-              <input type="text" id="cardType" name = "cardType" required>
-              <br>
-              <label for = "cardNumber"> Card Number: </label>
-              <input type = "text" id = "cardNumber" name = "cardNumber" required maxlength="16">
-              <br>
-              <label for = "cardExpiry"> Card Expiry (mm/yy): </label>
-              <input type="text" id="cardExpiry" name = "cardExpiry" required maxlength="5">
-              <br>
-              <label for = "securityCode"> Security code: </label>
-              <input type="text" id="securityCode" name = "securityCode" required maxlength="3">
-              <button type = "submit" >Add card details</button>
-            </form>
-          </div>
-          <h4> Below are your address details: </h4>
-          <h4> Address: </h4>
-          <h4 th:text = "${address}"></h4>
+                    <hr/>
+                      <button type ="submit" class="btn btn-primary">Place Order</button>
+                  </form>
+
+                </div>
+              </div>
 
         </div>
       </div>
+
+      <div id="cardDetails" style="display: none">
+        Add card details:
+        <form method="post" th:action = "@{addCardDetails}">
+          <label for = "cardName"> Card Holder Name: </label>
+          <input type="text" id="cardName" name = "cardName" required>
+          <br>
+          <label for = "cardType"> Card Type: </label>
+          <input type="text" id="cardType" name = "cardType" required>
+          <br>
+          <label for = "cardNumber"> Card Number: </label>
+          <input type = "text" id = "cardNumber" name = "cardNumber" required maxlength="16">
+          <br>
+          <label for = "cardExpiry"> Card Expiry (mm/yy): </label>
+          <input type="text" id="cardExpiry" name = "cardExpiry" required maxlength="5">
+          <br>
+          <label for = "securityCode"> Security code: </label>
+          <input type="text" id="securityCode" name = "securityCode" required maxlength="3">
+          <button type = "submit" >Add card details</button>
+        </form>
+      </div>
+
     </div>
   </div>
+
+
 </div>
 
 <script>
@@ -194,39 +200,13 @@ $(".qtyminus").click(function (e) {
     $(this).css('background', 'green');
   });
 
-  function myFunction() {
-  // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("products");
-  tr = table.getElementsByTagName("tr");
-
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
+function ShowHideDiv() {
+var chkYes = document.getElementById("Card");
+var dvPassport = document.getElementById("cardDetails");
+var dvPassport1 = document.getElementById("cardDetails1");
+dvPassport.style.display = chkYes.checked ? "block" : "none";
+dvPassport1.style.display = chkYes.checked ? "block" : "none";
 }
-
-    function ShowHideDiv() {
-        var chkYes = document.getElementById("Card");
-        var dvPassport = document.getElementById("cardDetails");
-        var dvPassport1 = document.getElementById("cardDetails1");
-        dvPassport.style.display = chkYes.checked ? "block" : "none";
-                dvPassport1.style.display = chkYes.checked ? "block" : "none";
-
-    }
-
-
-
 </script>
 </body>
 </html>

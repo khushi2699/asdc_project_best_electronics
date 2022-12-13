@@ -1,6 +1,5 @@
 package com.best.electronics.database;
 
-import com.best.electronics.model.CartItem;
 import com.best.electronics.model.WishListItem;
 
 import java.util.ArrayList;

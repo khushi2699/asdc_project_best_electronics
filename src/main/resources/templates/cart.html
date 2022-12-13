@@ -78,6 +78,9 @@ width: 66%;
   <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
   <div class="navbar-nav w-100">
     <div class="ml-auto">
+      <a class="nav-link nav-link active" href="/user/home">Home</a>
+    </div>
+    <div class="ml-auto">
       <a class="nav-link nav-link active" href="/user/profile">My Account</a>
     </div>
     <div class="ml-auto">
@@ -96,8 +99,7 @@ width: 66%;
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <p>&nbsp</p>
-      <h3>My Cart</h3>
-      <input type="text" class="search" id="myInput" onkeyup="myFunction()" placeholder="Search for products">
+      <h3 style="text-align: center;">My Cart</h3>
       <p></p>
       <div class="products">
         <div class="products-body">
@@ -126,7 +128,6 @@ width: 66%;
 
 
               <form method="post" th:action="@{/RemoveFromCartlistController/{product_id}(product_id=${carts.cartItemId})}">
-<!--                <form method="post">-->
                 <input type="hidden" name="cartItemId" th:value="${carts.cartItemId}">
 
                 <td class="add to whishlist">
@@ -136,9 +137,16 @@ width: 66%;
               </form>
             </tr>
             <tr>
-              <td>
-                <button type="button" th:onclick="|window.location.href='@{/proceedToOrder}'|">Checkout!</button><br><br>
-              </td>
+
+              <div th:if="${#lists.isEmpty(listCart)}">
+                <h5 style="color: red; text-align: center;">No items in cart yet!</h5>
+                <a class="btn btn-primary"  th:href="@{/products}" role="button" style="text-align: center;">Shop NOW</a>
+              </div>
+
+              <div th:if="${not #lists.isEmpty(listCart)}">
+                <button type="button" th:onclick="|window.location.href='@{/proceedToOrder}'|" class="btn btn-primary">Checkout!</button><br><br>
+              </div>
+
               <td>Total:</td>
               <td th:text="${sumofcart}"></td>
             </tr>
@@ -177,28 +185,6 @@ $(".qtyminus").click(function (e) {
  $( ".addtocartbutton" ).click(function() {
     $(this).css('background', 'green');
   });
-
-  function myFunction() {
-  // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("products");
-  tr = table.getElementsByTagName("tr");
-
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
 
 </script>
 </body>

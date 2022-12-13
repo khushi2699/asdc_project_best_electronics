@@ -92,18 +92,20 @@
                             <table class="table table-light">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Product Id</th>
+                                    <th scope="col">Product Code</th>
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Quantity</th>
+                                    <th scope="col">Product Price</th>
                                     <th scope="col">Subtotal</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="product:${order.products}">
-                                    <td data-th-text="${product.productId}"></td>
+                                    <td data-th-text="${product.productCode}"></td>
                                     <td data-th-text="${product.productName}"></td>
                                     <td data-th-text="${product.productQuantity}"></td>
                                     <td data-th-text="${product.productPrice}"></td>
+                                    <td data-th-text="${product.subTotal}"></td>
                                 </tr>
                                 </tbody>
                             </table>

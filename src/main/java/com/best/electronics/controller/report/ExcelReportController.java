@@ -21,16 +21,17 @@ public class ExcelReportController {
     @GetMapping("/user")
     public String sendUserExcelReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             String emailAddress = (String) oldSession.getAttribute("emailAddress");
-            String fileNameWithExtension = fileName + ".xlsx";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_all_user_details()}", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_all_user_details()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
+                if(sendReport.sendReport(emailAddress, fileName)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -38,22 +39,22 @@ public class ExcelReportController {
             oldSession.setAttribute("msg", "Some error occurred while sending Report! Please try again!");
             return "redirect:/reports";
         }
-        return "adminLogin";
     }
 
     @GetMapping("/products")
     public String sendProductExcelReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             String emailAddress = (String) oldSession.getAttribute("emailAddress");
-            String fileNameWithExtension = fileName + ".xlsx";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_product_list()}", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_product_list()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
+                if(sendReport.sendReport(emailAddress, fileName)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -61,29 +62,28 @@ public class ExcelReportController {
             oldSession.setAttribute("msg", "Some error occurred while sending Report! Please try again!");
             return "redirect:/reports";
         }
-        return "adminLogin";
     }
 
     @GetMapping("/products_sold")
     public String sendProductSoldExcelReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             String emailAddress = (String) oldSession.getAttribute("adminEmailAddress");
-            String fileNameWithExtension = fileName + ".xlsx";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "Select * from User", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_products_sold_details()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
+                if(sendReport.sendReport(emailAddress, fileName)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
             }
             oldSession.setAttribute("msg", "Some error occurred while sending Report! Please try again!");
-            return "reportOptions";
+            return "redirect:/reports";
         }
-        return "adminLogin";
     }
 }

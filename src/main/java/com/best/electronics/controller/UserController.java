@@ -10,6 +10,7 @@ import com.best.electronics.model.Order;
 import com.best.electronics.model.User;
 import com.best.electronics.register.RegisterHandler;
 import com.best.electronics.register.RegisterState;
+import com.best.electronics.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public String userHome(Model model){
+    public String userHome(){
         return "userLandingPage";
     }
 
@@ -95,11 +96,13 @@ public class UserController {
     @GetMapping("/profile")
     public String userProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "userLogin";
+        }else{
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail != null){
                 model.addAttribute("firstName", userDetail.get("firstName"));
                 model.addAttribute("lastName", userDetail.get("lastName"));
@@ -108,17 +111,18 @@ public class UserController {
                 model.addAttribute("address", userDetail.get("address"));
             }
 
-            ArrayList<Order> orderDetails = user.getOrderDetails(id, databasePersistence);
+            ArrayList<Order> orderDetails = userRepository.getUserOrderDetails(id);
             model.addAttribute("orders", orderDetails);
             return "userProfile";
         }
-       return "userLogin";
     }
 
     @GetMapping("/editProfile")
     public String editProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "userLogin";
+        }else{
             Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
             System.out.println(updatedStatus);
@@ -126,37 +130,38 @@ public class UserController {
                 oldSession.removeAttribute("updatedStatus");
             }
 
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail == null){
                 model.addAttribute("updatedStatus", "Some exception occurred! Please try again!");
+            }else{
+                model.addAttribute("firstName", userDetail.get("firstName"));
+                model.addAttribute("lastName", userDetail.get("lastName"));
+                model.addAttribute("dateOfBirth", userDetail.get("dob"));
+                model.addAttribute("email", userDetail.get("emailAddress"));
+                model.addAttribute("address", userDetail.get("address"));
             }
 
-            model.addAttribute("firstName", userDetail.get("firstName"));
-            model.addAttribute("lastName", userDetail.get("lastName"));
-            model.addAttribute("dateOfBirth", userDetail.get("dob"));
-            model.addAttribute("email", userDetail.get("emailAddress"));
-            model.addAttribute("address", userDetail.get("address"));
+            User user = new User();
             model.addAttribute("user", user);
             model.addAttribute("updatedStatus", updatedStatus);
             return "editUserDetails";
         }
-        return "userLogin";
     }
 
     @PostMapping("/update_profile")
     public String processUpdateProfile(User user, HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "userLogin";
+        }else{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            System.out.println(user.getEmailAddress());
-            String message = user.updateUserDetails(databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            String message = userRepository.updateUserDetails(user);
             oldSession.setAttribute("updatedStatus", message);
             return "redirect:/user/editProfile";
         }
-        return "userLogin";
     }
-
 
 }
