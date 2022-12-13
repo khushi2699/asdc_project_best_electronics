@@ -3,6 +3,7 @@ package com.best.electronics.login;
 import com.best.electronics.database.AdminMockDatabasePersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.model.Admin;
+import com.best.electronics.state.State;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,9 +37,9 @@ public class AdminLoginHandlerTest {
         Admin admin = new Admin ();
         admin.setEmailAddress("admin@gmail.com");
         admin.setPassword("Newuser@123");
-        LoginState loginState = authHandler.doHandler(admin, "admin");
+        State loginState = authHandler.doHandler(admin, "admin");
         Assertions.assertEquals(loginState.getNextPage(), "adminLandingPage");
-        Assertions.assertEquals(loginState.getLoginStatus(), "Successfully logged in");
+        Assertions.assertEquals(loginState.getStatus(), "Successfully logged in");
     }
 
     @Test
@@ -49,9 +50,9 @@ public class AdminLoginHandlerTest {
         Admin admin = new Admin ();
         admin.setEmailAddress("g@gmail.com");
         admin.setPassword("Newuser@123");
-        LoginState loginState = authHandler.doHandler(admin, "admin");
+        State loginState = authHandler.doHandler(admin, "admin");
         Assertions.assertEquals(loginState.getNextPage(), "adminLogin");
-        Assertions.assertEquals(loginState.getLoginStatus(), "EmailAddress does not Exists!");
+        Assertions.assertEquals(loginState.getStatus(), "EmailAddress does not Exists!");
     }
 
     @Test
@@ -62,9 +63,9 @@ public class AdminLoginHandlerTest {
         Admin admin = new Admin ();
         admin.setEmailAddress("admin@gmail.com");
         admin.setPassword("Newuser@125");
-        LoginState loginState = authHandler.doHandler(admin,"admin");
+        State loginState = authHandler.doHandler(admin,"admin");
         Assertions.assertEquals(loginState.getNextPage(), "adminLogin");
-        Assertions.assertEquals(loginState.getLoginStatus(), "Password is incorrect!");
+        Assertions.assertEquals(loginState.getStatus(), "Password is incorrect!");
     }
 
     @Test
@@ -76,8 +77,8 @@ public class AdminLoginHandlerTest {
         Admin admin = new Admin ();
         admin.setEmailAddress("admin@gmail.com");
         admin.setPassword("Newuser@123");
-        LoginState loginState = authHandler.doHandler(admin, "admin");
+        State loginState = authHandler.doHandler(admin, "admin");
         Assertions.assertEquals(loginState.getNextPage(), "adminLogin");
-        Assertions.assertEquals(loginState.getLoginStatus(), "Unexpected exception occurred! Please try again!");
+        Assertions.assertEquals(loginState.getStatus(), "Unexpected exception occurred! Please try again!");
     }
 }

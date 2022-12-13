@@ -1,7 +1,5 @@
 package com.best.electronics.forgotPassword;
 
-import com.best.electronics.login.SuccessLoginState;
-
 public abstract class ForgotPasswordEmailHandler {
     private ForgotPasswordEmailHandler nextHandler;
 
