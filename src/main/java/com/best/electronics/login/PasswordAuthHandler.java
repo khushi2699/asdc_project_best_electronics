@@ -1,6 +1,8 @@
 package com.best.electronics.login;
 
 import com.best.electronics.model.Account;
+import com.best.electronics.state.State;
+import com.best.electronics.state.login.IncorrectPasswordState;
 
 public class PasswordAuthHandler extends LoginAuthHandler {
 
@@ -12,7 +14,7 @@ public class PasswordAuthHandler extends LoginAuthHandler {
     }
 
     @Override
-    public LoginState doHandler(Account account, String type) throws Exception {
+    public State doHandler(Account account, String type) throws Exception {
         if(loginValidation.isValidPassword(account)){
             return nextHandler(account, type);
         }else{

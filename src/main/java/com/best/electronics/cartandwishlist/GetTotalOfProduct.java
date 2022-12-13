@@ -1,7 +1,5 @@
 package com.best.electronics.cartandwishlist;
 
-import com.best.electronics.login.EncryptPassword;
-
 import java.util.ArrayList;
 import java.util.Map;
 
