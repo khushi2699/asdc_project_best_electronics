@@ -4,7 +4,6 @@ import com.best.electronics.model.CartItem;
 import com.best.electronics.model.WishListItem;
 
 public class Invoker {
-
     CartItem cartItem = new CartItem();
 
     WishListItem wishListItem = new WishListItem();
@@ -31,12 +30,12 @@ public class Invoker {
 
     public void Remove(){
         if(this.cartItem != null && this.cartItem.getIdentifier().equalsIgnoreCase("Cart")){
-            //here adding product to cart logic
+            //here removing product from cart logic
             CartRemoveCommand cartRemoveCommand = new CartRemoveCommand(this.cartItem);
             cartRemoveCommand.execute();
         }
         else if (this.wishListItem.getIdentifier().equalsIgnoreCase("Wishlist")){
-            //here adding product to wishlist logic
+            //here removing product from wishlist logic
             WishlistRemoveCommand wishlistRemoveCommand = new WishlistRemoveCommand(this.wishListItem);
             wishlistRemoveCommand.execute();
         } else {

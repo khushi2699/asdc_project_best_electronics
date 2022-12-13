@@ -6,11 +6,14 @@ import com.best.electronics.database.*;
 import com.best.electronics.model.User;
 import com.best.electronics.model.CardDetails;
 import com.best.electronics.model.Order;
-import com.best.electronics.database.GetCartListPersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.model.CartItem;
 import com.best.electronics.model.Product;
+import com.best.electronics.repository.ProductRepository;
+import com.best.electronics.repository.UserRepository;
+import com.best.electronics.repository.CartRepository;
+import com.best.electronics.repository.OrderRepository;
 import com.best.electronics.repository.ProductRepository;
 import com.best.electronics.repository.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -62,8 +65,8 @@ public class CartController {
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
-                GetCartListPersistence getCartListPersistence = GetCartListPersistence.getInstance();
-                ArrayList<Map<String, Object>> cartListResult = getCartListPersistence.getCartListDetails(id);
+                CartRepository cartRepository = new CartRepository(databasePersistence);
+                ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
                 } else {
                     GetTotalOfProduct getTotalOfProduct = GetTotalOfProduct.getInstance();
@@ -95,8 +98,8 @@ public class CartController {
                 cardDetails.setExpiryDate(request.getParameter("cardExpiry"));
                 cardDetails.setSecurityCode(request.getParameter("securityCode"));
                 cardDetails.setUserId(id);
-                SaveCardDetailsPersistence saveCardDetailsPersistence = SaveCardDetailsPersistence.getInstance();
-                saveCardDetailsPersistence.saveCard(cardDetails);
+                CartRepository cartRepository = new CartRepository(databasePersistence);
+                cartRepository.saveCard(cardDetails);
             }
         }
         return "redirect:/proceedToOrder";
@@ -112,8 +115,8 @@ public class CartController {
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
-                GetCartListPersistence getCartListPersistence = GetCartListPersistence.getInstance();
-                ArrayList<Map<String, Object>> cartListResult = getCartListPersistence.getCartListDetails(id);
+                CartRepository cartRepository = new CartRepository(databasePersistence);
+                ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
                 } else {
                     //getting total sum of the cart
@@ -153,29 +156,25 @@ public class CartController {
             order.setOrderDate(String.valueOf(new Date()));
 
             if (userDetail != null) {
-                GetCartListPersistence getCartListPersistence = GetCartListPersistence.getInstance();
-                ArrayList<Map<String, Object>> cartListResult = getCartListPersistence.getCartListDetails(id);
+                CartRepository cartRepository = new CartRepository(databasePersistence);
+                ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
                 } else {
                     //placing order here
+                    OrderRepository orderRepository = new OrderRepository(databasePersistence);
 
                     //adding data to order Item generating the code and then adding it into the orderDetails table
-                    PlaceOrderPersistence placeOrderPersistence = PlaceOrderPersistence.getInstance();
-                    placeOrderPersistence.placeorder(order);
+                    orderRepository.placeorder(order);
                     //order added to OrderDetails
 
                     //fetching latest order for user to add data in orderItem
-                    GetOrderPersistence getOrderPersistence = GetOrderPersistence.getInstance();
-                    int latestOrderDetailsId = getOrderPersistence.getOrderId(id);
+                    int latestOrderDetailsId = cartRepository.getOrderId(id);
                     //using the extracted orderDetailsID to add orderItem
-
-                    PlaceOrderItemPersistence placeOrderItemPersistence = PlaceOrderItemPersistence.getInstance();
-                    placeOrderItemPersistence.saveOrderItems(cartListResult, latestOrderDetailsId);
+                    orderRepository.saveOrderItems(cartListResult, latestOrderDetailsId);
                     //Order Items added to the db
 
                     //Removing cart Items
-                    RemoveFullCartPersistence removeFullCartPersistence = RemoveFullCartPersistence.getInstance();
-                    removeFullCartPersistence.removeFullCart(id);
+                    cartRepository.removeFullCart(id);
 
                 }
             }
