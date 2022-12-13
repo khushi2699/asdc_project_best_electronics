@@ -20,6 +20,12 @@ public class CartItem {
         this.quantity = quantity;
     }
 
+    public CartItem(Integer cartItemId, String identifier, Integer userId){
+        this.cartItemId = cartItemId;
+        this.userId = userId;
+        this.identifier = identifier;
+    }
+
     public String getIdentifier() {
         return identifier;
     }

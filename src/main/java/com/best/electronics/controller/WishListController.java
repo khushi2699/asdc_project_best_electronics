@@ -1,6 +1,6 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.cart_and_wishlist.Invoker;
+import com.best.electronics.cartandwishlist.Invoker;
 import com.best.electronics.database.GetWishlistPersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;

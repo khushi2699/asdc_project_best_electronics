@@ -1,4 +1,4 @@
-package com.best.electronics.cart_and_wishlist;
+package com.best.electronics.cartandwishlist;
 
 import com.best.electronics.database.ProductRemovePersistence;
 import com.best.electronics.model.WishListItem;
