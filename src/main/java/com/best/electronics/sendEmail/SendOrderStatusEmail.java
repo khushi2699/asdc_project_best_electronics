@@ -1,6 +1,5 @@
 package com.best.electronics.sendEmail;
 
-import com.best.electronics.controller.email.EmailController;
 import com.best.electronics.model.Product;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -12,12 +11,12 @@ import java.util.ArrayList;
 public class SendOrderStatusEmail implements ISendOrderStatusEmail{
     public Boolean sendEmail(Integer orderId, Double orderAmount, String orderDateString, String emailAddress, String orderStatus, ArrayList<Product> products) {
         try{
-            EmailController emailController = new EmailController();
-            Session session = emailController.setUpProperties();
+            SendMail sendMail = new SendMail();
+            Session session = sendMail.setUpProperties();
             MimeMessage mimeMessage = new MimeMessage(session);
             draftEmail(mimeMessage, orderId, orderAmount, orderDateString,emailAddress, orderStatus, products);
-            emailController.setMimeMessage(mimeMessage);
-            emailController.sendMail();
+            sendMail.setMimeMessage(mimeMessage);
+            sendMail.sendMail();
             return true;
         } catch (Exception e){
             return false;

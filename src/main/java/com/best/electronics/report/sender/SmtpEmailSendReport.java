@@ -1,6 +1,6 @@
 package com.best.electronics.report.sender;
 
-import com.best.electronics.controller.email.EmailController;
+import com.best.electronics.sendEmail.SendMail;
 import com.best.electronics.properties.ReportProperties;
 
 import javax.activation.DataHandler;
@@ -17,14 +17,14 @@ public class SmtpEmailSendReport implements ISendReport{
     @Override
     public Boolean sendReport(String emailAddress, String fileName) {
         try{
-            EmailController emailController = new EmailController();
-            Session session = emailController.setUpProperties();
+            SendMail sendMail = new SendMail();
+            Session session = sendMail.setUpProperties();
 
             MimeMessage mimeMessage = new MimeMessage(session);
 
             draftEmail(mimeMessage, emailAddress, fileName);
-            emailController.setMimeMessage(mimeMessage);
-            emailController.sendMail();
+            sendMail.setMimeMessage(mimeMessage);
+            sendMail.sendMail();
             return true;
         } catch (Exception e){
             return false;
