@@ -1,5 +1,6 @@
-package com.best.electronics.cart_and_wishlist;
+package com.best.electronics.cartandwishlist;
 
+import com.best.electronics.database.ProductRemovePersistence;
 import com.best.electronics.database.ProductToCartPersistence;
 import com.best.electronics.model.CartItem;
 
@@ -11,8 +12,8 @@ public class CartRemoveCommand implements CommandForProduct{
 
     @Override
     public void execute() {
-        ProductToCartPersistence productToCartPersistence = ProductToCartPersistence.getInstance();
-        productToCartPersistence.addProductsToCart(cartItem);
+        ProductRemovePersistence productRemovePersistence = ProductRemovePersistence.getInstance();
+        productRemovePersistence.removeProductFromCart(cartItem);
     }
 
 }

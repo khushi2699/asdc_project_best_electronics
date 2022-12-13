@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -78,6 +78,9 @@ width: 66%;
   <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
   <div class="navbar-nav w-100">
     <div class="ml-auto">
+      <a class="nav-link nav-link active" href="/user/home">Home</a>
+    </div>
+    <div class="ml-auto">
       <a class="nav-link nav-link active" href="/user/profile">My Account</a>
     </div>
     <div class="ml-auto">
@@ -96,53 +99,66 @@ width: 66%;
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <p>&nbsp</p>
-      <h3>My Cart</h3>
-      <input type="text" class="search" id="myInput" onkeyup="myFunction()" placeholder="Search for products">
+      <h3>Checkout</h3>
       <p></p>
       <div class="products">
         <div class="products-body">
-          <table class = "productlist" id="products" style="table-layout: float ; width: 100%" align="left">
-            <thead class="thead-dark">
-            <tr>
-              <th style="text-align: center">ID</th>
-              <th style="text-align: center">Name</th>
-              <th style="text-align: center">Price</th>
-              <th style="text-align: center">Description</th>
-              <th style="text-align: center">Brand</th>
-              <th style="text-align: center">Quantity</th>
-              <th style="text-align: center">Price</th>
-              <th style="text-align: center">Remove</th>
-            </tr>
-            </thead>
-            <tr th:each="carts:${listCart}" th:object = "${cart}" th:with = "productTotal=${carts.quantity}*${carts.productPrice}">
+          <a th:href = "@{cart}">Back</a>
+          <h3>Your total value: </h3>
+          <h4 th:text = "${sumofcart}"></h4>
+          <form method="post" th:action = "@{placeOrder}">
+            <h4> Select a payment option: </h4>
+          <label for="COD">
+          <input type="radio" id = "COD" th:name="payment" th:value = "COD" onclick="ShowHideDiv()"> Cash on delivery
+          </label>
+          <label for="Card">
+            <input type="radio" id = "Card" th:name="payment" th:value = "Card" onclick="ShowHideDiv()"> Card
+          </label>
+          <div id="cardDetails1" style="display: none">
+            <h4> Below are your card options: </h4>
 
-              <td style="text-align: center" th:text="${carts.cartItemId}"></td>
-              <td style="text-align: center" th:text="${carts.productName}"></td>
-              <td style="text-align: center" th:text="${carts.productPrice}"></td>
-              <td style="text-align: center" th:text="${carts.productDescription}"></td>
-              <td style="text-align: center" th:text="${carts.productBrand}"></td>
-              <td style="text-align: center" th:text="${carts.quantity}"></td>
-              <td style="text-align: center" th:text="${productTotal}"></td>
+            <table class = "productlist" id="products" style="table-layout: float ; width: 100%" align="left">
+              <thead class="thead-dark">
+              <tr>
+                <th style="text-align: center">ID</th>
 
-
-              <form method="post" th:action="@{/RemoveFromCartlistController/{product_id}(product_id=${carts.cartItemId})}">
-<!--                <form method="post">-->
-                <input type="hidden" name="cartItemId" th:value="${carts.cartItemId}">
-
-                <td class="add to whishlist">
-                  <button type="submit" id="btn_whishlist" name="CartController" class="addtocartbutton"> Remove from cart</button>
-
+              </tr>
+              </thead>
+              <tr th:each="payments:${cardDetails}">
+                <td>
+                  <input type="radio" name="cardDetail" th:value="${payments.cardId}" style="text-align: center" th:text="${payments.cardType} + ${payments.cardNumber}"/>
                 </td>
-              </form>
-            </tr>
-            <tr>
-              <td>
-                <button type="button" th:onclick="|window.location.href='@{/proceedToOrder}'|">Checkout!</button><br><br>
-              </td>
-              <td>Total:</td>
-              <td th:text="${sumofcart}"></td>
-            </tr>
-          </table>
+              </tr>
+            </table>
+          </div>
+
+          <hr/>
+            <button type = "submit">Place Order</button>
+          </form>
+          <div id="cardDetails" style="display: none">
+            Add card details:
+            <form method="post" th:action = "@{addCardDetails}">
+              <label for = "cardName"> Card Holder Name: </label>
+              <input type="text" id="cardName" name = "cardName" required>
+              <br>
+              <label for = "cardType"> Card Type: </label>
+              <input type="text" id="cardType" name = "cardType" required>
+              <br>
+              <label for = "cardNumber"> Card Number: </label>
+              <input type = "text" id = "cardNumber" name = "cardNumber" required maxlength="16">
+              <br>
+              <label for = "cardExpiry"> Card Expiry (mm/yy): </label>
+              <input type="text" id="cardExpiry" name = "cardExpiry" required maxlength="5">
+              <br>
+              <label for = "securityCode"> Security code: </label>
+              <input type="text" id="securityCode" name = "securityCode" required maxlength="3">
+              <button type = "submit" >Add card details</button>
+            </form>
+          </div>
+          <h4> Below are your address details: </h4>
+          <h4> Address: </h4>
+          <h4 th:text = "${address}"></h4>
+
         </div>
       </div>
     </div>
@@ -199,6 +215,17 @@ $(".qtyminus").click(function (e) {
     }
   }
 }
+
+    function ShowHideDiv() {
+        var chkYes = document.getElementById("Card");
+        var dvPassport = document.getElementById("cardDetails");
+        var dvPassport1 = document.getElementById("cardDetails1");
+        dvPassport.style.display = chkYes.checked ? "block" : "none";
+                dvPassport1.style.display = chkYes.checked ? "block" : "none";
+
+    }
+
+
 
 </script>
 </body>
