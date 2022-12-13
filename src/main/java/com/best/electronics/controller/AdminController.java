@@ -7,10 +7,7 @@ import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.login.LoginState;
-import com.best.electronics.model.Admin;
-import com.best.electronics.model.Order;
-import com.best.electronics.model.Product;
-import com.best.electronics.model.User;
+import com.best.electronics.model.*;
 import com.best.electronics.exceptions.NullPointerException;
 import com.best.electronics.sendEmail.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
@@ -56,7 +53,7 @@ public class AdminController {
         loginHandler.logout(request);
         model.addAttribute("admin", new Admin());
         model.addAttribute("logoutMessage", "Successfully logged out!");
-        return "adminLogin";
+        return "adminLogout";
     }
 
     @GetMapping("/orderDetails")
@@ -102,11 +99,14 @@ public class AdminController {
         ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
 
+        ArrayList<Map<String, Object>> productCategoryList = productPersistence.getProductCategory(db);
         ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
-        if(productList == null){
-            throw new NullPointerException("Product List could not be fetched from the database");
+        if(productList == null && productCategoryList == null){
+            throw new NullPointerException("Products List could not be fetched from the database");
         }
         else {
+            model.addAttribute("productcategory", new ProductCategory());
+            model.addAttribute("listProductCategory", productCategoryList);
             model.addAttribute("product", new Product());
             model.addAttribute("listProducts", productList);
             return "adminProductList";
@@ -171,7 +171,7 @@ public class AdminController {
     }
 
     @PostMapping("/sendEmail")
-    public String processUpdateProfile(
+    public String sendEmail(
        @RequestParam(value = "orderId", required = false) Integer orderId,
        @RequestParam(value = "orderAmount", required = false) Double orderAmount,
        @RequestParam(value = "orderStatus", required = false) String orderStatus,
