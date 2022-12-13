@@ -1,12 +1,11 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.cart_and_wishlist.Invoker;
+import com.best.electronics.cartandwishlist.Invoker;
 import com.best.electronics.database.GetWishlistPersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.model.*;
-import exceptions.NullPointerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

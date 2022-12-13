@@ -191,6 +191,7 @@ width: 66%;
               <td style="text-align: center" th:text="${wishlists.productDescription}"></td>
               <td style="text-align: center" th:text="${wishlists.productBrand}"></td>
               <td style="text-align: center" th:text="${wishlists.availableQuantity}"></td>
+
               <form method="post" th:action="@{/WishlistControllerToCart/{product_id}(product_id=${wishlists.productId})}" th:object = "${wishlist}">
                 <input type="hidden" name="wishListItemId" th:value="${wishlists.wishListItemId}">
                 <td class="cart_quantity" style="text-align: center">
