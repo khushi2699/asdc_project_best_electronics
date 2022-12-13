@@ -45,7 +45,7 @@ public class UserRepository {
                     p.setProductPrice((Double) orderItem.get("productPrice"));
                     p.setProductCode(String.valueOf(orderItem.get("productCode")));
                     p.setProductQuantity((Integer) orderItem.get("quantity"));
-                    p.setProductPrice((Double) orderItem.get("subTotal"));
+                    p.setProductSubtotal((Double) orderItem.get("subTotal"));
                     p.setProductName((String) orderItem.get("productName"));
                     product.add(p);
                 }
