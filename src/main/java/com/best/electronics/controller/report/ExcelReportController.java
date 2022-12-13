@@ -31,7 +31,8 @@ public class ExcelReportController {
             if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_all_user_details()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileName)){
+                String fileNameWithExtension = fileName + ".xlsx";
+                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -54,7 +55,8 @@ public class ExcelReportController {
             if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_product_list()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileName)){
+                String fileNameWithExtension = fileName + ".xlsx";
+                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -77,7 +79,8 @@ public class ExcelReportController {
             if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_products_sold_details()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileName)){
+                String fileNameWithExtension = fileName + ".xlsx";
+                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
