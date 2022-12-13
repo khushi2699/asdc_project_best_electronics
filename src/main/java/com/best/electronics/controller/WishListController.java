@@ -4,12 +4,16 @@ import com.best.electronics.cartandwishlist.Invoker;
 import com.best.electronics.database.GetWishlistPersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.database.ProductPersistence;
-import com.best.electronics.model.*;
+import com.best.electronics.repository.ProductRepository;
+import com.best.electronics.repository.UserRepository;
+import com.best.electronics.model.User;
+import com.best.electronics.model.Product;
+import com.best.electronics.model.CartItem;
+import com.best.electronics.model.WishList;
+import com.best.electronics.model.WishListItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -21,14 +25,14 @@ import java.util.Map;
 @Controller
 public class WishListController {
     @PostMapping("/WishlistController/{product_id}")
-    public String index(Product product, HttpServletRequest request, @PathVariable Integer product_id, Model model) throws Exception {
+    public String index(HttpServletRequest request, @PathVariable Integer product_id, Model model) throws Exception {
 
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail != null){
                 WishListItem wishListItem = new WishListItem(product_id, "Wishlist", id);
                 Invoker invoker = new Invoker();
@@ -37,9 +41,9 @@ public class WishListController {
             }
         }
 
-        ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
+        ProductRepository productRepository = new ProductRepository(db);
+        ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
         model.addAttribute("listProducts", productList);
         return "productList";
     }
@@ -50,9 +54,9 @@ public class WishListController {
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail != null){
                 GetWishlistPersistence getWishlistPersistence = GetWishlistPersistence.getInstance();
                 ArrayList<Map<String, Object>> wishListResult = getWishlistPersistence.getWishListDetails(id);
@@ -67,7 +71,7 @@ public class WishListController {
     }
 
     @PostMapping("/WishlistControllerToCart/{product_id}")
-    public String moveItemToCart(@ModelAttribute WishList wishlist, HttpServletRequest request, @PathVariable Integer product_id, Model model){
+    public String moveItemToCart(HttpServletRequest request, @PathVariable Integer product_id, Model model){
         model.addAttribute("wishlist",new WishList());
         Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
         Integer wishListItemId = Integer.valueOf(request.getParameter("wishListItemId"));
@@ -75,9 +79,9 @@ public class WishListController {
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail != null){
                 //Adding the item to cart
                 CartItem cartItem = new CartItem(product_id, "Cart", quantity, id);
@@ -95,16 +99,16 @@ public class WishListController {
     }
 
     @PostMapping("/RemoveFromWishList/{product_id}")
-    public String removeItemFromWishlist(@ModelAttribute WishList wishlist, HttpServletRequest request, @PathVariable Integer product_id, Model model){
-        model.addAttribute("wishlist",new WishList());
+    public String removeItemFromWishlist(HttpServletRequest request, @PathVariable Integer product_id, Model model){
+        model.addAttribute("wishlist", new WishList());
         Integer wishListItemId = Integer.valueOf(request.getParameter("wishListItemId"));
 
         HttpSession oldSession = request.getSession(false);
         if(oldSession != null){
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail != null){
                 //Removing the item from wishlist
                 WishListItem wishListItem = new WishListItem(product_id, "Wishlist", id , wishListItemId);
