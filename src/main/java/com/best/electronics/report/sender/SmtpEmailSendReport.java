@@ -1,6 +1,6 @@
 package com.best.electronics.report.sender;
 
-import com.best.electronics.sendEmail.SendMail;
+import com.best.electronics.email.SendMail;
 import com.best.electronics.properties.ReportProperties;
 
 import javax.activation.DataHandler;

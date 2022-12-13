@@ -1,4 +1,4 @@
-package com.best.electronics.sendEmail;
+package com.best.electronics.email;
 
 import com.best.electronics.properties.EmailProperties;
 import com.best.electronics.properties.SendMailProperties;

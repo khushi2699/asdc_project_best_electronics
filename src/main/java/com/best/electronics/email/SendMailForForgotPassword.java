@@ -1,4 +1,4 @@
-package com.best.electronics.sendEmail;
+package com.best.electronics.email;
 
 import com.best.electronics.controller.email.EmailControllerPinResetStore;
 import com.best.electronics.controller.email.EmailControllerPinStoreHandler;

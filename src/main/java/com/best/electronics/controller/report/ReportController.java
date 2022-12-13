@@ -14,12 +14,14 @@ public class ReportController {
     @GetMapping("/reports")
     public String sendUserExcelReport(HttpServletRequest request, Model model){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "reportOptions";
+        }else{
             String message = (String) oldSession.getAttribute("msg");
             System.out.println(message);
             model.addAttribute("msg", message);
+            return "reportOptions";
         }
-        return "reportOptions";
     }
 
     @PostMapping("/process_reports")

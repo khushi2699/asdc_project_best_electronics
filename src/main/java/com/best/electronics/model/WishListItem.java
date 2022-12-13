@@ -10,7 +10,6 @@ public class WishListItem {
 
     private Integer wishListItemIdNumber;
 
-
     public WishListItem()
     {
 

@@ -1,8 +1,7 @@
 package com.best.electronics.controller.email;
 
+import com.best.electronics.email.SendMailForForgotPassword;
 import com.best.electronics.model.User;
-import com.best.electronics.sendEmail.SendMail;
-import com.best.electronics.sendEmail.SendMailForForgotPassword;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

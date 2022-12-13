@@ -1,21 +1,21 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.cartandwishlist.CartRemoveCommand;
 import com.best.electronics.cartandwishlist.GetTotalOfProduct;
 import com.best.electronics.cartandwishlist.Invoker;
 import com.best.electronics.database.*;
-import com.best.electronics.model.*;
+import com.best.electronics.model.User;
+import com.best.electronics.model.CardDetails;
+import com.best.electronics.model.Order;
 import com.best.electronics.database.GetCartListPersistence;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.model.CartItem;
 import com.best.electronics.model.Product;
-import com.best.electronics.model.User;
+import com.best.electronics.repository.ProductRepository;
+import com.best.electronics.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,17 +28,15 @@ import java.util.Map;
 @Controller
 public class CartController {
     @PostMapping("/CartController/{product_id}")
-    public String index(Product product, HttpServletRequest request, @PathVariable Integer product_id, Model model) throws Exception {
-
-        System.out.println("Quantity" + request.getParameter("userQuantity"));
+    public String index(HttpServletRequest request, @PathVariable Integer product_id, Model model) throws Exception {
         Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
 
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
                 CartItem cartItem = new CartItem(product_id, "Cart", quantity, id);
                 Invoker invoker = new Invoker();
@@ -47,9 +45,9 @@ public class CartController {
             }
         }
 
-        ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
+        ProductRepository productRepository = new ProductRepository(db);
+        ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
         model.addAttribute("listProducts", productList);
         return "productList";
     }
@@ -60,9 +58,9 @@ public class CartController {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
                 GetCartListPersistence getCartListPersistence = GetCartListPersistence.getInstance();
                 ArrayList<Map<String, Object>> cartListResult = getCartListPersistence.getCartListDetails(id);
@@ -82,13 +80,13 @@ public class CartController {
     }
 
     @PostMapping("addCardDetails")
-    public String addCardDetails(HttpServletRequest request, Model model) throws Exception {
+    public String addCardDetails(HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
                 CardDetails cardDetails = new CardDetails();
                 cardDetails.setCardName(request.getParameter("cardName"));
@@ -111,7 +109,8 @@ public class CartController {
             Integer id = (Integer) oldSession.getAttribute("id");
             User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
                 GetCartListPersistence getCartListPersistence = GetCartListPersistence.getInstance();
                 ArrayList<Map<String, Object>> cartListResult = getCartListPersistence.getCartListDetails(id);
@@ -136,7 +135,7 @@ public class CartController {
         return "proceedToCheckout";
     }
     @PostMapping("/placeOrder")
-    public String placeOrder(HttpServletRequest request, Model model) throws Exception {
+    public String placeOrder(HttpServletRequest request) throws Exception {
         Order order = new Order();
         order.setOrderAmount(0.0);
         order.setOrderStatus("Order placed");
@@ -147,7 +146,8 @@ public class CartController {
             Integer id = (Integer) oldSession.getAttribute("id");
             User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             order.setUserId(id);
             order.setAddress((String) userDetail.get("address"));
             order.setOrderDate(String.valueOf(new Date()));
@@ -169,8 +169,8 @@ public class CartController {
                     int latestOrderDetailsId = getOrderPersistence.getOrderId(id);
                     //using the extracted orderDetailsID to add orderItem
 
-                    PlaceOrderItemPersistence placeOrderItemPeristence = PlaceOrderItemPersistence.getInstance();
-                    placeOrderItemPeristence.saveOrderItems(cartListResult, latestOrderDetailsId);
+                    PlaceOrderItemPersistence placeOrderItemPersistence = PlaceOrderItemPersistence.getInstance();
+                    placeOrderItemPersistence.saveOrderItems(cartListResult, latestOrderDetailsId);
                     //Order Items added to the db
 
                     //Removing cart Items
@@ -191,11 +191,11 @@ public class CartController {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             Integer id = (Integer) oldSession.getAttribute("id");
-            User user = new User();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> userDetail = user.getUserDetails(id, databasePersistence);
+            UserRepository userRepository = new UserRepository(databasePersistence);
+            Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if (userDetail != null) {
-                CartItem cartItem = new CartItem(cardItemId,"Cart",id);
+                CartItem cartItem = new CartItem(cardItemId,"Cart", id);
                 Invoker invoker1 = new Invoker();
                 invoker1.setCommand(cartItem, null);
                 invoker1.Remove();
@@ -203,6 +203,5 @@ public class CartController {
         }
         return "redirect:/cart";
     }
-
 
 }
