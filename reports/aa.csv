@@ -1,0 +1,6 @@
+firstName,lastName,resetPasswordToken,emailAddress,password,address,gender,dob,userId
+Prabh,Kaur,null,srshtjn@gmail.com,7d86685ccb3353e1b69312eb10758cdc,1556 Lemarchant Street| Canada,female,12/07/2004,3
+Prabhleen,Kaur,null,s@gmail.com,52f1a9df69dc655db8a3832cfb853ebd,Park Victoria| Canada,female,12/06/2004,5
+Khushi,Shah,232675,khshah2699@gmail.com,52f1a9df69dc655db8a3832cfb853ebd,104| 6967 Bayers Road,female,12/07/2004,6
+Test,User,null,mk@gmail.com,1c4453807f819bde7f3895884c842df4,a|mdnwakjfnwf,male,12/12/2004,9
+Aish,Kanchi,null,aish@bestelectronics.com,d01f5d5217896fb7fd601412cb891830,halifax halifax halifax,female,02/01/2000,10

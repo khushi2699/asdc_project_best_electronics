@@ -1,6 +1,6 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.controller.email.ResetPasswordCombinationValidationHandler;
+import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.ILoginHandler;
@@ -63,28 +63,6 @@ public class UserController {
     public String login(Model model){
         model.addAttribute("user", new User());
         return "userLogin";
-    }
-
-    @GetMapping("/resetPassword")
-    public String resetPassword(Model model){
-        model.addAttribute("login", new User());
-        System.out.println("Printing reset Password");
-        return "resetPassword";
-    }
-
-    @PostMapping("/checkValidToken")
-    public String checkValidToken(@ModelAttribute User user, Model model) {
-        ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
-        model.addAttribute("login", new User());
-        model.addAttribute("emailAddress", user.getEmailAddress());
-        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress())){
-            return "changePassword";
-        }
-        else {
-            model.addAttribute("msg","Please enter correct combination");
-            return "resetPassword";
-
-        }
     }
 
     @GetMapping("/logout")
