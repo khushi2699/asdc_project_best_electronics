@@ -30,13 +30,11 @@ public class ForgotPasswordController {
         model.addAttribute("login", new User());
         ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
         ForgotPasswordState forgotPasswordState = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress());
-        System.out.println("Next Page: "+forgotPasswordState.getNextPage());
         model.addAttribute("msg", forgotPasswordState.getStatus());
         return forgotPasswordState.getNextPage();
     }
     @PostMapping("/getCode")
     public String getCode(@ModelAttribute User user, Model model) throws Exception {
-        System.out.println("Email address" + user.getEmailAddress());
         SendMailForForgotPassword sendMailForForgotPassword = new SendMailForForgotPassword();
         sendMailForForgotPassword.emailControl(user.getEmailAddress());
         model.addAttribute("login", new User());

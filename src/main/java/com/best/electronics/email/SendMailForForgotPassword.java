@@ -20,7 +20,8 @@ public class SendMailForForgotPassword {
 
 
     public void emailControl (String email) throws Exception {
-        int randomNumber = generateRandomNumber(); //generating a random number
+        GenerateRandomNumber generateRandomNumber = GenerateRandomNumber.getInstance();
+        int randomNumber = generateRandomNumber.generateRandomNumber();
         SendMail sendMail = new SendMail();
         newSession = sendMail.setUpProperties();
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
@@ -48,10 +49,5 @@ public class SendMailForForgotPassword {
     private void saveToDB(int randomNumber, String email){
         EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
         emailControllerPinResetStore.storePinToDB(randomNumber,email);
-    }
-    public int generateRandomNumber(){
-        Random randomNumber = new Random();
-        int number =  randomNumber.nextInt(999999);
-        return number;
     }
 }
