@@ -4,11 +4,14 @@ import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.model.Product;
 import com.best.electronics.exceptions.NullPointerException;
+import com.best.electronics.model.ProductCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -33,6 +36,7 @@ public class ProductController {
             return "productList";
         }
     }
+
 
 
 
