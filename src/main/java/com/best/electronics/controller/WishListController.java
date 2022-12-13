@@ -33,12 +33,18 @@ public class WishListController {
     public String index(HttpServletRequest request, @PathVariable Integer product_id, Model model) throws Exception {
 
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if(userDetail != null){
+            if(userDetail == null){
+                return "products";
+            }
+            else {
                 WishListItem wishListItem = new WishListItem(product_id, "Wishlist", id);
                 Invoker invoker = new Invoker();
                 invoker.setCommand(null, wishListItem);
@@ -57,22 +63,29 @@ public class WishListController {
     public String displayWishlist(Model model, HttpServletRequest request) throws Exception {
 
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if(userDetail != null){
+            if(userDetail == null){
+                return "products";
+            }
+            else {
                 WishListRepository wishListRepository = new WishListRepository(databasePersistence);
                 ArrayList<Map<String, Object>> wishListResult = wishListRepository.getWishListDetails(id);
-                if(wishListResult == null){}
+                if(wishListResult == null){
+                    return "products";
+                }
                 else {
-                model.addAttribute("wishlist",new WishList());
-                model.addAttribute("listWishlist", wishListResult);}
+                    model.addAttribute("wishlist",new WishList());
+                    model.addAttribute("listWishlist", wishListResult);}
             }
-
+            return "wishList";
         }
-        return "wishList";
     }
 
     @PostMapping("/WishlistControllerToCart/{product_id}")
@@ -82,12 +95,18 @@ public class WishListController {
         Integer wishListItemId = Integer.valueOf(request.getParameter("wishListItemId"));
 
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if(userDetail != null){
+            if(userDetail == null){
+                return "products";
+            }
+            else {
                 //Adding the item to cart
                 CartItem cartItem = new CartItem(product_id, "Cart", quantity, id);
                 Invoker invoker = new Invoker();
@@ -99,8 +118,8 @@ public class WishListController {
                 invoker1.setCommand(null, wishListItem);
                 invoker1.Remove();
             }
+            return "redirect:/wishList";
         }
-        return "redirect:/wishList";
     }
 
     @PostMapping("/RemoveFromWishList/{product_id}")
@@ -109,19 +128,25 @@ public class WishListController {
         Integer wishListItemId = Integer.valueOf(request.getParameter("wishListItemId"));
 
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if(userDetail != null){
+            if(userDetail == null){
+                return "products";
+            }
+            else {
                 //Removing the item from wishlist
                 WishListItem wishListItem = new WishListItem(product_id, "Wishlist", id , wishListItemId);
                 Invoker invoker1 = new Invoker();
                 invoker1.setCommand(null, wishListItem);
                 invoker1.Remove();
             }
+            return "redirect:/wishList";
         }
-        return "redirect:/wishList";
     }
 }

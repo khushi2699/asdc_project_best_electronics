@@ -31,19 +31,24 @@ public class CartController {
         Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
 
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
+        if (oldSession == null) {
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if (userDetail != null) {
+            if (userDetail == null) {
+                return "products";
+            }
+            else {
                 CartItem cartItem = new CartItem(product_id, "Cart", quantity, id);
                 Invoker invoker = new Invoker();
                 invoker.setCommand(cartItem, null);
                 invoker.Add();
             }
         }
-
         IDatabasePersistence db = new MySQLDatabasePersistence();
         ProductRepository productRepository = new ProductRepository(db);
         ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
@@ -55,15 +60,22 @@ public class CartController {
     public String displayWishlist(Model model, HttpServletRequest request) throws Exception {
 
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
+        if (oldSession == null) {
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if (userDetail != null) {
+            if (userDetail == null) {
+                return "products";
+            }
+            else {
                 CartRepository cartRepository = new CartRepository(databasePersistence);
                 ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
+                    return "products";
                 } else {
                     GetTotalOfProduct getTotalOfProduct = GetTotalOfProduct.getInstance();
                     double totalsum = getTotalOfProduct.calculateTotalOfProducts(cartListResult);
@@ -73,20 +85,25 @@ public class CartController {
                     model.addAttribute("listCart", cartListResult);
                 }
             }
-
+            return "cart";
         }
-        return "cart";
     }
 
     @PostMapping("addCardDetails")
     public String addCardDetails(HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
+        if (oldSession == null) {
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if (userDetail != null) {
+            if (userDetail == null) {
+               return "products";
+            }
+            else {
                 CardDetails cardDetails = new CardDetails();
                 cardDetails.setCardName(request.getParameter("cardName"));
                 cardDetails.setCardNumber(request.getParameter("cardNumber"));
@@ -97,22 +114,30 @@ public class CartController {
                 CartRepository cartRepository = new CartRepository(databasePersistence);
                 cartRepository.saveCard(cardDetails);
             }
+            return "redirect:/proceedToOrder";
+
         }
-        return "redirect:/proceedToOrder";
     }
 
     @GetMapping("proceedToOrder")
     public String proceedToOrder(Model model, HttpServletRequest request) throws Exception {
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
+        if (oldSession == null) {
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if (userDetail != null) {
+            if (userDetail == null) {
+                return "products";
+            }
+            else {
                 CartRepository cartRepository = new CartRepository(databasePersistence);
                 ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
+                    return "products";
                 } else {
                     //getting total sum of the cart
                     GetTotalOfProduct getTotalOfProduct = GetTotalOfProduct.getInstance();
@@ -128,8 +153,9 @@ public class CartController {
                     model.addAttribute("sumofcart",totalsum);
                 }
             }
+            return "proceedToCheckout";
+
         }
-        return "proceedToCheckout";
     }
     @PostMapping("/placeOrder")
     public String placeOrder(HttpServletRequest request) throws Exception {
@@ -139,7 +165,10 @@ public class CartController {
         order.setPaymentMethod(request.getParameter("payment"));
 
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
+        if (oldSession == null) {
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
@@ -148,7 +177,10 @@ public class CartController {
             order.setAddress((String) userDetail.get("address"));
             order.setOrderDate(String.valueOf(new Date()));
 
-            if (userDetail != null) {
+            if (userDetail == null) {
+                return "products";
+            }
+            else {
                 CartRepository cartRepository = new CartRepository(databasePersistence);
                 ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
@@ -171,8 +203,8 @@ public class CartController {
 
                 }
             }
+            return "cart";
         }
-        return "cart";
     }
 
     @PostMapping("/RemoveFromCartlistController/{product_id}")
@@ -181,19 +213,24 @@ public class CartController {
         int cardItemId = Integer.parseInt(request.getParameter("cartItemId"));
 
         HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
+        if (oldSession == null) {
+            return "products";
+        }
+        else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
-            if (userDetail != null) {
+            if (userDetail == null) {
+                return "products";
+            }
+            else {
                 CartItem cartItem = new CartItem(cardItemId,"Cart", id);
                 Invoker invoker1 = new Invoker();
                 invoker1.setCommand(cartItem, null);
                 invoker1.Remove();
             }
+            return "redirect:/cart";
         }
-        return "redirect:/cart";
     }
-
 }
