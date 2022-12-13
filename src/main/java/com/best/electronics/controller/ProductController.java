@@ -18,7 +18,7 @@ public class ProductController {
         IDatabasePersistence db = new MySQLDatabasePersistence();
         ProductRepository productRepository = new ProductRepository(db);
         ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
-        if(productList == null){
+        if(productList.isEmpty()){
             throw new NullPointerException("Product List could not be fetched from the database");
         } else {
             model.addAttribute("product", new Product());
