@@ -4,6 +4,8 @@ import com.best.electronics.email.ChangePasswordHandler;
 import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
 import com.best.electronics.email.SendMailForForgotPassword;
 import com.best.electronics.forgotPassword.ForgotPasswordState;
+import com.best.electronics.forgotPassword.GetCode;
+import com.best.electronics.forgotPassword.ResetPasswordFactory;
 import com.best.electronics.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +37,11 @@ public class ForgotPasswordController {
     }
     @PostMapping("/getCode")
     public String getCode(@ModelAttribute User user, Model model) throws Exception {
-        SendMailForForgotPassword sendMailForForgotPassword = new SendMailForForgotPassword();
-        sendMailForForgotPassword.emailControl(user.getEmailAddress());
+        //implementing an open approach to send codes through either email or text message. But implementation is of email
+        ResetPasswordFactory resetPasswordFactory = new ResetPasswordFactory();
+        GetCode getCode = resetPasswordFactory.sendCodeThrough("Email");
+        getCode.generateCode(user.getEmailAddress());
+
         model.addAttribute("login", new User());
         model.addAttribute("msg", "Password reset link and token will be sent to you email if the email exists!");
         return "forgotPassword";

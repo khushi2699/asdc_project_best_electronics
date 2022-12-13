@@ -2,6 +2,7 @@ package com.best.electronics.email;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.forgotPassword.GetCode;
 import com.best.electronics.repository.PasswordRepository;
 
 import javax.mail.Message;
@@ -13,11 +14,15 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class SendMailForForgotPassword {
+public class SendMailForForgotPassword implements GetCode {
 
     Session newSession = null;
     MimeMessage mimeMessage = null;
 
+    @Override
+    public void generateCode(String medium) throws Exception {
+        emailControl(medium);
+    }
 
     public void emailControl (String email) throws Exception {
         GenerateRandomNumber generateRandomNumber = GenerateRandomNumber.getInstance();
@@ -50,4 +55,6 @@ public class SendMailForForgotPassword {
         EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
         emailControllerPinResetStore.storePinToDB(randomNumber,email);
     }
+
+
 }
