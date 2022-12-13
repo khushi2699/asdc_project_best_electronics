@@ -12,6 +12,7 @@ import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
 import com.best.electronics.exceptions.NullPointerException;
+import com.best.electronics.sendEmail.ISendOrderStatusEmail;
 import com.best.electronics.sendEmail.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -171,7 +172,7 @@ public class AdminController {
     }
 
     @PostMapping("/sendEmail")
-    public String processUpdateProfile(
+    public String sendEmail(
        @RequestParam(value = "orderId", required = false) Integer orderId,
        @RequestParam(value = "orderAmount", required = false) Double orderAmount,
        @RequestParam(value = "orderStatus", required = false) String orderStatus,
@@ -187,7 +188,7 @@ public class AdminController {
 
             for (Order order1 : orderDetails) {
                 ArrayList<Product> products = order1.getProducts();
-                SendOrderStatusEmail email = new SendOrderStatusEmail();
+                ISendOrderStatusEmail email = new SendOrderStatusEmail();
                 if (email.sendEmail(orderId, orderAmount, orderDate, emailAddress, orderStatus, products)) {
                     oldSession.setAttribute("msg", "Email is successfully sent!");
                     return "redirect:/admin/orderDetails";
