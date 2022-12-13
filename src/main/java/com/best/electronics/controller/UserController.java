@@ -4,12 +4,12 @@ import com.best.electronics.controller.email.ResetPasswordCombinationValidationH
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.ILoginHandler;
+import com.best.electronics.state.State;
 import com.best.electronics.login.UserLoginHandler;
-import com.best.electronics.login.LoginState;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.User;
-import com.best.electronics.register.RegisterHandler;
-import com.best.electronics.register.RegisterState;
+import com.best.electronics.register.IRegisterHandler;
+import com.best.electronics.register.UserRegisterHandler;
 import com.best.electronics.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -29,16 +30,19 @@ public class UserController {
 
     @PostMapping("/process_registration")
     public String processRegistration(User user, Model model){
-        RegisterHandler registerHandler = new RegisterHandler();
-        RegisterState registerState = registerHandler.register(user);
-        model.addAttribute("msg", registerState.getRegisterStatus());
+        IRegisterHandler registerHandler = new UserRegisterHandler();
+        Map<String, Object> specificParameters = new HashMap<>();
+        specificParameters.put("dob", user.getDateOfBirth());
+        specificParameters.put("address", user.getAddress());
+        State registerState = registerHandler.register(user, specificParameters);
+        model.addAttribute("msg", registerState.getStatus());
         return registerState.getNextPage();
     }
 
     @GetMapping("/register")
     public String register(Model model){
         model.addAttribute("user", new User());
-        return "registrationForm";
+        return "userRegistrationForm";
     }
 
     @GetMapping("/home")
@@ -49,8 +53,8 @@ public class UserController {
     @PostMapping("/process_login")
     public String processLogin(User user, Model model, HttpServletRequest request) {
         ILoginHandler loginHandler = new UserLoginHandler();
-        LoginState loginState = loginHandler.login(user, request);
-        model.addAttribute("msg", loginState.getLoginStatus());
+        State loginState = loginHandler.login(user, request);
+        model.addAttribute("msg", loginState.getStatus());
         model.addAttribute("user", new User());
         return loginState.getNextPage();
     }

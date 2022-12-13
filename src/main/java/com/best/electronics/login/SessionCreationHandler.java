@@ -2,6 +2,10 @@ package com.best.electronics.login;
 
 import com.best.electronics.model.Account;
 import com.best.electronics.session.SessionManager;
+import com.best.electronics.state.State;
+import com.best.electronics.state.login.GenericFailedLoginState;
+import com.best.electronics.state.login.SuccessLoginState;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +18,7 @@ public class SessionCreationHandler extends LoginAuthHandler{
     }
 
     @Override
-    public LoginState doHandler(Account account, String type){
+    public State doHandler(Account account, String type){
         SessionManager sessionManager = new SessionManager();
         HttpSession session = sessionManager.getSession(request);
 

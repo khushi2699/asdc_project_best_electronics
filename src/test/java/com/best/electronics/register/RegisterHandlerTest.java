@@ -3,6 +3,7 @@ package com.best.electronics.register;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.UserMockDatabasePersistence;
 import com.best.electronics.model.User;
+import com.best.electronics.state.State;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,9 +34,9 @@ public class RegisterHandlerTest {
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
 
-        RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registerSuccess");
-        Assertions.assertEquals(registerState.getRegisterStatus(), "Registered Successfully");
+        State registerState = registerHandler.validate(user, "user");
+        Assertions.assertEquals(registerState.getNextPage(), "userRegisterSuccess");
+        Assertions.assertEquals(registerState.getStatus(), "Registered Successfully");
     }
 
     @Test
@@ -53,9 +54,9 @@ public class RegisterHandlerTest {
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
 
-        RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
-        Assertions.assertEquals(registerState.getRegisterStatus(), "Email address already Exists!");
+        State registerState = registerHandler.validate(user, "user");
+        Assertions.assertEquals(registerState.getNextPage(), "userRegistrationForm");
+        Assertions.assertEquals(registerState.getStatus(), "Email address already Exists!");
     }
 
     @Test
@@ -73,9 +74,9 @@ public class RegisterHandlerTest {
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
 
-        RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
-        Assertions.assertEquals(registerState.getRegisterStatus(), "Either firstName or lastName are not in correct format!");
+        State registerState = registerHandler.validate(user, "user");
+        Assertions.assertEquals(registerState.getNextPage(), "userRegistrationForm");
+        Assertions.assertEquals(registerState.getStatus(), "Either firstName or lastName are not in correct format!");
     }
 
     @Test
@@ -93,9 +94,9 @@ public class RegisterHandlerTest {
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
 
-        RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
-        Assertions.assertEquals(registerState.getRegisterStatus(), "Either firstName or lastName are not in correct format!");
+        State registerState = registerHandler.validate(user, "user");
+        Assertions.assertEquals(registerState.getNextPage(), "userRegistrationForm");
+        Assertions.assertEquals(registerState.getStatus(), "Either firstName or lastName are not in correct format!");
     }
 
     @Test
@@ -113,9 +114,9 @@ public class RegisterHandlerTest {
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
 
-        RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
-        Assertions.assertEquals(registerState.getRegisterStatus(), "Password must contain at least one " +
+        State registerState = registerHandler.validate(user, "user");
+        Assertions.assertEquals(registerState.getNextPage(), "userRegistrationForm");
+        Assertions.assertEquals(registerState.getStatus(), "Password must contain at least one " +
                 "uppercase, lowercase, number and special character. Min 8 length!");
     }
 
@@ -134,9 +135,9 @@ public class RegisterHandlerTest {
         user.setGender("Female");
         user.setAddress("Abc Street, Canada");
 
-        RegisterState registerState = registerHandler.validate(user);
-        Assertions.assertEquals(registerState.getNextPage(), "registrationForm");
-        Assertions.assertEquals(registerState.getRegisterStatus(), "The re-entered password and password are not matching!");
+        State registerState = registerHandler.validate(user, "user");
+        Assertions.assertEquals(registerState.getNextPage(), "userRegistrationForm");
+        Assertions.assertEquals(registerState.getStatus(), "The re-entered password and password are not matching!");
     }
 
 }

@@ -2,6 +2,7 @@ package com.best.electronics.login;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.model.Account;
+import com.best.electronics.security.EncryptPassword;
 
 import java.util.ArrayList;
 import java.util.Map;

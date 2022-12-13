@@ -4,10 +4,13 @@ import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
+import com.best.electronics.properties.AdminProperties;
+import com.best.electronics.register.AdminRegisterHandler;
+import com.best.electronics.state.State;
 import com.best.electronics.login.UserLoginHandler;
-import com.best.electronics.login.LoginState;
 import com.best.electronics.model.*;
 import com.best.electronics.exceptions.NullPointerException;
+import com.best.electronics.register.IRegisterHandler;
 import com.best.electronics.repository.AdminRepository;
 import com.best.electronics.repository.ProductRepository;
 import com.best.electronics.repository.UserRepository;
@@ -15,18 +18,31 @@ import com.best.electronics.email.ISendOrderStatusEmail;
 import com.best.electronics.email.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    @PostMapping("/process_registration")
+    public String processRegistration(Admin admin, Model model){
+        IRegisterHandler registerHandler = new AdminRegisterHandler();
+        State registerState = registerHandler.register(admin, new HashMap<>());
+        model.addAttribute("msg", registerState.getStatus());
+        return registerState.getNextPage();
+    }
+
+    @GetMapping("/register")
+    public String register(Model model){
+        model.addAttribute("admin", new Admin());
+        return "adminRegistrationForm";
+    }
 
     @GetMapping("/login")
     public String login(Model model){
@@ -37,15 +53,37 @@ public class AdminController {
     @PostMapping("/process_login")
     public String processLogin(Admin admin, Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new AdminLoginHandler();
-        LoginState loginState = loginHandler.login(admin, request);
-        model.addAttribute("msg", loginState.getLoginStatus());
+        State loginState = loginHandler.login(admin, request);
+        model.addAttribute("msg", loginState.getStatus());
         model.addAttribute("admin", new Admin());
+
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null) {
+            return "adminLogin";
+        }else{
+            AdminProperties adminProperties = new AdminProperties();
+            if(oldSession.getAttribute("id") == adminProperties.getId()){
+                model.addAttribute("isSuperAdmin", true);
+                System.out.println("Hello");
+            }
+
+        }
         return loginState.getNextPage();
     }
 
     @GetMapping("/adminHome")
-    public String adminHome(){
-        return "adminLandingPage";
+    public String adminHome(Model model,HttpServletRequest request){
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null) {
+            return "adminLogin";
+        }else{
+            AdminProperties adminProperties = new AdminProperties();
+            if(oldSession.getAttribute("id") == adminProperties.getId()){
+                model.addAttribute("isSuperAdmin", true);
+                System.out.println("Hello");
+            }
+            return "adminLandingPage";
+        }
     }
 
     @GetMapping("/logout")
@@ -78,6 +116,46 @@ public class AdminController {
             return "orderList";
         }
     }
+
+    @GetMapping("/adminList")
+    public String getAdminsList(Model model, HttpServletRequest request){
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null) {
+            return "adminLogin";
+        }else{
+            String updatedStatus = (String) oldSession.getAttribute("msg");
+            Integer id = (Integer) oldSession.getAttribute("id");
+            System.out.println(updatedStatus);
+            if(updatedStatus != null){
+                oldSession.removeAttribute("msg");
+            }
+            model.addAttribute("msg",updatedStatus);
+
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            ArrayList<Map<String, Object>> adminDetails = adminRepository.getAllAdmins(id);
+            model.addAttribute("adminDetails", adminDetails);
+            return "adminList";
+        }
+    }
+
+    @PostMapping("/deleteAdmin/{adminId}")
+    public String deleteAdmin(@PathVariable Integer adminId, Model model, HttpServletRequest request){
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null) {
+            return "adminLogin";
+        }else{
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            if(adminRepository.deleteAdmin(adminId)){
+                oldSession.setAttribute("msg","Admin Deleted Successfully!");
+                return "redirect:/admin/adminList";
+            }
+            oldSession.setAttribute("msg","Some error occurred while deleting the Admin. Please try again!");
+            return "redirect:/admin/adminList";
+        }
+    }
+
 
     @GetMapping("/users")
     public String adminUsers(Model model) throws Exception{

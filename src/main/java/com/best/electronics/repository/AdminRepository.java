@@ -19,6 +19,18 @@ public class AdminRepository {
         this.databasePersistence = databasePersistence;
     }
 
+    public ArrayList<Map<String, Object>> getAllAdmins(Integer id){
+        ArrayList<Map<String, Object>> adminList = new ArrayList<>();
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(id);
+            adminList =  databasePersistence.loadData("{call get_all_admins(?)}", parameters);
+            return adminList;
+        }catch(Exception e){
+            return adminList;
+        }
+    }
+
     public Map<String, Object> getAdminDetails(Integer adminId){
         try{
             ArrayList<Object> parameters = new ArrayList<>();
@@ -30,8 +42,8 @@ public class AdminRepository {
         }
     }
     public ArrayList<Order> getOrderDetails() {
+        ArrayList<Order> orderList = new ArrayList<>();
         try {
-            ArrayList<Order> orderList = new ArrayList<>();
             ArrayList<Map<String, Object>> orders = databasePersistence.loadData("Select * from OrderDetails", new ArrayList<>());
             System.out.println("Order Details: " + orders);
 
@@ -78,7 +90,7 @@ public class AdminRepository {
             return orderList;
 
         } catch (Exception e) {
-            return null;
+            return orderList;
         }
     }
 
@@ -108,4 +120,17 @@ public class AdminRepository {
         return "Admin Profile Updated Failed! Please try again!";
     }
 
+    public Boolean saveAdminData(ArrayList<Object> params) throws Exception {
+        return databasePersistence.saveData("{call create_admin(?, ?, ?, ?, ?)}", params);
+    }
+
+    public Boolean deleteAdmin(Integer adminId){
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(adminId);
+        try{
+            return databasePersistence.saveData("{call delete_admin(?)}", params);
+        }catch (Exception e){
+            return false;
+        }
+    }
 }

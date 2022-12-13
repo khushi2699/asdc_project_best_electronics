@@ -2,7 +2,7 @@ package com.best.electronics.controller.email;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.login.EncryptPassword;
+import com.best.electronics.security.EncryptPassword;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
