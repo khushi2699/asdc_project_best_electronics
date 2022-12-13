@@ -9,14 +9,12 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.util.ArrayList;
 
-public class SendOrderStatusEmail {
+public class SendOrderStatusEmail implements ISendOrderStatusEmail{
     public Boolean sendEmail(Integer orderId, Double orderAmount, String orderDateString, String emailAddress, String orderStatus, ArrayList<Product> products) {
         try{
             EmailController emailController = new EmailController();
             Session session = emailController.setUpProperties();
-
             MimeMessage mimeMessage = new MimeMessage(session);
-
             draftEmail(mimeMessage, orderId, orderAmount, orderDateString,emailAddress, orderStatus, products);
             emailController.setMimeMessage(mimeMessage);
             emailController.sendMail();
