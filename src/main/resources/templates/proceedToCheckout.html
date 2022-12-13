@@ -113,7 +113,7 @@ width: 66%;
                   <form method="post" th:action="@{placeOrder}" style="max-width: 600px; margin: 0 auto;">
                     <h4 style="font-size: 20px;text-align: center; padding-top: 25px;"> Select a payment option: </h4>
                     <label for="COD">
-                      <input type="radio" id = "COD" th:name="payment" th:value = "COD" onclick="ShowHideDiv()"> Cash on delivery
+                      <input type="radio" id = "COD" th:name="payment" th:value = "COD" onclick="ShowHideDiv()" checked> Cash on delivery
                     </label>
                     <label for="Card">
                       <input type="radio" id = "Card" th:name="payment" th:value = "Card" onclick="ShowHideDiv()"> Card
@@ -128,7 +128,7 @@ width: 66%;
                         </thead>
                         <tr th:each="payments:${cardDetails}">
                           <td>
-                            <input type="radio" name="cardDetail" th:value="${payments.cardId}" style="text-align: center" th:text="${payments.cardType} + ${payments.cardNumber}"/>
+                            <input type="radio" name="cardDetail" th:value="${payments.cardId}" style="text-align: center" th:text="${payments.cardType} + ${payments.cardNumber}" checked/>
                           </td>
                         </tr>
                       </table>
