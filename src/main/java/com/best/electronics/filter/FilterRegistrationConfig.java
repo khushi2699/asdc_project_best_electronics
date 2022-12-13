@@ -14,7 +14,7 @@ public class FilterRegistrationConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(AuthenticationFilter());
         registration.addUrlPatterns("/*");
-        registration.addInitParameter("excluded_urls", "/welcome,/user/login,/user/process_login," +
+        registration.addInitParameter("excluded_urls", "/.*.js,/.*.css,/welcome,/user/login,/user/process_login," +
                 "/user/register,/user/process_registration,/user/forgotPassword, /user/getCode," +
                 "/admin/login,/admin/process_login,/admin,/user,/user/resetPassword," +
                 "/user/checkValidToken,/user/enterNewPassword");
