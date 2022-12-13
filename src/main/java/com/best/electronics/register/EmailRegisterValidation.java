@@ -1,7 +1,9 @@
 package com.best.electronics.register;
 
 import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.state.State;
 import com.best.electronics.model.Account;
+import com.best.electronics.state.register.EmailAlreadyExistsState;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,13 +19,13 @@ public class EmailRegisterValidation extends RegisterAuthHandler{
     }
 
     @Override
-    public RegisterState validate(Account account) {
+    public State validate(Account account, String type) {
         String emailAddress = account.getEmailAddress();
 
         if(isEmailAddressValid(emailAddress) && isNewEmailAddress(emailAddress)){
-            return nextHandler(account);
+            return nextHandler(account, type);
         }
-        return new EmailAlreadyExistsState();
+        return new EmailAlreadyExistsState(type);
     }
 
     private Boolean isEmailAddressValid(String emailAddress) {

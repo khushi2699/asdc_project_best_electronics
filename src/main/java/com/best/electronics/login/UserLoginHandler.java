@@ -4,14 +4,16 @@ import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.model.Account;
 import com.best.electronics.session.SessionManager;
+import com.best.electronics.state.State;
+import com.best.electronics.state.login.GenericFailedLoginState;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class UserLoginHandler implements ILoginHandler {
 
     @Override
-    public LoginState login(Account user, HttpServletRequest request) {
-        LoginState loginState = new GenericFailedLoginState("user");
+    public State login(Account user, HttpServletRequest request) {
+        State loginState = new GenericFailedLoginState("user");
         try{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ILoginValidationHandler loginValidationHandler = new GenericLoginValidationHandler
