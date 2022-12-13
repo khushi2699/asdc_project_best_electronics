@@ -61,27 +61,6 @@ public class UserController {
         return "userLogin";
     }
 
-    @GetMapping("/resetPassword")
-    public String resetPassword(Model model){
-        model.addAttribute("login", new User());
-        return "resetPassword";
-    }
-
-    @PostMapping("/checkValidToken")
-    public String checkValidToken(@ModelAttribute User user, Model model) {
-        ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
-        model.addAttribute("login", new User());
-        model.addAttribute("emailAddress", user.getEmailAddress());
-        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress())){
-            return "changePassword";
-        }
-        else {
-            model.addAttribute("msg","Please enter correct combination");
-            return "resetPassword";
-
-        }
-    }
-
     @GetMapping("/logout")
     public String logout(Model model, HttpServletRequest request){
         ILoginHandler loginHandler = new UserLoginHandler();
