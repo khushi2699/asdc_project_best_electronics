@@ -90,7 +90,6 @@ public class Order {
         return products;
     }
 
-
     public void setProducts(ArrayList<Product> products) {
         this.products = products;
     }

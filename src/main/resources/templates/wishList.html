@@ -144,6 +144,9 @@ width: 66%;
   <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
   <div class="navbar-nav w-100">
     <div class="ml-auto">
+      <a class="nav-link nav-link active" href="/user/home">Home</a>
+    </div>
+    <div class="ml-auto">
       <a class="nav-link nav-link active" href="/user/profile">My Account</a>
     </div>
     <div class="ml-auto">
@@ -162,11 +165,15 @@ width: 66%;
   <div class="row">
     <div class="col-md-6 offset-md-3">
       <p>&nbsp</p>
-      <h3>WishList</h3>
-      <input type="text" class="search" id="myInput" onkeyup="myFunction()" placeholder="Search for products">
-      <p></p>
+      <h3 style="text-align: center;">WishList</h3>
       <div class="wishList">
         <div class="wishList-body">
+          <div th:if="${#lists.isEmpty(listWishlist)}">
+            <h5 style="color: red; text-align: center;">No items in wishList yet!</h5>
+            <a class="btn btn-primary"  th:href="@{/products}" role="button" style="text-align: center;">Shop NOW</a>
+          </div>
+
+          <div th:if="${not #lists.isEmpty(listWishlist)}">
           <table class = "wishlist" id="wishlists" style="table-layout: float ; width: 100%" align="left">
             <thead class="thead-dark">
             <tr>
@@ -200,18 +207,6 @@ width: 66%;
                 </td>
 
               </form>
-<!--              <td>-->
-<!--                <button class = "addtocartbutton" onclick="openForm()" id="btn" name="WishtlistController"> Move to cart</button>-->
-<!--                <div class="form-popup" id="myForm">-->
-<!--                  <form method = "post" th:action="@{/WishlistControllerToCart/{product_id}(product_id=${wishlists.productId})}" class="form-container">-->
-
-<!--                    <h3>Enter Quantity to move to cart</h3>-->
-<!--                    <input style="width: 50px" min="1" th:max="${wishlists.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>-->
-<!--                    <button type="submit" name = "WishtlistController" class="btn">Move to Cart </button>-->
-<!--                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>-->
-<!--                  </form>-->
-<!--                </div>-->
-<!--              </td>-->
               <form method="post" th:action="@{/RemoveFromWishList/{product_id}(product_id=${wishlists.productId})}" th:object = "${wishlist}">
                 <input type="hidden" name="wishListItemId" th:value="${wishlists.wishListItemId}">
 
@@ -220,28 +215,10 @@ width: 66%;
                 </td>
 
               </form>
-
-              <!--              <form method="post" th:action="@{/CartController/{product_id}(product_id=${products.productId})}">-->
-
-<!--                <td class="cart_quantity" style="text-align: center">-->
-<!--                  <input style="width: 50px" min="1" th:max="${products.availableQuantity}" type="number" name="userQuantity" id="userQuantity" th:value="1"/>-->
-
-<!--                <td class="add to cart">-->
-<!--                  <button type="submit" id="btn" name="CartController" class="addtocartbutton"> Add to cart</button>-->
-<!--                </td>-->
-
-<!--              </form>-->
-
-<!--              <form method="post" th:action="@{/WishlistController/{product_id}(product_id=${products.productId})}">-->
-
-<!--                <td class="add to whishlist">-->
-<!--                  <button type="submit" id="btn_whishlist" name="WhishlistController" class="addtocartbutton"> Add to whishlist</button>-->
-
-<!--                </td>-->
-<!--              </form>-->
             </tr>
 
           </table>
+          </div>
 
         </div>
       </div>
@@ -277,28 +254,6 @@ $(".qtyminus").click(function (e) {
  $( ".addtocartbutton" ).click(function() {
     $(this).css('background', 'green');
   });
-
-  function myFunction() {
-  // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("products");
-  tr = table.getElementsByTagName("tr");
-
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
 
 function openForm() {
   document.getElementById("myForm").style.display = "block";

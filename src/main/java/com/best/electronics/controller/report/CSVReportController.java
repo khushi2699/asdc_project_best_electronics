@@ -22,17 +22,17 @@ public class CSVReportController {
     @GetMapping("/user")
     public String sendUserCSVReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             String emailAddress = (String) oldSession.getAttribute("emailAddress");
-            System.out.println("emailAddress ------ " + emailAddress);
-            String fileNameWithExtension = fileName + ".csv";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateCSVReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_all_user_details()}", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_all_user_details()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
+                if(sendReport.sendReport(emailAddress, fileName)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -40,22 +40,22 @@ public class CSVReportController {
             oldSession.setAttribute("msg", "Some error occurred while sending Report! Please try again!");
             return "redirect:/reports";
         }
-        return "adminLogin";
     }
 
     @GetMapping("/products")
     public String sendProductCSVReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             String emailAddress = (String) oldSession.getAttribute("emailAddress");
-            String fileNameWithExtension = fileName + ".csv";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateCSVReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_product_list()}", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_product_list()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
+                if(sendReport.sendReport(emailAddress, fileName)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -63,22 +63,22 @@ public class CSVReportController {
             oldSession.setAttribute("msg", "Some error occurred while sending Report! Please try again!");
             return "redirect:/reports";
         }
-        return "adminLogin";
     }
 
     @GetMapping("/products_sold")
     public String sendProductSoldCSVReport(@PathVariable String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             String emailAddress = (String) oldSession.getAttribute("emailAddress");
-            String fileNameWithExtension = fileName + ".csv";
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateCSVReport());
-            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "Select * from Product", fileNameWithExtension)){
+            if(reportGeneratorService.getDataAndGenerateReport(databasePersistence, "{call get_products_sold_details()}", fileName)){
                 SendReportDelegator sendReportDelegator = new SendReportDelegator();
                 ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
-                if(sendReport.sendReport(emailAddress, fileNameWithExtension)){
+                if(sendReport.sendReport(emailAddress, fileName)){
                     oldSession.setAttribute("msg", "Report is successfully sent!");
                     return "redirect:/reports";
                 }
@@ -86,6 +86,5 @@ public class CSVReportController {
             oldSession.setAttribute("msg", "Some error occurred while sending Report! Please try again!");
             return "redirect:/reports";
         }
-        return "adminLogin";
     }
 }

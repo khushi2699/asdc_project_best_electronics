@@ -23,7 +23,7 @@ public class GenerateExcelReport implements IReportGenerator{
             writeHeaderLine(sheet, data.get(0));
             writeDataInFile(data, sheet);
 
-            FileOutputStream outputStream = new FileOutputStream(reportProperties.getFileLocation() + fileName);
+            FileOutputStream outputStream = new FileOutputStream(reportProperties.getFileLocation() + fileName + ".xlsx");
             workbook.write(outputStream);
 
             return true;

@@ -2,7 +2,7 @@ package com.best.electronics.model;
 
 public class WishList {
 
-    private Integer wishListItemId; //id for entry
+    private Integer wishListItemId;
     private Integer productId;
     private Integer userId;
     private String productCode;

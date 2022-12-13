@@ -16,7 +16,7 @@ public class GenerateCSVReport implements IReportGenerator{
         try{
             List<ArrayList<String>> csvData = convertDataToCSVFormat(data);
             ReportProperties reportProperties = new ReportProperties();
-            BufferedWriter writer = Files.newBufferedWriter(Paths.get(reportProperties.getFileLocation() + fileName));
+            BufferedWriter writer = Files.newBufferedWriter(Paths.get(reportProperties.getFileLocation() + fileName + ".csv"));
             for (ArrayList<String> record : csvData) {
                 writer.write(String.join(",", record));
                 writer.newLine();

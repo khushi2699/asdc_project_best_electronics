@@ -2,7 +2,6 @@ package com.best.electronics.controller;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.login.UserLoginHandler;
@@ -12,8 +11,11 @@ import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
 import com.best.electronics.exceptions.NullPointerException;
-import com.best.electronics.sendEmail.ISendOrderStatusEmail;
-import com.best.electronics.sendEmail.SendOrderStatusEmail;
+import com.best.electronics.repository.AdminRepository;
+import com.best.electronics.repository.ProductRepository;
+import com.best.electronics.repository.UserRepository;
+import com.best.electronics.email.ISendOrderStatusEmail;
+import com.best.electronics.email.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -61,37 +62,35 @@ public class AdminController {
     }
 
     @GetMapping("/orderDetails")
-    public String orderDetails(Order order, Admin admin, Model model, HttpServletRequest request){
-
+    public String orderDetails(Order order, Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null) {
-            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            ArrayList<Order> orderDetails = admin.getOrderDetails(databasePersistence);
-
-            System.out.println(orderDetails.toString());
-            model.addAttribute("orders", orderDetails);
-            model.addAttribute("order", order);
+        if(oldSession == null) {
+            return "adminLogin";
+        }else{
             String updatedStatus = (String) oldSession.getAttribute("msg");
             System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("msg");
             }
             model.addAttribute("msg",updatedStatus);
+
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            ArrayList<Order> orderDetails = adminRepository.getOrderDetails();
+            model.addAttribute("orders", orderDetails);
+            model.addAttribute("order", order);
             return "orderList";
         }
-        return "adminLogin";
     }
 
     @GetMapping("/users")
     public String adminUsers(Model model) throws Exception{
-        ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
-
-        ArrayList<Map<String, Object>> userList = productPersistence.getAllUsersDetails(db);
+        UserRepository userRepository = new UserRepository(db);
+        ArrayList<Map<String, Object>> userList = userRepository.getAllUsersDetails();
         if(userList == null){
             throw new NullPointerException("Users List could not be fetched from the database");
-        }
-        else {
+        } else {
             model.addAttribute("user", new User());
             model.addAttribute("listUser", userList);
             return "adminUsersList";
@@ -100,14 +99,12 @@ public class AdminController {
 
     @GetMapping("/products")
     public String adminProducts(Model model) throws Exception{
-        ProductPersistence productPersistence = ProductPersistence.getInstance();
         IDatabasePersistence db = new MySQLDatabasePersistence();
-
-        ArrayList<Map<String, Object>> productList = productPersistence.getDetails(db);
+        ProductRepository productRepository = new ProductRepository(db);
+        ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
         if(productList == null){
             throw new NullPointerException("Product List could not be fetched from the database");
-        }
-        else {
+        } else {
             model.addAttribute("product", new Product());
             model.addAttribute("listProducts", productList);
             return "adminProductList";
@@ -117,11 +114,13 @@ public class AdminController {
     @GetMapping("/profile")
     public String adminProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             Integer id = (Integer) oldSession.getAttribute("id");
-            Admin admin = new Admin();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> adminDetail = admin.getAdminDetails(id, databasePersistence);
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            Map<String, Object> adminDetail = adminRepository.getAdminDetails(id);
             if(adminDetail != null){
                 model.addAttribute("firstName", adminDetail.get("firstName"));
                 model.addAttribute("lastName", adminDetail.get("lastName"));
@@ -129,13 +128,14 @@ public class AdminController {
             }
             return "adminProfile";
         }
-        return "adminLogin";
     }
 
     @GetMapping("/editProfile")
     public String adminEditProfile(Model model, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
             Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
             System.out.println(updatedStatus);
@@ -143,9 +143,9 @@ public class AdminController {
                 oldSession.removeAttribute("updatedStatus");
             }
 
-            Admin admin = new Admin();
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            Map<String, Object> adminDetail = admin.getAdminDetails(id, databasePersistence);
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            Map<String, Object> adminDetail = adminRepository.getAdminDetails(id);
             if(adminDetail == null){
                 model.addAttribute("updatedStatus", "Some exception occurred! Please try again!");
             }
@@ -156,50 +156,48 @@ public class AdminController {
             model.addAttribute("updatedStatus", updatedStatus);
             return "editAdminDetails";
         }
-        return "adminLogin";
     }
 
     @PostMapping("/update_profile")
     public String processUpdateProfile(Admin admin, HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null){
+        if(oldSession == null){
+            return "AdminLogin";
+        }else{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            String message = admin.updateAdminDetails(databasePersistence);
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            String message = adminRepository.updateAdminDetails(admin);
             oldSession.setAttribute("updatedStatus", message);
             return "redirect:/admin/editProfile";
         }
-        return "AdminLogin";
     }
 
     @PostMapping("/sendEmail")
-    public String sendEmail(
-       @RequestParam(value = "orderId", required = false) Integer orderId,
-       @RequestParam(value = "orderAmount", required = false) Double orderAmount,
-       @RequestParam(value = "orderStatus", required = false) String orderStatus,
-       @RequestParam(value = "orderDate", required = false) String orderDate,
-       @RequestParam(value = "emailAddress", required = false) String emailAddress,
-       HttpServletRequest request) throws MessagingException {
-
-        Admin admin = new Admin();
+    public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
+            @RequestParam(value = "orderAmount", required = false) Double orderAmount,
+            @RequestParam(value = "orderStatus", required = false) String orderStatus,
+            @RequestParam(value = "orderDate", required = false) String orderDate,
+            @RequestParam(value = "emailAddress", required = false) String emailAddress,
+            HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
-        if(oldSession != null) {
+        if(oldSession == null) {
+            return "adminLogin";
+        }else{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            ArrayList<Order> orderDetails = admin.getOrderDetails(databasePersistence);
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            ArrayList<Order> orderDetails = adminRepository.getOrderDetails();
 
-            for (Order order1 : orderDetails) {
-                ArrayList<Product> products = order1.getProducts();
+            for (Order order : orderDetails) {
+                ArrayList<Product> products = order.getProducts();
                 ISendOrderStatusEmail email = new SendOrderStatusEmail();
                 if (email.sendEmail(orderId, orderAmount, orderDate, emailAddress, orderStatus, products)) {
                     oldSession.setAttribute("msg", "Email is successfully sent!");
                     return "redirect:/admin/orderDetails";
-
-                } else {
-                    oldSession.setAttribute("msg", "Some error occurred while sending email! Please try again!");
-                    return "redirect:/admin/orderDetails";
                 }
             }
+            oldSession.setAttribute("msg", "Some error occurred while sending email! Please try again!");
+            return "redirect:/admin/orderDetails";
         }
-        return "adminLogin";
-
     }
+
 }
