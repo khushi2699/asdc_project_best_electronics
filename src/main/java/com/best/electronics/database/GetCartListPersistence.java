@@ -16,10 +16,8 @@ public class GetCartListPersistence {
 
     public ArrayList<Map<String, Object>> getCartListDetails(int id) throws Exception {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> result = new ArrayList<>();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(id);
-        result = databasePersistence.loadData("{call getCartDetails(?)}", tokenDetails);
-        return result;
+        return databasePersistence.loadData("{call getCartDetails(?)}", tokenDetails);
     }
 }

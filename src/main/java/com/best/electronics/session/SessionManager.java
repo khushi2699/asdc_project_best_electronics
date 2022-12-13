@@ -10,7 +10,7 @@ public class SessionManager {
         if (oldSession != null) {
             oldSession.invalidate();
         }
-        //generate a new session
+
         return request.getSession(true);
     }
 

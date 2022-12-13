@@ -3,7 +3,7 @@ import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.database.ProductPersistence;
 import com.best.electronics.model.Product;
-import exceptions.NullPointerException;
+import com.best.electronics.exceptions.NullPointerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

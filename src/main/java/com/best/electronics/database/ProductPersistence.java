@@ -1,7 +1,7 @@
 package com.best.electronics.database;
 import java.util.ArrayList;
 import java.util.Map;
-import exceptions.DataNotFoundException;
+import com.best.electronics.exceptions.DataNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class ProductPersistence {
