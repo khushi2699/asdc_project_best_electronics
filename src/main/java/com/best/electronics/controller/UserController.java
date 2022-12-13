@@ -1,6 +1,6 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.controller.email.ResetPasswordCombinationValidationHandler;
+import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.ILoginHandler;
@@ -64,7 +64,6 @@ public class UserController {
     @GetMapping("/resetPassword")
     public String resetPassword(Model model){
         model.addAttribute("login", new User());
-        System.out.println("Printing reset Password");
         return "resetPassword";
     }
 

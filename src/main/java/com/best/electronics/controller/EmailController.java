@@ -1,12 +1,11 @@
-package com.best.electronics.controller.email;
+package com.best.electronics.controller;
 
+import com.best.electronics.email.ChangePasswordHandler;
 import com.best.electronics.email.SendMailForForgotPassword;
 import com.best.electronics.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.NoSuchAlgorithmException;
 
 @Controller
 @RequestMapping("/user")
@@ -19,7 +18,7 @@ public class EmailController {
     }
 
     @PostMapping("/enterNewPassword")
-    public String enterNewPassword(@ModelAttribute User user, Model model) throws NoSuchAlgorithmException {
+    public String enterNewPassword(@ModelAttribute User user, Model model) throws Exception {
         model.addAttribute("login", new User());
         ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
         String status = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress());

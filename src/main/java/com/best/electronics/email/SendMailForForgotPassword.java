@@ -1,9 +1,8 @@
 package com.best.electronics.email;
 
-import com.best.electronics.controller.email.EmailControllerPinResetStore;
-import com.best.electronics.controller.email.EmailControllerPinStoreHandler;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.repository.PasswordRepository;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -25,10 +24,8 @@ public class SendMailForForgotPassword {
         SendMail sendMail = new SendMail();
         newSession = sendMail.setUpProperties();
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        ArrayList<Object> tokenDetails = new ArrayList<>();
-        tokenDetails.add(email);
-        ArrayList<Map<String, Object>> result= new ArrayList<>();
-        result = databasePersistence.loadData("{call get_email_check(?)}",tokenDetails);
+        PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
+        ArrayList<Map<String, Object>> result= passwordRepository.getEmailCheck(email);
         if(result.size()== 1){
             //checking if email is valid or not, if valid set random token, draft email and send.
             saveToDB(randomNumber,email);
