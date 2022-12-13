@@ -2,34 +2,6 @@ package com.best.electronics.model;
 
 public class Product {
 
-    private Integer cartItemId;
-    private Integer quantity;
-    private Integer userId;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setCartItemId(Integer cartItemId) {
-        this.cartItemId = cartItemId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCartItemId() {
-        return cartItemId;
-    }
-
     private Integer productId;
 
     private String productCode;
@@ -41,6 +13,8 @@ public class Product {
     private String productDescription;
 
     private Double productPrice;
+
+    private Double productSubtotal;
 
     private Integer productQuantity;
 
@@ -90,6 +64,14 @@ public class Product {
 
     public void setProductPrice(Double productPrice) {
         this.productPrice = productPrice;
+    }
+
+    public Double getProductSubtotal() {
+        return productSubtotal;
+    }
+
+    public void setProductSubtotal(Double productSubtotal) {
+        this.productSubtotal = productSubtotal;
     }
 
     public Integer getProductQuantity() {
