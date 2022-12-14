@@ -2,7 +2,6 @@ package com.best.electronics.forgotPassword;
 
 public abstract class ForgotPasswordState {
     String status;
-
     String nextPage;
     ForgotPasswordState(){
         setNextPage();
@@ -18,5 +17,6 @@ public abstract class ForgotPasswordState {
     public String getNextPage() {
         return nextPage;
     }
+
     public abstract void setNextPage();
 }

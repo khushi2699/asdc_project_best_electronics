@@ -9,13 +9,6 @@ import com.best.electronics.model.CartItem;
 import com.best.electronics.model.WishList;
 import com.best.electronics.model.WishListItem;
 import com.best.electronics.repository.WishListRepository;
-import com.best.electronics.repository.ProductRepository;
-import com.best.electronics.repository.UserRepository;
-import com.best.electronics.model.User;
-import com.best.electronics.model.Product;
-import com.best.electronics.model.CartItem;
-import com.best.electronics.model.WishList;
-import com.best.electronics.model.WishListItem;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +54,6 @@ public class WishListController {
 
     @GetMapping("/wishList")
     public String displayWishlist(Model model, HttpServletRequest request) throws Exception {
-
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null){
             return "products";
@@ -126,7 +118,6 @@ public class WishListController {
     public String removeItemFromWishlist(HttpServletRequest request, @PathVariable Integer product_id, Model model){
         model.addAttribute("wishlist", new WishList());
         Integer wishListItemId = Integer.valueOf(request.getParameter("wishListItemId"));
-
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null){
             return "products";

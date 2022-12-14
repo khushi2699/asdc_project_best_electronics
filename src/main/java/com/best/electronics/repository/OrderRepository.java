@@ -1,7 +1,6 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.model.Order;
 
 import java.util.ArrayList;
@@ -15,16 +14,15 @@ public class OrderRepository {
     }
 
     public void saveOrderItems(ArrayList<Map<String, Object>> cartListResult, int orderId){
-        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        for(int i = 0 ; i < cartListResult.size(); i++){
+        for (Map<String, Object> stringObjectMap : cartListResult) {
             ArrayList<Object> tokenDetails = new ArrayList<>();
-            tokenDetails.add(cartListResult.get(i).get("quantity"));
+            tokenDetails.add(stringObjectMap.get("quantity"));
             tokenDetails.add(orderId);
-            tokenDetails.add(cartListResult.get(i).get("productId"));
-            tokenDetails.add(cartListResult.get(i).get("productPrice"));
-            int quantity = (int) cartListResult.get(i).get("quantity");
-            double productPrice = (double) cartListResult.get(i).get("productPrice");
-            tokenDetails.add(quantity*productPrice);
+            tokenDetails.add(stringObjectMap.get("productId"));
+            tokenDetails.add(stringObjectMap.get("productPrice"));
+            int quantity = (int) stringObjectMap.get("quantity");
+            double productPrice = (double) stringObjectMap.get("productPrice");
+            tokenDetails.add(quantity * productPrice);
             try {
                 if (databasePersistence.saveData("{call saveOrderItem(?,?,?,?,?)}", tokenDetails)) {
                     System.out.println("Done");
@@ -36,8 +34,7 @@ public class OrderRepository {
 
     }
 
-    public void placeorder(Order order){
-        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+    public void placeOrder(Order order){
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(order.getUserId());
         tokenDetails.add(order.getOrderAmount());

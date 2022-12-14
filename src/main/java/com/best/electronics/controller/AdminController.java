@@ -13,8 +13,10 @@ import com.best.electronics.properties.AdminProperties;
 import com.best.electronics.register.AdminRegisterHandler;
 import com.best.electronics.state.State;
 import com.best.electronics.login.UserLoginHandler;
-import com.best.electronics.model.*;
-import com.best.electronics.exceptions.NullPointerException;
+import com.best.electronics.model.User;
+import com.best.electronics.model.Admin;
+import com.best.electronics.model.Product;
+import com.best.electronics.model.Order;
 import com.best.electronics.register.IRegisterHandler;
 import com.best.electronics.repository.AdminRepository;
 import com.best.electronics.repository.ProductRepository;
@@ -24,6 +26,7 @@ import com.best.electronics.email.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -116,7 +119,6 @@ public class AdminController {
             AdminProperties adminProperties = new AdminProperties();
             if(oldSession.getAttribute("id") == adminProperties.getId()){
                 model.addAttribute("isSuperAdmin", true);
-                System.out.println("Hello");
             }
 
         }
@@ -132,7 +134,6 @@ public class AdminController {
             AdminProperties adminProperties = new AdminProperties();
             if(oldSession.getAttribute("id") == adminProperties.getId()){
                 model.addAttribute("isSuperAdmin", true);
-                System.out.println("Hello");
             }
             return "adminLandingPage";
         }
@@ -148,7 +149,7 @@ public class AdminController {
     }
 
     @GetMapping("/orderDetails")
-    public String orderDetails(Order order, Model model, HttpServletRequest request){
+    public String orderDetails(Order order, Model model, HttpServletRequest request) throws Exception {
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -192,7 +193,7 @@ public class AdminController {
     }
 
     @PostMapping("/deleteAdmin/{adminId}")
-    public String deleteAdmin(@PathVariable Integer adminId, Model model, HttpServletRequest request){
+    public String deleteAdmin(@PathVariable Integer adminId, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -208,14 +209,13 @@ public class AdminController {
         }
     }
 
-
     @GetMapping("/users")
-    public String adminUsers(Model model) throws Exception{
+    public String adminUsers(Model model){
         IDatabasePersistence db = new MySQLDatabasePersistence();
         UserRepository userRepository = new UserRepository(db);
         ArrayList<Map<String, Object>> userList = userRepository.getAllUsersDetails();
-        if(userList == null){
-            throw new NullPointerException("Users List could not be fetched from the database");
+        if(userList.isEmpty()){
+            return "redirect:/admin/adminHome";
         } else {
             model.addAttribute("user", new User());
             model.addAttribute("listUser", userList);
@@ -228,15 +228,10 @@ public class AdminController {
         IDatabasePersistence db = new MySQLDatabasePersistence();
         ProductRepository productRepository = new ProductRepository(db);
         ArrayList<Map<String, Object>> productCategoryList = productRepository.getAllProductsAndTheirCategory();
-//        ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
         if(productCategoryList.isEmpty()){
-            throw new NullPointerException("Products List could not be fetched from the database");
+            return "redirect:/admin/adminHome";
         }else {
-
-//            model.addAttribute("productcategory", new ProductCategory());
             model.addAttribute("listProductCategory", productCategoryList);
-//            model.addAttribute("product", new Product());
-//            model.addAttribute("listProducts", productList);
             return "adminCategoryProduct";
         }
     }
@@ -304,11 +299,11 @@ public class AdminController {
 
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
-            @RequestParam(value = "orderAmount", required = false) Double orderAmount,
-            @RequestParam(value = "orderStatus", required = false) String orderStatus,
-            @RequestParam(value = "orderDate", required = false) String orderDate,
-            @RequestParam(value = "emailAddress", required = false) String emailAddress,
-            HttpServletRequest request) {
+        @RequestParam(value = "orderAmount", required = false) Double orderAmount,
+        @RequestParam(value = "orderStatus", required = false) String orderStatus,
+        @RequestParam(value = "orderDate", required = false) String orderDate,
+        @RequestParam(value = "emailAddress", required = false) String emailAddress,
+        HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -329,5 +324,4 @@ public class AdminController {
             return "redirect:/admin/orderDetails";
         }
     }
-
 }
