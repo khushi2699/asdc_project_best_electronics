@@ -32,7 +32,7 @@ public class SendReportDelegatorTest {
         try (MockedConstruction<SendMail> mocked = Mockito.mockConstruction(SendMail.class,
                 (mock, context) -> {when(mock.setUpProperties()).thenReturn(Session.getDefaultInstance(new Properties(), null));
                     doNothing().when(mock).setMimeMessage(mimeMessage);
-                    doNothing().when(mock).sendMail();})) {
+                   when(mock.sendMail()).thenReturn(true);})) {
             SendReportDelegator sendReportDelegator = new SendReportDelegator();
             ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
             Boolean status = sendReport.sendReport(EMAIL_ADDRESS, FILE);
