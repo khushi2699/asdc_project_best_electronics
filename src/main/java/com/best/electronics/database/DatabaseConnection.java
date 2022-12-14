@@ -2,7 +2,6 @@ package com.best.electronics.database;
 
 import com.best.electronics.properties.DatabaseProperties;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,9 +29,9 @@ public class DatabaseConnection {
         basicDataSource.setUrl(dbProperties.getUrl());
         basicDataSource.setUsername(dbProperties.getUsername());
         basicDataSource.setPassword(dbProperties.getPassword());
-        basicDataSource.setMinIdle(5);
-        basicDataSource.setMaxIdle(10);
-        basicDataSource.setMaxOpenPreparedStatements(100);
+        basicDataSource.setMinIdle(dbProperties.getMinIdle());
+        basicDataSource.setMaxIdle(dbProperties.getMaxIdle());
+        basicDataSource.setMaxOpenPreparedStatements(dbProperties.getMaxOpenPreparedStatements());
     }
 
     public Connection getDBConnection() throws SQLException {

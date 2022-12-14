@@ -12,8 +12,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Random;
-
 public class SendMailForForgotPassword implements GetCode {
 
     Session newSession = null;
@@ -43,10 +41,9 @@ public class SendMailForForgotPassword implements GetCode {
     }
 
     public MimeMessage draftEmail(int randomNumber, String email, String type) throws MessagingException {
-        String toEmail = email;
         String emailSubject = "Token for new password request";
         mimeMessage = new MimeMessage(newSession);
-        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
         mimeMessage.setSubject(emailSubject);
         mimeMessage.setText("We have received a password change request from your ID. Below is your code: "+randomNumber+". " +
                 "Go to below link to change your password: http://localhost:8080/"+type.toLowerCase()+"/resetPassword");
@@ -56,6 +53,5 @@ public class SendMailForForgotPassword implements GetCode {
         EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
         emailControllerPinResetStore.storePinToDB(randomNumber,email,type);
     }
-
 
 }
