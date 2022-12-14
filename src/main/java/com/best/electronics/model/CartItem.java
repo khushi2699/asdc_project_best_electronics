@@ -4,9 +4,7 @@ public class CartItem {
 
     private String identifier;
     private Integer cartItemId;
-
     private Integer quantity;
-
     private Integer userId;
 
     public CartItem()
@@ -30,16 +28,8 @@ public class CartItem {
         return identifier;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
     public Integer getCartItemId() {
         return cartItemId;
-    }
-
-    public void setCartItemId(Integer cartItemId) {
-        this.cartItemId = cartItemId;
     }
 
     public Integer getQuantity() {
