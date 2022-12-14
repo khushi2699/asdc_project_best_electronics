@@ -252,11 +252,12 @@ public class AdminController {
 
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
-            @RequestParam(value = "orderAmount", required = false) Double orderAmount,
-            @RequestParam(value = "orderStatus", required = false) String orderStatus,
-            @RequestParam(value = "orderDate", required = false) String orderDate,
-            @RequestParam(value = "emailAddress", required = false) String emailAddress,
-            HttpServletRequest request) throws Exception {
+        @RequestParam(value = "orderAmount", required = false) Double orderAmount,
+        @RequestParam(value = "orderStatus", required = false) String orderStatus,
+        @RequestParam(value = "orderDate", required = false) String orderDate,
+        @RequestParam(value = "emailAddress", required = false) String emailAddress,
+        HttpServletRequest request) throws Exception {
+
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -277,5 +278,4 @@ public class AdminController {
             return "redirect:/admin/orderDetails";
         }
     }
-
 }

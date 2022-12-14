@@ -42,6 +42,7 @@ public class AdminRepository {
             return null;
         }
     }
+    // Fetching the orders, order items and product details for sending an order update status email
     public ArrayList<Order> getOrderDetails() {
         try {
             ArrayList<Order> orderList = new ArrayList<>();
