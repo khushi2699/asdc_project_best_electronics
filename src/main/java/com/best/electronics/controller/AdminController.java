@@ -4,14 +4,15 @@ import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
-import com.best.electronics.properties.AdminProperties;
-import com.best.electronics.register.AdminRegisterHandler;
-import com.best.electronics.state.State;
-import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.model.User;
 import com.best.electronics.model.Admin;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.Order;
+import com.best.electronics.model.ProductCategory;
+import com.best.electronics.properties.AdminProperties;
+import com.best.electronics.register.AdminRegisterHandler;
+import com.best.electronics.state.State;
+import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.register.IRegisterHandler;
 import com.best.electronics.repository.AdminRepository;
 import com.best.electronics.repository.ProductRepository;
@@ -63,7 +64,6 @@ public class AdminController {
         State loginState = loginHandler.login(admin, request);
         model.addAttribute("msg", loginState.getStatus());
         model.addAttribute("admin", new Admin());
-
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -72,7 +72,6 @@ public class AdminController {
             if(oldSession.getAttribute("id") == adminProperties.getId()){
                 model.addAttribute("isSuperAdmin", true);
             }
-
         }
         return loginState.getNextPage();
     }
@@ -160,7 +159,6 @@ public class AdminController {
             return "redirect:/admin/adminList";
         }
     }
-
     @GetMapping("/users")
     public String adminUsers(Model model){
         IDatabasePersistence db = new MySQLDatabasePersistence();
@@ -291,42 +289,64 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/createProduct")
-    public String adminUpdateProduct(Model model, HttpServletRequest request){
+    @GetMapping("/createProduct/{categoryId}")
+    public String adminUpdateProduct(Model model, HttpServletRequest request, @PathVariable Integer categoryId){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null){
             return "adminLogin";
         }else{
-            Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
             System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
-            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            ProductRepository productRepository = new ProductRepository(databasePersistence);
-            model.addAttribute("categoryId", id);
+            model.addAttribute("categoryId", categoryId);
             return "addProducts";
         }
     }
-    @PostMapping("/addProduct")
-    public String processAddProduct(Product product, HttpServletRequest request) {
+    @PostMapping("/addProduct/{categoryId}")
+    public String processAddProduct(Product product, HttpServletRequest request , @PathVariable Integer categoryId) {
         HttpSession oldSession = request.getSession(false);
-        Integer id = (Integer) oldSession.getAttribute("id");
-//        Integer id = (Integer) oldSession.getAttribute("categoryId");
-        System.out.println("This is category id from /addproduct"+id);
         if(oldSession == null){
             return "adminCategoryProducts";
         }else{
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ProductRepository productRepository = new ProductRepository(databasePersistence);
-            String message = productRepository.createProduct(product, id);
+            String message = productRepository.createProduct(product, categoryId);
             oldSession.setAttribute("updatedStatus", message);
             return "redirect:/admin/products";
         }
     }
-
-
+    @GetMapping("/createCategory")
+    public String adminCreateCategory(Model model, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession == null) {
+            return "adminCategoryProduct";
+        } else {
+            String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
+            System.out.println(updatedStatus);
+            if (updatedStatus != null) {
+                oldSession.removeAttribute("updatedStatus");
+            }
+            model.addAttribute("category",new ProductCategory());
+            return "addCategories";
+        }
+    }
+    @PostMapping("/addCategory")
+    public String processAddCategory(ProductCategory productCategory, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        Integer id = (Integer) oldSession.getAttribute("id");
+        System.out.println("This is category id from /addcategory"+id);
+        if(oldSession == null){
+            return "adminCategoryProducts";
+        }else{
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            String message = productRepository.createCategory(productCategory);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/admin/products";
+        }
+    }
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
                             @RequestParam(value = "orderAmount", required = false) Double orderAmount,

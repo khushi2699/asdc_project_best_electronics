@@ -74,6 +74,7 @@ width: 66%;
             </div>
             <p></p>
             <input type="text" class="search" id="myInputCategory" onkeyup="myFunction()" placeholder="Search for product categories">
+            <td><p><a href="/admin/createCategory">Add Category</a></p></td>
             <div class="productCategory">
                 <div class="productCategory-body">
                     <table class = "productcategorylist" id="productCategory" style="table-layout: float ; width: 100%" align="left">
@@ -85,6 +86,7 @@ width: 66%;
                         </tr>
                         </thead>
                         <tr th:each="productCategory:${listProductCategory}" th:object = "${productcategory}">
+<!--                            <form method = "post" th:action = "@{/admin/createProduct/{categoryId}(categoryId = ${productCategory.categoryId})}">-->
                             <td style="text-align: center" th:text="${productCategory.categoryId}" name = "categoryId"></td>
                             <td style="text-align: center" th:text="${productCategory.name}"></td>
                             <td style="text-align: center" th:text="${productCategory.description}"></td>
@@ -126,8 +128,9 @@ width: 66%;
                                     </table>
                                 </div>
                             </div></td>
-                            <td><p><a href="/admin/createProduct">Add Product</a></p></td>
-<!--                            <td><a class="btn btn-primary btn-sm"  th:href="@{/products/addProduct}" role="button">Add Product</a></td>-->
+                            <td><p><a th:href="@{/admin/createProduct/{categoryId}(categoryId = ${productCategory.categoryId})}">Add Product</a></p></td>
+<!--                                <td><input type="submit" class="btn btn-primary" value="Add Product"/></td>-->
+<!--                            </form>-->
                         </tr>
                     </table>
                 </div>
