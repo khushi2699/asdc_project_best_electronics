@@ -105,7 +105,9 @@ width: 66%;
                         </thead>
                         <tr th:each="products:${listProducts}" th:object = "${product}">
 
-                            <td style="text-align: center" th:text="${products.productId}"></td>
+                            <td style="text-align: center" th:text="${products.productId}">
+                                <input type ="hidden" name = "productId" th:text="${products.productId}"  th:value="${products.productId}">
+                            </td>
                             <td style="text-align: center" th:text="${products.productName}"></td>
                             <td style="text-align: center" th:text="${products.productPrice}"></td>
                             <td style="text-align: center" th:text="${products.productDescription}"></td>

@@ -85,7 +85,7 @@ width: 66%;
                         </tr>
                         </thead>
                         <tr th:each="productCategory:${listProductCategory}" th:object = "${productcategory}">
-                            <td style="text-align: center" th:text="${productCategory.categoryId}"></td>
+                            <td style="text-align: center" th:text="${productCategory.categoryId}" name = "categoryId"></td>
                             <td style="text-align: center" th:text="${productCategory.name}"></td>
                             <td style="text-align: center" th:text="${productCategory.description}"></td>
                             <td><div class="products">
@@ -99,22 +99,35 @@ width: 66%;
                                             <th style="text-align: center">Description</th>
                                             <th style="text-align: center">Brand</th>
                                             <th style="text-align: center">Quantity</th>
+                                            <th style="text-align: center">New Quantity</th>
+                                            <th style="text-align: center">New Price</th>
+                                            <th style="text-align: center"></th>
                                         </tr>
                                         </thead>
-                                        <tr th:each="products:${productCategory.products}" th:object = "${product}">
+                                        <tr th:each="p:${productCategory.products}" th:object = "${product}">
+                                            <form method = "post" th:action = "@{/admin/updateProduct/{productId}(productId = ${p.productId})}">
+                                            <td style="text-align: center" th:text="${p.productId}">
+                                            </td>
+                                            <td style="text-align: center" th:text="${p.productName}"></td>
+                                            <td style="text-align: center" th:text="${p.productPrice}"></td>
+                                            <td style="text-align: center" th:text="${p.productDescription}"></td>
+                                            <td style="text-align: center" th:text="${p.productBrand}"></td>
+                                            <td style="text-align: center" th:text="${p.availableQuantity}"></td>
+                                                <td class="product_quantity" style="text-align: center">
+                                                  <input style="width: 50px" min="1" max=15 type="number" name="userQuantity" id="userQuantity" th:value="1"/>
+                                                </td>
+                                                <td class="product_price" style="text-align: center">
+                                                    <input style="width: 50px" min="1" max=15 type="text" name="userPrice" id="userPrice" th:value="${p.productPrice}"/>
+                                                </td>
+                                            <td><input type="submit" class="btn btn-primary" value="Update"/></td>
+                                            </form>
 
-                                            <td style="text-align: center" th:text="${products.productId}"></td>
-                                            <td style="text-align: center" th:text="${products.productName}"></td>
-                                            <td style="text-align: center" th:text="${products.productPrice}"></td>
-                                            <td style="text-align: center" th:text="${products.productDescription}"></td>
-                                            <td style="text-align: center" th:text="${products.productBrand}"></td>
-                                            <td style="text-align: center" th:text="${products.availableQuantity}"></td>
-                                            <td><a class="btn btn-primary btn-sm"  th:href="@{/admin/updateProduct}" role="button">Update</a></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div></td>
-                            <td><a class="btn btn-primary btn-sm"  th:href="@{/admin/addProduct}" role="button">Add Product</a></td>
+                            <td><p><a href="/admin/createProduct">Add Product</a></p></td>
+<!--                            <td><a class="btn btn-primary btn-sm"  th:href="@{/products/addProduct}" role="button">Add Product</a></td>-->
                         </tr>
                     </table>
                 </div>
@@ -132,9 +145,9 @@ width: 66%;
   function myFunction() {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("myInput");
+  input = document.getElementById("myInputCategory");
   filter = input.value.toUpperCase();
-  table = document.getElementById("products");
+  table = document.getElementById("productCategory");
   tr = table.getElementsByTagName("tr");
 
   // Loop through all table rows, and hide those who don't match the search query

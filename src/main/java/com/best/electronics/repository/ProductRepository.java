@@ -1,6 +1,8 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.model.Admin;
+import com.best.electronics.model.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +16,37 @@ public class ProductRepository {
     public ArrayList<Map<String, Object>> getProductDetails() throws Exception {
         return databasePersistence.loadData("{call get_product_list()}", new ArrayList<>());
     }
+
+//    public ArrayList<Map<String, Object>> getProductById(Integer productId) throws Exception {
+//        return databasePersistence.loadData("{call get_product_list(?)}", new ArrayList<>());
+//    }
+    public Map<String, Object> getProductDetails(Integer productId){
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(productId);
+            ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("{call get_products_by_id(?)}", parameters);
+            return productDetails.get(0);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    public String updateProductDetails(Product product){
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+                updatedDetails.add(product.getProductId());
+                updatedDetails.add(product.getProductQuantity());
+                updatedDetails.add(product.getProductPrice());
+                if(databasePersistence.saveData("{call update_product_details(?, ?, ?)}", updatedDetails)){
+                    return "Product Details Updated Successfully";
+                }
+        }catch(Exception e){
+            return "Product details Updated Failed! Please try again!";
+        }
+        return "Product details  Updated Failed! Please try again!";
+    }
+
+
     public ArrayList<Map<String, Object>> getProductCategory() throws Exception {
         return databasePersistence.loadData("{call get_product_category()}", new ArrayList<>());
     }
@@ -39,6 +72,27 @@ public class ProductRepository {
             result.add(map);
         }
         return result;
+    }
+
+    public String createProduct(Product product, Integer id) {
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+            updatedDetails.add(id);
+            updatedDetails.add(product.getProductId());
+            updatedDetails.add(product.getProductCode());
+            updatedDetails.add(product.getProductName());
+            updatedDetails.add(product.getProductBrand());
+            updatedDetails.add(product.getProductDescription());
+            updatedDetails.add(product.getProductPrice());
+            updatedDetails.add(product.getProductQuantity());
+            System.out.println("updatedDetails"+updatedDetails);
+            if(databasePersistence.saveData("{call create_product(?, ?, ?, ?, ?, ?, ?, ?)}", updatedDetails)){
+                return "Product Created Successfully";
+            }
+        }catch(Exception e){
+            return "Product Creation Failed! Please try again!";
+        }
+        return "Product Creation Failed! Please try again!";
     }
     
 }

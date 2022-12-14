@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -98,15 +100,10 @@ public class AdminController {
         IDatabasePersistence db = new MySQLDatabasePersistence();
         ProductRepository productRepository = new ProductRepository(db);
         ArrayList<Map<String, Object>> productCategoryList = productRepository.getAllProductsAndTheirCategory();
-//        ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
         if(productCategoryList.isEmpty()){
             throw new NullPointerException("Products List could not be fetched from the database");
         }else {
-
-//            model.addAttribute("productcategory", new ProductCategory());
             model.addAttribute("listProductCategory", productCategoryList);
-//            model.addAttribute("product", new Product());
-//            model.addAttribute("listProducts", productList);
             return "adminCategoryProduct";
         }
     }
@@ -142,7 +139,6 @@ public class AdminController {
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
-
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             AdminRepository adminRepository = new AdminRepository(databasePersistence);
             Map<String, Object> adminDetail = adminRepository.getAdminDetails(id);
@@ -155,6 +151,48 @@ public class AdminController {
             model.addAttribute("email", adminDetail.get("emailAddress"));
             model.addAttribute("updatedStatus", updatedStatus);
             return "editAdminDetails";
+        }
+    }
+
+    @PostMapping("/updateProduct/{productId}")
+    public String adminEditProductDetails(Model model, HttpServletRequest request, @PathVariable Integer productId ) throws Exception {
+        HttpSession oldSession = request.getSession(false);
+        Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
+        Float price = Float.valueOf(request.getParameter("userPrice"));
+        if(oldSession == null){
+            return "adminProductList";
+        }else{
+              Integer id = productId;
+            String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
+            System.out.println(updatedStatus);
+            if(updatedStatus != null){
+                oldSession.removeAttribute("updatedStatus");
+            }
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            System.out.println("id that is being passed:"+id);
+                ArrayList<Object> updatedDetails = new ArrayList<>();
+                updatedDetails.add(productId);
+                updatedDetails.add(quantity);
+                updatedDetails.add(price);
+            if(databasePersistence.saveData("{call update_product_details(?, ?, ?)}", updatedDetails)){
+                    return "redirect:/admin/products";
+                }
+            return "redirect:/admin/products";
+        }
+    }
+
+    @GetMapping("/update_product")
+    public String processUpdateProduct(Product product, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null){
+            return "adminProductList";
+        }else{
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            String message = productRepository.updateProductDetails(product);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/admin/addProduct";
         }
     }
 
@@ -171,6 +209,42 @@ public class AdminController {
             return "redirect:/admin/editProfile";
         }
     }
+
+    @GetMapping("/createProduct")
+    public String adminUpdateProduct(Model model, HttpServletRequest request){
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
+            Integer id = (Integer) oldSession.getAttribute("id");
+            String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
+            System.out.println(updatedStatus);
+            if(updatedStatus != null){
+                oldSession.removeAttribute("updatedStatus");
+            }
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            model.addAttribute("categoryId", id);
+            return "addProducts";
+        }
+    }
+    @PostMapping("/addProduct")
+    public String processAddProduct(Product product, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        Integer id = (Integer) oldSession.getAttribute("id");
+//        Integer id = (Integer) oldSession.getAttribute("categoryId");
+        System.out.println("This is category id from /addproduct"+id);
+        if(oldSession == null){
+            return "adminCategoryProducts";
+        }else{
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            String message = productRepository.createProduct(product, id);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/admin/products";
+        }
+    }
+
 
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
