@@ -50,4 +50,18 @@ public class OrderRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public String updateOrderStatus(String orderStatus, Integer orderId){
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+            updatedDetails.add(orderStatus);
+            updatedDetails.add(orderId);
+            if (databasePersistence.saveData("{call update_order_status(?, ?)}", updatedDetails)) {
+                return "Order Status Updated Successfully";
+            }
+            return "Order Status Update Failed! Please try again!";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

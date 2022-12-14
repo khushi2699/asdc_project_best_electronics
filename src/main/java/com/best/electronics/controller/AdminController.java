@@ -12,6 +12,7 @@ import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.properties.AdminProperties;
 import com.best.electronics.register.AdminRegisterHandler;
+import com.best.electronics.repository.OrderRepository;
 import com.best.electronics.state.State;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.model.User;
@@ -385,26 +386,31 @@ public class AdminController {
         if(oldSession == null) {
             return "adminLogin";
         }else{
-            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            AdminRepository adminRepository = new AdminRepository(databasePersistence);
-            ArrayList<Order> orderDetails = adminRepository.getOrderDetails();
 
-            for (Order order : orderDetails) {
-                ArrayList<Product> products = order.getProducts();
-                ISendStatusEmail email = new SendOrderStatusEmail();
-                HashMap<String, Object> messageDetails = new HashMap<>();
-                messageDetails.put("orderId", orderId);
-                messageDetails.put("orderAmount", orderAmount);
-                messageDetails.put("orderDate", orderDate);
-                messageDetails.put("orderStatus", orderStatus);
-                messageDetails.put("products", products);
-                if (email.sendEmail(emailAddress, messageDetails)) {
-                    oldSession.setAttribute("msg", "Email is successfully sent!");
-                    return "redirect:/admin/orderDetails";
-                }
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            OrderRepository orderRepository = new OrderRepository(databasePersistence);
+            orderRepository.updateOrderStatus(orderStatus, orderId);
+            System.out.println("heloooooooIIIII");
+            System.out.println(orderId);
+
+            AdminRepository adminRepository = new AdminRepository(databasePersistence);
+            ArrayList<Product> products = adminRepository.getProductDetails(orderId);
+            ISendStatusEmail email = new SendOrderStatusEmail();
+            HashMap<String, Object> messageDetails = new HashMap<>();
+            messageDetails.put("orderId", orderId);
+            messageDetails.put("orderAmount", orderAmount);
+            messageDetails.put("orderDate", orderDate);
+            messageDetails.put("orderStatus", orderStatus);
+            messageDetails.put("products", products);
+            System.out.println("helooooooo");
+            System.out.println(messageDetails);
+            if (email.sendEmail(emailAddress, messageDetails)) {
+                oldSession.setAttribute("msg", "Email is successfully sent!");
+                return "redirect:/admin/orderDetails";
             }
-            oldSession.setAttribute("msg", "Some error occurred while sending email! Please try again!");
-            return "redirect:/admin/orderDetails";
+
+        oldSession.setAttribute("msg", "Some error occurred while sending email! Please try again!");
+        return "redirect:/admin/orderDetails";
         }
     }
 }

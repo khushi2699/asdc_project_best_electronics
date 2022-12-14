@@ -43,9 +43,10 @@ public class AdminRepository {
         }
     }
 
-    // Fetching the orders, order items and product details for sending an order update status email
+    // Fetching the orders, order items and product details
     public ArrayList<Order> getOrderDetails() {
         try {
+
             ArrayList<Order> orderList = new ArrayList<>();
             ArrayList<Map<String, Object>> orders = getAllOrderDetails();
             for (Map<String, Object> order : orders) {
@@ -87,6 +88,24 @@ public class AdminRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<Product> getProductDetails(Integer orderId) {
+        ArrayList<Map<String, Object>> orderItems = getOrderItems(orderId);
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Map<String, Object> orderItem : orderItems) {
+            Integer productId = (Integer) orderItem.get("productId");
+            Map<String, Object> productDetail = getOrderItemsByProduct(productId);
+            Product p = new Product();
+            p.setProductId((Integer) orderItem.get("productId"));
+            p.setProductQuantity((Integer) orderItem.get("quantity"));
+            p.setProductPrice((Double) orderItem.get("subTotal"));
+            p.setProductName((String) productDetail.get("productName"));
+            productList.add(p);
+
+        }
+        return productList;
+    }
+
 
     public ArrayList<Map<String, Object>> getAllOrderDetails() {
         ArrayList<Map<String, Object>> orders = new ArrayList<>();
