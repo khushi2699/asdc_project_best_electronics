@@ -249,13 +249,91 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/updateProduct/{productId}")
+    public String adminEditProductDetails(Model model, HttpServletRequest request, @PathVariable Integer productId ) throws Exception {
+        HttpSession oldSession = request.getSession(false);
+        Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
+        Float price = Float.valueOf(request.getParameter("userPrice"));
+        if(oldSession == null){
+            return "adminProductList";
+        }else{
+            Integer id = productId;
+            String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
+            System.out.println(updatedStatus);
+            if(updatedStatus != null){
+                oldSession.removeAttribute("updatedStatus");
+            }
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            System.out.println("id that is being passed:"+id);
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+            updatedDetails.add(productId);
+            updatedDetails.add(quantity);
+            updatedDetails.add(price);
+            if(databasePersistence.saveData("{call update_product_details(?, ?, ?)}", updatedDetails)){
+                return "redirect:/admin/products";
+            }
+            return "redirect:/admin/products";
+        }
+    }
+
+    @GetMapping("/update_product")
+    public String processUpdateProduct(Product product, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null){
+            return "adminProductList";
+        }else{
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            String message = productRepository.updateProductDetails(product);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/admin/addProduct";
+        }
+    }
+
+    @GetMapping("/createProduct")
+    public String adminUpdateProduct(Model model, HttpServletRequest request){
+        HttpSession oldSession = request.getSession(false);
+        if(oldSession == null){
+            return "adminLogin";
+        }else{
+            Integer id = (Integer) oldSession.getAttribute("id");
+            String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
+            System.out.println(updatedStatus);
+            if(updatedStatus != null){
+                oldSession.removeAttribute("updatedStatus");
+            }
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            model.addAttribute("categoryId", id);
+            return "addProducts";
+        }
+    }
+    @PostMapping("/addProduct")
+    public String processAddProduct(Product product, HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        Integer id = (Integer) oldSession.getAttribute("id");
+//        Integer id = (Integer) oldSession.getAttribute("categoryId");
+        System.out.println("This is category id from /addproduct"+id);
+        if(oldSession == null){
+            return "adminCategoryProducts";
+        }else{
+            IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
+            ProductRepository productRepository = new ProductRepository(databasePersistence);
+            String message = productRepository.createProduct(product, id);
+            oldSession.setAttribute("updatedStatus", message);
+            return "redirect:/admin/products";
+        }
+    }
+
+
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
-        @RequestParam(value = "orderAmount", required = false) Double orderAmount,
-        @RequestParam(value = "orderStatus", required = false) String orderStatus,
-        @RequestParam(value = "orderDate", required = false) String orderDate,
-        @RequestParam(value = "emailAddress", required = false) String emailAddress,
-        HttpServletRequest request){
+                            @RequestParam(value = "orderAmount", required = false) Double orderAmount,
+                            @RequestParam(value = "orderStatus", required = false) String orderStatus,
+                            @RequestParam(value = "orderDate", required = false) String orderDate,
+                            @RequestParam(value = "emailAddress", required = false) String emailAddress,
+                            HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
