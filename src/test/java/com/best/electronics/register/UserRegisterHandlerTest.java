@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class RegisterHandlerTest {
+public class UserRegisterHandlerTest {
 
     private static IDatabasePersistence mockDatabasePersistence;
 

@@ -15,12 +15,7 @@ public class ResetPasswordCombinationValidationHandler implements ICheckCombinat
         PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
         try {
             ArrayList<Map<String, Object>> result = passwordRepository.checkCombination(token,email,type);
-            if(result.size() == 0){
-                return false;
-            }
-            else {
-                return true;
-            }
+            return result.size() != 0;
 
         } catch (Exception e) {
             throw new RuntimeException(e);

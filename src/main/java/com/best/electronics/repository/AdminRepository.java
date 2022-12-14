@@ -44,8 +44,8 @@ public class AdminRepository {
     }
     // Fetching the orders, order items and product details for sending an order update status email
     public ArrayList<Order> getOrderDetails() {
+        ArrayList<Order> orderList = new ArrayList<>();
         try {
-            ArrayList<Order> orderList = new ArrayList<>();
             ArrayList<Map<String, Object>> orders = getAllOrderDetails();
             for (Map<String, Object> order : orders) {
                 Order o = new Order();
@@ -83,7 +83,7 @@ public class AdminRepository {
             }
             return orderList;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return orderList;
         }
     }
 
