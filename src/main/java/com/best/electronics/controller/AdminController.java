@@ -96,7 +96,7 @@ public class AdminController {
     }
 
     @GetMapping("/orderDetails")
-    public String orderDetails(Order order, Model model, HttpServletRequest request){
+    public String orderDetails(Order order, Model model, HttpServletRequest request) throws Exception {
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -140,7 +140,7 @@ public class AdminController {
     }
 
     @PostMapping("/deleteAdmin/{adminId}")
-    public String deleteAdmin(@PathVariable Integer adminId, Model model, HttpServletRequest request){
+    public String deleteAdmin(@PathVariable Integer adminId, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -256,7 +256,7 @@ public class AdminController {
             @RequestParam(value = "orderStatus", required = false) String orderStatus,
             @RequestParam(value = "orderDate", required = false) String orderDate,
             @RequestParam(value = "emailAddress", required = false) String emailAddress,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws Exception {
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
