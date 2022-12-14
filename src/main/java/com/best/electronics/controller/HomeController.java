@@ -21,4 +21,9 @@ public class HomeController {
         return "adminIndex";
     }
 
+    @GetMapping("/*")
+    public String viewGenericPage() {
+        return "redirect:/welcome";
+    }
+
 }

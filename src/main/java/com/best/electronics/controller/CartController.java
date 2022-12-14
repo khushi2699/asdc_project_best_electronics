@@ -180,6 +180,7 @@ public class CartController {
                 CartRepository cartRepository = new CartRepository(databasePersistence);
                 ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
+                    return "products";
                 } else {
                     //placing order here
                     OrderRepository orderRepository = new OrderRepository(databasePersistence);

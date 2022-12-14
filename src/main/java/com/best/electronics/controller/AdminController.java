@@ -2,7 +2,12 @@ package com.best.electronics.controller;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.email.ChangePasswordHandler;
 import com.best.electronics.email.ISendStatusEmail;
+import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
+import com.best.electronics.forgotPassword.ForgotPasswordState;
+import com.best.electronics.forgotPassword.GetCode;
+import com.best.electronics.forgotPassword.ResetPasswordFactory;
 import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.properties.AdminProperties;
@@ -20,11 +25,7 @@ import com.best.electronics.repository.UserRepository;
 import com.best.electronics.email.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,29 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    @GetMapping("/forgotPassword")
+    public String forgotPassword(Model model){
+        model.addAttribute("login", new Admin());
+        return "forgotPasswordAdmin";
+    }
+
+    @PostMapping("/getCode")
+    public String getCode(@ModelAttribute User user, Model model) throws Exception {
+        //implementing an open approach to send codes through either email or text message. But implementation is of email
+        ResetPasswordFactory resetPasswordFactory = new ResetPasswordFactory();
+        GetCode getCode = resetPasswordFactory.sendCodeThrough("Email");
+        getCode.generateCode("Admin",user.getEmailAddress());
+        model.addAttribute("login", new User());
+        model.addAttribute("msg", "Password reset link and token will be sent to you email if the email exists!");
+        return "forgotPasswordAdmin";
+    }
+
+    @GetMapping("/resetPassword")
+    public String resetPassword(Model model){
+        model.addAttribute("login", new User());
+        return "resetPasswordAdmin";
+    }
 
     @PostMapping("/process_registration")
     public String processRegistration(Admin admin, Model model){
@@ -55,6 +79,30 @@ public class AdminController {
     public String login(Model model){
         model.addAttribute("admin", new Admin());
         return "adminLogin";
+    }
+
+    @PostMapping("/checkValidToken")
+    public String checkValidToken(@ModelAttribute User user, Model model) {
+        ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
+        model.addAttribute("login", new User());
+        model.addAttribute("emailAddress", user.getEmailAddress());
+        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress(), "Admin")){
+            return "changePasswordAdmin";
+        }
+        else {
+            model.addAttribute("msg","Please enter correct combination");
+            return "resetPasswordAdmin";
+        }
+
+    }
+
+    @PostMapping("/enterNewPassword")
+    public String enterNewPassword(@ModelAttribute User user, Model model) throws Exception {
+        model.addAttribute("login", new User());
+        ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
+        ForgotPasswordState forgotPasswordState = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress() , "Admin");
+        model.addAttribute("msg", forgotPasswordState.getStatus());
+        return forgotPasswordState.getNextPage();
     }
 
     @PostMapping("/process_login")
@@ -312,11 +360,11 @@ public class AdminController {
     @PostMapping("/addProduct")
     public String processAddProduct(Product product, HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
-        Integer id = (Integer) oldSession.getAttribute("id");
-        System.out.println("This is category id from /addproduct"+id);
         if(oldSession == null){
             return "adminCategoryProducts";
         }else{
+            Integer id = (Integer) oldSession.getAttribute("id");
+            System.out.println("This is category id from /addproduct"+id);
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ProductRepository productRepository = new ProductRepository(databasePersistence);
             String message = productRepository.createProduct(product, id);
