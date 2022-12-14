@@ -117,7 +117,7 @@ public class AdminController {
             return "adminLogin";
         }else{
             AdminProperties adminProperties = new AdminProperties();
-            if(oldSession.getAttribute("id") == adminProperties.getId()){
+            if(oldSession.getAttribute("id").equals(adminProperties.getId())){
                 model.addAttribute("isSuperAdmin", true);
             }
         }
@@ -131,7 +131,8 @@ public class AdminController {
             return "adminLogin";
         }else{
             AdminProperties adminProperties = new AdminProperties();
-            if(oldSession.getAttribute("id") == adminProperties.getId()){
+            System.out.println("Adminnnnn id: " + oldSession.getAttribute("id"));
+            if(oldSession.getAttribute("id").equals(adminProperties.getId())){
                 model.addAttribute("isSuperAdmin", true);
             }
             return "adminLandingPage";
