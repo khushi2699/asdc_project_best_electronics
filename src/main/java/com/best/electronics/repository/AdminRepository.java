@@ -7,6 +7,7 @@ import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +20,18 @@ public class AdminRepository {
         this.databasePersistence = databasePersistence;
     }
 
+    public ArrayList<Map<String, Object>> getAllAdmins(Integer id){
+        ArrayList<Map<String, Object>> adminList = new ArrayList<>();
+        try{
+            ArrayList<Object> parameters = new ArrayList<>();
+            parameters.add(id);
+            adminList =  databasePersistence.loadData("{call get_all_admins(?)}", parameters);
+            return adminList;
+        }catch(Exception e){
+            return adminList;
+        }
+    }
+
     public Map<String, Object> getAdminDetails(Integer adminId){
         try{
             ArrayList<Object> parameters = new ArrayList<>();
@@ -29,12 +42,11 @@ public class AdminRepository {
             return null;
         }
     }
+    // Fetching the orders, order items and product details for sending an order update status email
     public ArrayList<Order> getOrderDetails() {
         try {
             ArrayList<Order> orderList = new ArrayList<>();
-            ArrayList<Map<String, Object>> orders = databasePersistence.loadData("Select * from OrderDetails", new ArrayList<>());
-            System.out.println("Order Details: " + orders);
-
+            ArrayList<Map<String, Object>> orders = getAllOrderDetails();
             for (Map<String, Object> order : orders) {
                 Order o = new Order();
                 o.setOrderId((Integer) order.get("orderId"));
@@ -46,13 +58,11 @@ public class AdminRepository {
                 o.setUserId((Integer) order.get("userId"));
 
                 Integer orderId = (Integer) order.get("orderId");
-                ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("Select * from OrderItem where orderId=" + orderId, new ArrayList<>());
+                ArrayList<Map<String, Object>> orderItems = getOrderItems(orderId);
                 ArrayList<Product> product = new ArrayList<>();
-                for(Map<String, Object> orderItem: orderItems) {
+                for (Map<String, Object> orderItem : orderItems) {
                     Integer productId = (Integer) orderItem.get("productId");
-                    ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("Select * from Product where productId=" + productId, new ArrayList<>());
-                    Map<String, Object> productDetail = productDetails.get(0);
-
+                    Map<String, Object> productDetail = getOrderItemsByProduct(productId);
                     Product p = new Product();
                     p.setProductId((Integer) orderItem.get("productId"));
                     p.setProductQuantity((Integer) orderItem.get("quantity"));
@@ -62,25 +72,74 @@ public class AdminRepository {
                 }
                 o.setProducts(product);
                 Integer userId = (Integer) order.get("userId");
-                ArrayList<Map<String, Object>> userInfo = databasePersistence.loadData("Select * from User where userId=" + userId, new ArrayList<>());
-                System.out.println("User Details: " + userInfo);
-                Map<String, Object> user = userInfo.get(0);
-
+                Map<String, Object> user = getUserDetailsByID(userId);
                 User u = new User();
                 u.setFirstName((String) user.get("firstName"));
                 u.setLastName((String) user.get("lastName"));
                 u.setEmailAddress((String) user.get("emailAddress"));
                 u.setAddress((String) user.get("address"));
-
                 o.setUser(u);
                 orderList.add(o);
             }
             return orderList;
-
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<Map<String, Object>> getAllOrderDetails() {
+        ArrayList<Map<String, Object>> orders = new ArrayList<>();
+        try {
+            orders = databasePersistence.loadData("{call get_all_order_details()}", new ArrayList<>());
+            System.out.println("Order Details: " + orders);
+            return orders;
+        } catch (Exception ex) {
+            return orders;
+        }
+    }
+
+    public ArrayList<Map<String, Object>> getOrderItems(Integer orderId){
+        ArrayList<Map<String, Object>> orderItems = new ArrayList<>();
+        try {
+            ArrayList<Object> orderIDList = new ArrayList<>();
+            orderIDList.add(orderId);
+            orderItems = databasePersistence.loadData("{call get_orderItem_by_order_id(?)}", orderIDList);
+            return orderItems;
+        } catch (Exception ex) {
+            return orderItems;
+        }
+    }
+
+    public Map<String, Object> getOrderItemsByProduct(Integer productId) {
+        try {
+            ArrayList<Object> productIDList = new ArrayList<>();
+            productIDList.add(productId);
+            ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("{call get_product_by_product_id(?)}", productIDList);
+            if(productDetails.isEmpty()){
+                return new HashMap<>();
+            }else{
+                return productDetails.get(0);
+            }
+        } catch (Exception e) {
+            return new HashMap<>();
+        }
+    }
+
+    public Map<String, Object> getUserDetailsByID(Integer userId){
+        try {
+            ArrayList<Object> userIDList = new ArrayList<>();
+            userIDList.add(userId);
+            ArrayList<Map<String, Object>> userInfo = databasePersistence.loadData("{call get_user_details_by_user_id(?)}", userIDList);
+            if(userInfo.isEmpty()){
+                return new HashMap<>();
+            }else{
+                return userInfo.get(0);
+            }
+        } catch (Exception e) {
+            return new HashMap<>();
+        }
+    }
+
 
     private Boolean isUsernameValid(String name) {
         String urlPattern = "^[a-zA-Z]{2,20}$";
@@ -108,4 +167,17 @@ public class AdminRepository {
         return "Admin Profile Updated Failed! Please try again!";
     }
 
+    public Boolean saveAdminData(ArrayList<Object> params) throws Exception {
+        return databasePersistence.saveData("{call create_admin(?, ?, ?, ?, ?)}", params);
+    }
+
+    public Boolean deleteAdmin(Integer adminId){
+        ArrayList<Object> params = new ArrayList<>();
+        params.add(adminId);
+        try{
+            return databasePersistence.saveData("{call delete_admin(?)}", params);
+        }catch (Exception e){
+            return false;
+        }
+    }
 }

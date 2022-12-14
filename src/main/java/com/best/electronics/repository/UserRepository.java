@@ -1,7 +1,6 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.exceptions.DataNotFoundException;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
@@ -20,8 +19,8 @@ public class UserRepository {
     }
 
     public ArrayList<Order> getUserOrderDetails(Integer userId){
+        ArrayList<Order> orderList = new ArrayList<>();
         try{
-            ArrayList<Order> orderList = new ArrayList<>();
             ArrayList<Object> userIdList = new ArrayList<>();
             userIdList.add(userId);
             ArrayList<Map<String, Object>> orders = databasePersistence.loadData("{call get_order_details(?)}", userIdList);
@@ -54,7 +53,7 @@ public class UserRepository {
             }
             return orderList;
         }catch(Exception e){
-            return null;
+            return orderList;
         }
     }
 
@@ -96,12 +95,11 @@ public class UserRepository {
         }
     }
 
-    public ArrayList<Map<String, Object>> getAllUsersDetails() throws Exception {
-        ArrayList<Map<String, Object>> result = databasePersistence.loadData("{call get_all_user_details()}", new ArrayList<>());
-        if(result.isEmpty()){
-            throw new DataNotFoundException("Unable to load users list");
-        } else {
-            return result;
+    public ArrayList<Map<String, Object>> getAllUsersDetails() {
+        try{
+            return databasePersistence.loadData("{call get_all_user_details()}", new ArrayList<>());
+        }catch (Exception e){
+            return new ArrayList<>();
         }
     }
 

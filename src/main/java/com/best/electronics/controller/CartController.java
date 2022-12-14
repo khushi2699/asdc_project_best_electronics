@@ -58,7 +58,6 @@ public class CartController {
 
     @GetMapping("/cart")
     public String displayWishlist(Model model, HttpServletRequest request) throws Exception {
-
         HttpSession oldSession = request.getSession(false);
         if (oldSession == null) {
             return "products";
@@ -79,7 +78,6 @@ public class CartController {
                 } else {
                     GetTotalOfProduct getTotalOfProduct = GetTotalOfProduct.getInstance();
                     double totalsum = getTotalOfProduct.calculateTotalOfProducts(cartListResult);
-                    System.out.println("Total sum "+ totalsum);
                     model.addAttribute("sumofcart",totalsum);
                     model.addAttribute("cart", new Product());
                     model.addAttribute("listCart", cartListResult);
@@ -167,20 +165,18 @@ public class CartController {
         HttpSession oldSession = request.getSession(false);
         if (oldSession == null) {
             return "products";
-        }
-        else {
+        } else {
             Integer id = (Integer) oldSession.getAttribute("id");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             UserRepository userRepository = new UserRepository(databasePersistence);
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             order.setUserId(id);
-            order.setAddress((String) userDetail.get("address"));
             order.setOrderDate(String.valueOf(new Date()));
-
             if (userDetail == null) {
                 return "products";
             }
             else {
+                order.setAddress((String) userDetail.get("address"));
                 CartRepository cartRepository = new CartRepository(databasePersistence);
                 ArrayList<Map<String, Object>> cartListResult = cartRepository.getCartListDetails(id);
                 if (cartListResult == null) {
@@ -189,7 +185,7 @@ public class CartController {
                     OrderRepository orderRepository = new OrderRepository(databasePersistence);
 
                     //adding data to order Item generating the code and then adding it into the orderDetails table
-                    orderRepository.placeorder(order);
+                    orderRepository.placeOrder(order);
                     //order added to OrderDetails
 
                     //fetching latest order for user to add data in orderItem
@@ -200,7 +196,6 @@ public class CartController {
 
                     //Removing cart Items
                     cartRepository.removeFullCart(id);
-
                 }
             }
             return "cart";
@@ -208,8 +203,7 @@ public class CartController {
     }
 
     @PostMapping("/RemoveFromCartlistController/{product_id}")
-    public String removeFromCart(HttpServletRequest request) throws Exception {
-
+    public String removeFromCart(HttpServletRequest request) {
         int cardItemId = Integer.parseInt(request.getParameter("cartItemId"));
 
         HttpSession oldSession = request.getSession(false);

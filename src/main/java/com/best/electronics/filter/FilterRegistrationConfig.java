@@ -1,5 +1,6 @@
 package com.best.electronics.filter;
 
+import com.best.electronics.properties.FilterProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +15,9 @@ public class FilterRegistrationConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(AuthenticationFilter());
         registration.addUrlPatterns("/*");
-        registration.addInitParameter("excluded_urls", "/.*.js,/.*.css,/welcome,/user/login,/user/process_login," +
-                "/user/register,/user/process_registration,/user/forgotPassword, /user/getCode," +
-                "/admin/login,/admin/process_login,/admin,/user,/user/resetPassword," +
-                "/user/checkValidToken,/user/enterNewPassword");
+
+        String excludedUrls = getExcludedUrls();
+        registration.addInitParameter("excluded_urls", excludedUrls);
         registration.setName("filter");
         registration.setOrder(1);
         return registration;
@@ -26,4 +26,11 @@ public class FilterRegistrationConfig {
     public Filter AuthenticationFilter() {
         return new AuthenticationFilter();
     }
+
+    private String getExcludedUrls() {
+        FilterProperties filterProperties = new FilterProperties();
+        return filterProperties.getCommonExcludedUrls() + "," + filterProperties.getUserExcludedUrls() + "," + filterProperties.getAdminExcludedUrls();
+    }
+
+
 }
