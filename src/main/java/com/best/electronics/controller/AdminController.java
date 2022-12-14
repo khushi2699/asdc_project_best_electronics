@@ -2,6 +2,7 @@ package com.best.electronics.controller;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.email.ISendStatusEmail;
 import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.properties.AdminProperties;
@@ -16,7 +17,6 @@ import com.best.electronics.register.IRegisterHandler;
 import com.best.electronics.repository.AdminRepository;
 import com.best.electronics.repository.ProductRepository;
 import com.best.electronics.repository.UserRepository;
-import com.best.electronics.email.ISendOrderStatusEmail;
 import com.best.electronics.email.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -313,7 +313,6 @@ public class AdminController {
     public String processAddProduct(Product product, HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
         Integer id = (Integer) oldSession.getAttribute("id");
-//        Integer id = (Integer) oldSession.getAttribute("categoryId");
         System.out.println("This is category id from /addproduct"+id);
         if(oldSession == null){
             return "adminCategoryProducts";
@@ -329,11 +328,11 @@ public class AdminController {
 
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestParam(value = "orderId", required = false) Integer orderId,
-                            @RequestParam(value = "orderAmount", required = false) Double orderAmount,
-                            @RequestParam(value = "orderStatus", required = false) String orderStatus,
-                            @RequestParam(value = "orderDate", required = false) String orderDate,
-                            @RequestParam(value = "emailAddress", required = false) String emailAddress,
-                            HttpServletRequest request){
+        @RequestParam(value = "orderAmount", required = false) Double orderAmount,
+        @RequestParam(value = "orderStatus", required = false) String orderStatus,
+        @RequestParam(value = "orderDate", required = false) String orderDate,
+        @RequestParam(value = "emailAddress", required = false) String emailAddress,
+        HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null) {
             return "adminLogin";
@@ -344,8 +343,14 @@ public class AdminController {
 
             for (Order order : orderDetails) {
                 ArrayList<Product> products = order.getProducts();
-                ISendOrderStatusEmail email = new SendOrderStatusEmail();
-                if (email.sendEmail(orderId, orderAmount, orderDate, emailAddress, orderStatus, products)) {
+                ISendStatusEmail email = new SendOrderStatusEmail();
+                HashMap<String, Object> messageDetails = new HashMap<>();
+                messageDetails.put("orderId", orderId);
+                messageDetails.put("orderAmount", orderAmount);
+                messageDetails.put("orderDate", orderDate);
+                messageDetails.put("orderStatus", orderStatus);
+                messageDetails.put("products", products);
+                if (email.sendEmail(emailAddress, messageDetails)) {
                     oldSession.setAttribute("msg", "Email is successfully sent!");
                     return "redirect:/admin/orderDetails";
                 }
