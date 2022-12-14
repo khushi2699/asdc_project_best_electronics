@@ -19,7 +19,7 @@ public class PasswordRepository {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(password);
         tokenDetails.add(email);
-        if(databasePersistence.saveData("{call save_new_"+type+"_password(?, ?)}", tokenDetails)){
+        if (databasePersistence.saveData("{call save_new_" + type + "_password(?, ?)}", tokenDetails)) {
             return true;
         } else {
             return false;
@@ -32,10 +32,9 @@ public class PasswordRepository {
         tokenDetails.add(token);
         tokenDetails.add(email);
 
-        if(databasePersistence.saveData("{call save_forgot_password_"+type+"_token(?, ?)}", tokenDetails)){
+        if (databasePersistence.saveData("{call save_forgot_password_" + type + "_token(?, ?)}", tokenDetails)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -45,7 +44,7 @@ public class PasswordRepository {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(token);
         tokenDetails.add(email);
-        ArrayList<Map<String, Object>> result = databasePersistence.loadData("{call get_check_"+type+"_combinations(?, ?)}",tokenDetails);
+        ArrayList<Map<String, Object>> result = databasePersistence.loadData("{call get_check_" + type + "_combinations(?, ?)}", tokenDetails);
         return result;
     }
 
@@ -53,7 +52,7 @@ public class PasswordRepository {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(email);
-        ArrayList<Map<String,Object>> result = databasePersistence.loadData("{call get_email_"+type+"_check(?)}",tokenDetails);
+        ArrayList<Map<String, Object>> result = databasePersistence.loadData("{call get_email_" + type + "_check(?)}", tokenDetails);
         return result;
     }
 

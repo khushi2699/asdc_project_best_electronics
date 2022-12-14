@@ -18,14 +18,14 @@ public class UserRepository {
         this.databasePersistence = databasePersistence;
     }
 
-    public ArrayList<Order> getUserOrderDetails(Integer userId){
+    public ArrayList<Order> getUserOrderDetails(Integer userId) {
         ArrayList<Order> orderList = new ArrayList<>();
-        try{
+        try {
             ArrayList<Object> userIdList = new ArrayList<>();
             userIdList.add(userId);
             ArrayList<Map<String, Object>> orders = databasePersistence.loadData("{call get_order_details(?)}", userIdList);
             System.out.println("Order Details: " + orders);
-            for(Map<String, Object> order: orders){
+            for (Map<String, Object> order : orders) {
                 Order o = new Order();
                 o.setOrderId((Integer) order.get("orderId"));
                 o.setOrderStatus((String) order.get("orderStatus"));
@@ -39,7 +39,7 @@ public class UserRepository {
                 ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("{call get_ordered_product_details(?)}", orderIdList);
                 ArrayList<Product> product = new ArrayList<>();
                 System.out.println(orderItems);
-                for(Map<String, Object> orderItem: orderItems){
+                for (Map<String, Object> orderItem : orderItems) {
                     Product p = new Product();
                     p.setProductPrice((Double) orderItem.get("productPrice"));
                     p.setProductCode(String.valueOf(orderItem.get("productCode")));
@@ -52,26 +52,26 @@ public class UserRepository {
                 orderList.add(o);
             }
             return orderList;
-        }catch(Exception e){
+        } catch (Exception e) {
             return orderList;
         }
     }
 
-    public String updateUserDetails(User user){
-        try{
+    public String updateUserDetails(User user) {
+        try {
             ArrayList<Object> updatedDetails = new ArrayList<>();
-            if(isUsernameValid(user.getFirstName()) && isUsernameValid(user.getLastName())){
+            if (isUsernameValid(user.getFirstName()) && isUsernameValid(user.getLastName())) {
                 updatedDetails.add(user.getEmailAddress());
                 updatedDetails.add(user.getFirstName());
                 updatedDetails.add(user.getLastName());
                 updatedDetails.add(user.getAddress());
-                if(databasePersistence.saveData("{call update_user_details(?, ?, ?, ?)}", updatedDetails)){
+                if (databasePersistence.saveData("{call update_user_details(?, ?, ?, ?)}", updatedDetails)) {
                     return "User Profile Updated Successfully";
                 }
-            }else{
+            } else {
                 return "Either firstName or lastName are not in correct format!";
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             return "User Profile Updated Failed! Please try again!";
         }
         return "User Profile Updated Failed! Please try again!";
@@ -84,21 +84,21 @@ public class UserRepository {
         return matcher.find();
     }
 
-    public Map<String, Object> getUserDetailsById(Integer userId){
-        try{
+    public Map<String, Object> getUserDetailsById(Integer userId) {
+        try {
             ArrayList<Object> parameters = new ArrayList<>();
             parameters.add(userId);
             ArrayList<Map<String, Object>> userDetails = databasePersistence.loadData("{call get_user_details_by_user_id(?)}", parameters);
             return userDetails.get(0);
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
     public ArrayList<Map<String, Object>> getAllUsersDetails() {
-        try{
+        try {
             return databasePersistence.loadData("{call get_all_user_details()}", new ArrayList<>());
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ArrayList<>();
         }
     }

@@ -13,7 +13,7 @@ public class OrderRepository {
         this.databasePersistence = databasePersistence;
     }
 
-    public void saveOrderItems(ArrayList<Map<String, Object>> cartListResult, int orderId){
+    public void saveOrderItems(ArrayList<Map<String, Object>> cartListResult, int orderId) {
         for (Map<String, Object> stringObjectMap : cartListResult) {
             ArrayList<Object> tokenDetails = new ArrayList<>();
             tokenDetails.add(stringObjectMap.get("quantity"));
@@ -34,7 +34,7 @@ public class OrderRepository {
 
     }
 
-    public void placeOrder(Order order){
+    public void placeOrder(Order order) {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(order.getUserId());
         tokenDetails.add(order.getOrderAmount());

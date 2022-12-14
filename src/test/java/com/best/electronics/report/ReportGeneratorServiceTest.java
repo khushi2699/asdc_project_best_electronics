@@ -21,12 +21,12 @@ public class ReportGeneratorServiceTest {
     IDatabasePersistence mockDatabasePersistence;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         mockDatabasePersistence = new UserMockDatabasePersistence();
     }
 
     @Test
-    public void generateCSVReportSuccess(){
+    public void generateCSVReportSuccess() {
         try (MockedConstruction<ReportProperties> mocked = Mockito.mockConstruction(ReportProperties.class,
                 (mock, context) -> when(mock.getFileLocation()).thenReturn("reports/test/"))) {
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
@@ -38,10 +38,12 @@ public class ReportGeneratorServiceTest {
     }
 
     @Test
-    public void generateExcelReportSuccess(){
+    public void generateExcelReportSuccess() {
         try (MockedConstruction<ReportProperties> mocked = Mockito.mockConstruction(ReportProperties.class,
-                (mock, context) -> {when(mock.getFileLocation()).thenReturn("reports/test/");
-                                    when(mock.getExcelSheetName()).thenReturn("test");})) {
+                (mock, context) -> {
+                    when(mock.getFileLocation()).thenReturn("reports/test/");
+                    when(mock.getExcelSheetName()).thenReturn("test");
+                })) {
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
             Boolean status = reportGeneratorService.getDataAndGenerateReport(mockDatabasePersistence, "{call get_all_user_details()}", "test");
@@ -51,7 +53,7 @@ public class ReportGeneratorServiceTest {
     }
 
     @Test
-    public void generateCSVReportFailWhenDBIssue(){
+    public void generateCSVReportFailWhenDBIssue() {
         try (MockedConstruction<ReportProperties> mocked = Mockito.mockConstruction(ReportProperties.class,
                 (mock, context) -> when(mock.getFileLocation()).thenReturn("reports/test/"))) {
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
@@ -63,10 +65,12 @@ public class ReportGeneratorServiceTest {
     }
 
     @Test
-    public void generateExcelReportFailWhenDBIssue(){
+    public void generateExcelReportFailWhenDBIssue() {
         try (MockedConstruction<ReportProperties> mocked = Mockito.mockConstruction(ReportProperties.class,
-                (mock, context) -> {when(mock.getFileLocation()).thenReturn("reports/test/");
-                                    when(mock.getExcelSheetName()).thenReturn("test");})) {
+                (mock, context) -> {
+                    when(mock.getFileLocation()).thenReturn("reports/test/");
+                    when(mock.getExcelSheetName()).thenReturn("test");
+                })) {
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
             Boolean status = reportGeneratorService.getDataAndGenerateReport(mockDatabasePersistence, "{call get_all_products_details()}", "test");
@@ -76,7 +80,7 @@ public class ReportGeneratorServiceTest {
     }
 
     @Test
-    public void generateCSVReportFailWhenFolderIssue(){
+    public void generateCSVReportFailWhenFolderIssue() {
         try (MockedConstruction<ReportProperties> mocked = Mockito.mockConstruction(ReportProperties.class,
                 (mock, context) -> when(mock.getFileLocation()).thenReturn("reports/test/"))) {
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
@@ -88,10 +92,12 @@ public class ReportGeneratorServiceTest {
     }
 
     @Test
-    public void generateExcelReportFailWhenFolderIssue(){
+    public void generateExcelReportFailWhenFolderIssue() {
         try (MockedConstruction<ReportProperties> mocked = Mockito.mockConstruction(ReportProperties.class,
-                (mock, context) -> {when(mock.getFileLocation()).thenReturn("reports/test1/");
-                                    when(mock.getExcelSheetName()).thenReturn("test");})) {
+                (mock, context) -> {
+                    when(mock.getFileLocation()).thenReturn("reports/test1/");
+                    when(mock.getExcelSheetName()).thenReturn("test");
+                })) {
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
             Boolean status = reportGeneratorService.getDataAndGenerateReport(mockDatabasePersistence, "{call get_all_products_details()}", "test");

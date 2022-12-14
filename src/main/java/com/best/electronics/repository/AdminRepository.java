@@ -20,28 +20,29 @@ public class AdminRepository {
         this.databasePersistence = databasePersistence;
     }
 
-    public ArrayList<Map<String, Object>> getAllAdmins(Integer id){
+    public ArrayList<Map<String, Object>> getAllAdmins(Integer id) {
         ArrayList<Map<String, Object>> adminList = new ArrayList<>();
-        try{
+        try {
             ArrayList<Object> parameters = new ArrayList<>();
             parameters.add(id);
-            adminList =  databasePersistence.loadData("{call get_all_admins(?)}", parameters);
+            adminList = databasePersistence.loadData("{call get_all_admins(?)}", parameters);
             return adminList;
-        }catch(Exception e){
+        } catch (Exception e) {
             return adminList;
         }
     }
 
-    public Map<String, Object> getAdminDetails(Integer adminId){
-        try{
+    public Map<String, Object> getAdminDetails(Integer adminId) {
+        try {
             ArrayList<Object> parameters = new ArrayList<>();
             parameters.add(adminId);
             ArrayList<Map<String, Object>> adminDetails = databasePersistence.loadData("{call get_admin_details(?)}", parameters);
             return adminDetails.get(0);
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
+
     // Fetching the orders, order items and product details for sending an order update status email
     public ArrayList<Order> getOrderDetails() {
         try {
@@ -98,7 +99,7 @@ public class AdminRepository {
         }
     }
 
-    public ArrayList<Map<String, Object>> getOrderItems(Integer orderId){
+    public ArrayList<Map<String, Object>> getOrderItems(Integer orderId) {
         ArrayList<Map<String, Object>> orderItems = new ArrayList<>();
         try {
             ArrayList<Object> orderIDList = new ArrayList<>();
@@ -115,9 +116,9 @@ public class AdminRepository {
             ArrayList<Object> productIDList = new ArrayList<>();
             productIDList.add(productId);
             ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("{call get_product_by_product_id(?)}", productIDList);
-            if(productDetails.isEmpty()){
+            if (productDetails.isEmpty()) {
                 return new HashMap<>();
-            }else{
+            } else {
                 return productDetails.get(0);
             }
         } catch (Exception e) {
@@ -125,14 +126,14 @@ public class AdminRepository {
         }
     }
 
-    public Map<String, Object> getUserDetailsByID(Integer userId){
+    public Map<String, Object> getUserDetailsByID(Integer userId) {
         try {
             ArrayList<Object> userIDList = new ArrayList<>();
             userIDList.add(userId);
             ArrayList<Map<String, Object>> userInfo = databasePersistence.loadData("{call get_user_details_by_user_id(?)}", userIDList);
-            if(userInfo.isEmpty()){
+            if (userInfo.isEmpty()) {
                 return new HashMap<>();
-            }else{
+            } else {
                 return userInfo.get(0);
             }
         } catch (Exception e) {
@@ -140,28 +141,28 @@ public class AdminRepository {
         }
     }
 
-
     private Boolean isUsernameValid(String name) {
         String urlPattern = "^[a-zA-Z]{2,20}$";
         Pattern pattern = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(name);
         return matcher.find();
     }
-    public String updateAdminDetails(Admin admin){
-        try{
+
+    public String updateAdminDetails(Admin admin) {
+        try {
             ArrayList<Object> updatedDetails = new ArrayList<>();
 
-            if(isUsernameValid(admin.getFirstName()) && isUsernameValid(admin.getLastName())){
+            if (isUsernameValid(admin.getFirstName()) && isUsernameValid(admin.getLastName())) {
                 updatedDetails.add(admin.getEmailAddress());
                 updatedDetails.add(admin.getFirstName());
                 updatedDetails.add(admin.getLastName());
-                if(databasePersistence.saveData("{call update_admin_details(?, ?, ?)}", updatedDetails)){
+                if (databasePersistence.saveData("{call update_admin_details(?, ?, ?)}", updatedDetails)) {
                     return "Admin Profile Updated Successfully";
                 }
-            }else{
+            } else {
                 return "Either firstName or lastName are not in correct format!";
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             return "Admin Profile Updated Failed! Please try again!";
         }
         return "Admin Profile Updated Failed! Please try again!";
@@ -171,12 +172,12 @@ public class AdminRepository {
         return databasePersistence.saveData("{call create_admin(?, ?, ?, ?, ?)}", params);
     }
 
-    public Boolean deleteAdmin(Integer adminId){
+    public Boolean deleteAdmin(Integer adminId) {
         ArrayList<Object> params = new ArrayList<>();
         params.add(adminId);
-        try{
+        try {
             return databasePersistence.saveData("{call delete_admin(?)}", params);
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
