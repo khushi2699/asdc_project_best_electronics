@@ -18,6 +18,16 @@ public class Product {
 
     private Integer productQuantity;
 
+    private Integer productCategoryId;
+
+    public Integer getProductCategoryId() {
+        return productCategoryId;
+    }
+
+    public void setProductCategoryId(Integer productCategoryId) {
+        this.productCategoryId = productCategoryId;
+    }
+
     public Integer getProductId() {
         return productId;
     }
