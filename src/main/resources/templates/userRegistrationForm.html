@@ -15,8 +15,13 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark py-3">
-    <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
+<nav class="navbar navbar-expand navbar-dark bg-dark py-3">
+    <div><a class="navbar-brand mb-0 h2" style="font-size: 30px; color:white">Best Electronics</a></div>
+    <div class="navbar-nav w-100">
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" th:href="@{/admin}">Admin Options</a>
+        </div>
+    </div>
 </nav>
 
 <div class="container p-2 text-center">
@@ -37,6 +42,7 @@
                                 <div class="col-8">
                                     <input type="text" th:field="*{firstName}" class="form-control"
                                            required/>
+                                    <small class="form-text text-muted">Please enter first name of at least 2 length.</small>
                                 </div>
                             </div>
 
@@ -45,14 +51,14 @@
                                 <div class="col-8">
                                     <input type="text" th:field="*{lastName}" class="form-control"
                                            required/>
+                                    <small class="form-text text-muted">Please enter first name of at least 2 length.</small>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">E-mail: </label>
                                 <div class="col-8">
-                                    <input type="email" th:field="*{emailAddress}" class="form-control" required
-                                           data-error="Please enter valid Email Address!"/>
+                                    <input type="email" th:field="*{emailAddress}" class="form-control" required/>
                                 </div>
                             </div>
 
@@ -61,6 +67,7 @@
                                 <div class="col-8">
                                     <input type="password" th:field="*{password}" id="password" class="form-control"
                                            required/>
+                                    <small class="form-text text-muted">Please use a combination of upper, lower letters and at lease one special character. Minimum 8 length.</small>
                                 </div>
                             </div>
 
@@ -85,6 +92,7 @@
                                                         <i class="fa fa-calendar"></i>
                                                     </span>
                                             </span>
+                                            <small class="form-text text-muted">Only 18 year or above are allowed to register.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -119,6 +127,7 @@
                                 <div class="col-8">
                                     <input type="text" th:field="*{address}" class="form-control"
                                            required minlength="10" maxlength="30"/>
+                                    <small class="form-text text-muted">Please enter valid complete address.</small>
                                 </div>
                             </div>
 

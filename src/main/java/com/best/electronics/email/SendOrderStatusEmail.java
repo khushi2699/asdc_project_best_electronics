@@ -9,6 +9,7 @@ import javax.mail.internet.MimeMultipart;
 import java.util.ArrayList;
 
 public class SendOrderStatusEmail implements ISendOrderStatusEmail{
+
     public Boolean sendEmail(Integer orderId, Double orderAmount, String orderDateString, String emailAddress, String orderStatus, ArrayList<Product> products) {
         try{
             SendMail sendMail = new SendMail();
@@ -32,8 +33,8 @@ public class SendOrderStatusEmail implements ISendOrderStatusEmail{
         Multipart multipart = new MimeMultipart();
 
         String productDetails = null;
-        for(Product productslist:products){
-            productDetails = "Product ID: " +  productslist.getProductId() + "\n\t" + "Product Name: " + productslist.getProductName();
+        for(Product productsList: products){
+            productDetails = "Product ID: " +  productsList.getProductId() + "\n\t" + "Product Name: " + productsList.getProductName();
         }
         messageBodyPart.setText("This message is from BestElectronics. Please find the updates on your order!\n Order ID: "+ orderId + "\n" + "Amount Paid: " +  orderAmount + "\n" + "Date of Order: " + orderDateString + "\n" + "Product Details: \n\t" +  productDetails + "\n" + "We have successfully accepted your order and the order has been placed.");
         multipart.addBodyPart(messageBodyPart);

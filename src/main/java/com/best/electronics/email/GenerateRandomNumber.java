@@ -14,7 +14,6 @@ public class GenerateRandomNumber {
 
     public int generateRandomNumber(){
         Random randomNumber = new Random();
-        int number =  randomNumber.nextInt(999999);
-        return number;
+        return randomNumber.nextInt(999999);
     }
 }
