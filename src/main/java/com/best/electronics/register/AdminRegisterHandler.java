@@ -2,6 +2,8 @@ package com.best.electronics.register;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.email.ISendStatusEmail;
+import com.best.electronics.email.SendAdminRegisterStatusEmail;
 import com.best.electronics.model.Account;
 import com.best.electronics.repository.AdminRepository;
 import com.best.electronics.security.EncryptPassword;
@@ -9,6 +11,7 @@ import com.best.electronics.state.State;
 import com.best.electronics.state.register.GenericFailedRegisterState;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class AdminRegisterHandler implements IRegisterHandler{
@@ -32,6 +35,7 @@ public class AdminRegisterHandler implements IRegisterHandler{
                 adminDetails.add(account.getGender());
                 AdminRepository adminRepository = new AdminRepository(databasePersistence);
                 if(adminRepository.saveAdminData(adminDetails)){
+                    sendRegisterStatus(account);
                     return registerState;
                 }
                 return new GenericFailedRegisterState("admin");
@@ -41,5 +45,14 @@ public class AdminRegisterHandler implements IRegisterHandler{
             return registerState;
         }
         return registerState;
+    }
+
+    private void sendRegisterStatus(Account account) {
+        ISendStatusEmail sendStatusEmail = new SendAdminRegisterStatusEmail();
+        HashMap<String, Object> details= new HashMap<>();
+        details.put("firstName", account.getFirstName());
+        details.put("lastName", account.getLastName());
+        details.put("password", account.getPassword());
+        sendStatusEmail.sendEmail(account.getEmailAddress(), details);
     }
 }
