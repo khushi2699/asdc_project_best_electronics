@@ -8,7 +8,6 @@ import com.best.electronics.report.sender.ISendReport;
 import com.best.electronics.report.sender.SendReportDelegator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -68,7 +67,7 @@ public class CSVReportController {
     }
 
     @GetMapping("/products_sold")
-    public String sendProductSoldCSVReport(@PathVariable String fileName, HttpServletRequest request){
+    public String sendProductSoldCSVReport(@RequestParam String fileName, HttpServletRequest request){
         HttpSession oldSession = request.getSession(false);
         if(oldSession == null){
             return "adminLogin";

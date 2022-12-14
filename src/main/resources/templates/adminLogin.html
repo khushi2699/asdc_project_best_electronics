@@ -11,8 +11,13 @@
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark py-3">
-    <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
+<nav class="navbar navbar-expand navbar-dark bg-dark py-3">
+    <div><a class="navbar-brand mb-0 h2" style="font-size: 30px; color:white">Best Electronics</a></div>
+    <div class="navbar-nav w-100">
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" th:href="@{/user}">User Options</a>
+        </div>
+    </div>
 </nav>
 <div class="container p-2 text-center">
     <div class="row">

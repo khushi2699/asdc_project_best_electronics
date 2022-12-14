@@ -22,7 +22,7 @@ public class ChangePasswordHandler implements IChangePassword {
             password = EncryptPassword.getInstance().encryptString(password);
 
             PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
-            passwordRepository.saveNewpassword(password, email);
+            passwordRepository.saveNewPassword(password, email);
             return forgotPasswordState;
 
         }

@@ -2,14 +2,16 @@ package com.best.electronics.controller;
 
 import com.best.electronics.email.ChangePasswordHandler;
 import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
-import com.best.electronics.email.SendMailForForgotPassword;
 import com.best.electronics.forgotPassword.ForgotPasswordState;
 import com.best.electronics.forgotPassword.GetCode;
 import com.best.electronics.forgotPassword.ResetPasswordFactory;
 import com.best.electronics.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 @RequestMapping("/user")
@@ -36,7 +38,7 @@ public class ForgotPasswordController {
         return forgotPasswordState.getNextPage();
     }
     @PostMapping("/getCode")
-    public String getCode(@ModelAttribute User user, Model model) throws Exception {
+    public String getCode(@ModelAttribute User user, Model model){
         //implementing an open approach to send codes through either email or text message. But implementation is of email
         ResetPasswordFactory resetPasswordFactory = new ResetPasswordFactory();
         GetCode getCode = resetPasswordFactory.sendCodeThrough("Email");

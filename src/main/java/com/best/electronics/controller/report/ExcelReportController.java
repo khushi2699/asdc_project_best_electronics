@@ -72,7 +72,7 @@ public class ExcelReportController {
         if(oldSession == null){
             return "adminLogin";
         }else{
-            String emailAddress = (String) oldSession.getAttribute("adminEmailAddress");
+            String emailAddress = (String) oldSession.getAttribute("emailAddress");
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ReportGeneratorService reportGeneratorService = new ReportGeneratorService();
             reportGeneratorService.setReportGenerator(new GenerateExcelReport());
