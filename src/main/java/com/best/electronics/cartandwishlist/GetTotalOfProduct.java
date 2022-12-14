@@ -15,14 +15,14 @@ public class GetTotalOfProduct {
     }
 
     public double calculateTotalOfProducts(ArrayList<Map<String, Object>> cartListResult){
-        double totalsum = 0;
-        for(int i = 0 ; i < cartListResult.size(); i++){
-            int quantity = (int) cartListResult.get(i).get("quantity");
+        double totalSum = 0;
+        for (Map<String, Object> stringObjectMap : cartListResult) {
+            int quantity = (int) stringObjectMap.get("quantity");
             System.out.println("Quantity " + quantity);
-            double productPrice = (double) cartListResult.get(i).get("productPrice");
-            double productsum = quantity * productPrice;
-            totalsum = totalsum + productsum;
+            double productPrice = (double) stringObjectMap.get("productPrice");
+            double productSum = quantity * productPrice;
+            totalSum = totalSum + productSum;
         }
-        return totalsum;
+        return totalSum;
     }
 }

@@ -77,8 +77,8 @@ public class CartController {
                     return "products";
                 } else {
                     GetTotalOfProduct getTotalOfProduct = GetTotalOfProduct.getInstance();
-                    double totalsum = getTotalOfProduct.calculateTotalOfProducts(cartListResult);
-                    model.addAttribute("sumofcart",totalsum);
+                    double totalSum = getTotalOfProduct.calculateTotalOfProducts(cartListResult);
+                    model.addAttribute("sumofcart", totalSum);
                     model.addAttribute("cart", new Product());
                     model.addAttribute("listCart", cartListResult);
                 }

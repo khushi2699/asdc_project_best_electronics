@@ -1,6 +1,5 @@
 package com.best.electronics.exceptions;
 public class ErrorMessage {
-
     private final int StatusCode;
 
     private final String message;

@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class EmailPropertiesTest {
     @Test
-    public void checkPropertiesConfigured(){
+    public void checkEmailPropertiesConfigured(){
         EmailProperties emailProperties = new EmailProperties();
 
         Assertions.assertEquals("TLSv1.2", emailProperties.ssl_protocols);

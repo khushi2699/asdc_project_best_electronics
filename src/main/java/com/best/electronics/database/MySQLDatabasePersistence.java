@@ -33,9 +33,7 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
                     while(rs.next()){
                         Map<String, Object> map = new HashMap<>();
                         for(int j=1; j<cols+1; j++){
-                            System.out.println(meta.getCatalogName(j));
                             map.put(meta.getColumnLabel(j), rs.getObject(j));
-                            System.out.println(meta.getColumnName(j) + " : " + rs.getObject(j));
                         }
                         result.add(map);
                     }

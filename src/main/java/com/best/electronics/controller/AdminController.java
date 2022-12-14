@@ -271,11 +271,13 @@ public class AdminController {
             Map<String, Object> adminDetail = adminRepository.getAdminDetails(id);
             if(adminDetail == null){
                 model.addAttribute("updatedStatus", "Some exception occurred! Please try again!");
+                return "editAdminDetails";
+            }else{
+                model.addAttribute("firstName", adminDetail.get("firstName"));
+                model.addAttribute("lastName", adminDetail.get("lastName"));
+                model.addAttribute("email", adminDetail.get("emailAddress"));
             }
 
-            model.addAttribute("firstName", adminDetail.get("firstName"));
-            model.addAttribute("lastName", adminDetail.get("lastName"));
-            model.addAttribute("email", adminDetail.get("emailAddress"));
             model.addAttribute("updatedStatus", updatedStatus);
             return "editAdminDetails";
         }
@@ -296,22 +298,20 @@ public class AdminController {
     }
 
     @PostMapping("/updateProduct/{productId}")
-    public String adminEditProductDetails(Model model, HttpServletRequest request, @PathVariable Integer productId ) throws Exception {
+    public String adminEditProductDetails(HttpServletRequest request, @PathVariable Integer productId ) throws Exception {
         HttpSession oldSession = request.getSession(false);
         Integer quantity = Integer.valueOf(request.getParameter("userQuantity"));
         Float price = Float.valueOf(request.getParameter("userPrice"));
         if(oldSession == null){
             return "adminProductList";
         }else{
-            Integer id = productId;
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
             System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
+
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-            ProductRepository productRepository = new ProductRepository(databasePersistence);
-            System.out.println("id that is being passed:"+id);
             ArrayList<Object> updatedDetails = new ArrayList<>();
             updatedDetails.add(productId);
             updatedDetails.add(quantity);
