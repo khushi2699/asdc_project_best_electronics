@@ -39,59 +39,28 @@
         </div>
     </div>
 </nav>
-
 <div class="container p-2 text-center">
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h5>Add Product</h5>
-                    <form th:action="@{/admin/addProduct/{categoryId}(categoryId = ${categoryId})}"
+                    <h5>Add Category</h5>
+                    <form th:action="@{addCategory}" th:object="${category}"
                           method="post" style="max-width: 600px; margin: 0 auto;">
                         <div th:if="${updatedStatus} != null">
                             <p style="color: red" data-th-text="${updatedStatus}"></p>
                         </div>
                         <div class="m-3">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label">Category id </label>
+                                <label class="col-4 col-form-label">category Name </label>
                                 <div class="col-8">
-                                    <input type="text" name="categoryId" id="categoryId" class="form-control" th:value="${categoryId}" readonly/>
+                                    <input type="text" name="categoryName" id="categoryName" class="form-control" th:field="*{productCategoryName}" required/>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-4 col-form-label">Product Code </label>
+                                <label class="col-4 col-form-label">Category Description</label>
                                 <div class="col-8">
-                                    <input type="text" name="productCode" id="productCode" class="form-control" th:value="${productCode}" required/>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-4 col-form-label">Product Name </label>
-                                <div class="col-8">
-                                    <input type="text" name="productName" id="productName" class="form-control" th:value="${productName}" required/>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-4 col-form-label">Product Brand </label>
-                                <div class="col-8">
-                                    <input type="text" name="productBrand" id="productBrand" class="form-control" th:value="${productBrand}" required/>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-4 col-form-label">Product Description </label>
-                                <div class="col-8">
-                                    <input type="text" name="productDescription" id="productDescription" class="form-control" th:value="${productDescription}" required/>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-4 col-form-label">Product Price </label>
-                                <div class="col-8">
-                                    <input type="text" name="productPrice" id="productPrice" class="form-control" th:value="${productPrice}" required/>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-4 col-form-label">Available Quantity </label>
-                                <div class="col-8">
-                                    <input type="text" name="ProductQuantity" id="ProductQuantity" class="form-control" th:value="${ProductQuantity}" required/>
+                                    <input type="text" name="categoryDescription" id="categoryDescription" class="form-control" th:field="*{productCategoryDescription}" required/>
                                 </div>
                             </div>
                             <div>
@@ -99,7 +68,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
