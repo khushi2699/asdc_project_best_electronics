@@ -22,8 +22,7 @@ public class SmtpEmailSendReport implements ISendReport{
             MimeMessage mimeMessage = new MimeMessage(session);
             draftEmail(mimeMessage, emailAddress, fileName);
             sendMail.setMimeMessage(mimeMessage);
-            sendMail.sendMail();
-            return true;
+            return sendMail.sendMail();
         } catch (Exception e){
             return false;
         }

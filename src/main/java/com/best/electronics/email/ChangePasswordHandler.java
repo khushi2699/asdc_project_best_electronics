@@ -15,7 +15,6 @@ public class ChangePasswordHandler implements IChangePassword {
         ForgotPasswordEmailHandler forgotPasswordEmailHandler = new InvalidPasswordFormatAuthHandler(iInvalidPasswordFormat);
         forgotPasswordEmailHandler.setNextHandler(new PasswordMissMatchAuthHandler(iInvalidPasswordFormat));
         ForgotPasswordState forgotPasswordState = forgotPasswordEmailHandler.doHandler(password, confirmPassword, email);
-        System.out.println(forgotPasswordState.getStatus());
 
         if (forgotPasswordState.getStatus().equalsIgnoreCase("Password changed")) {
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();

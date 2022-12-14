@@ -18,7 +18,6 @@ public class ReportController {
             return "reportOptions";
         }else{
             String message = (String) oldSession.getAttribute("msg");
-            System.out.println(message);
             model.addAttribute("msg", message);
             return "reportOptions";
         }
@@ -29,7 +28,6 @@ public class ReportController {
         String format = request.getParameter("format");
         String category = request.getParameter("category");
         String fileName = request.getParameter("fileName");
-        System.out.println(format);
         return "redirect:/report/" + format + "/" + category + "?fileName=" + fileName;
     }
 }

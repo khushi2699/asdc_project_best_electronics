@@ -45,6 +45,7 @@ public class AdminRepository {
 
     // Fetching the orders, order items and product details
     public ArrayList<Order> getOrderDetails() {
+        ArrayList<Order> orderList = new ArrayList<>();
         try {
 
             ArrayList<Order> orderList = new ArrayList<>();
@@ -85,7 +86,7 @@ public class AdminRepository {
             }
             return orderList;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return orderList;
         }
     }
 

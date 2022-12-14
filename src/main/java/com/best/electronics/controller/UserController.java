@@ -1,6 +1,5 @@
 package com.best.electronics.controller;
 
-import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.login.ILoginHandler;
@@ -14,7 +13,6 @@ import com.best.electronics.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -107,7 +105,6 @@ public class UserController {
         }else{
             Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
@@ -117,6 +114,7 @@ public class UserController {
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail == null){
                 model.addAttribute("updatedStatus", "Some exception occurred! Please try again!");
+                return "editUserDetails";
             }else{
                 model.addAttribute("firstName", userDetail.get("firstName"));
                 model.addAttribute("lastName", userDetail.get("lastName"));

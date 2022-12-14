@@ -15,12 +15,7 @@ public class GenericPassword implements IInvalidPasswordFormat{
 
     @Override
     public Boolean isPasswordMatching(String password, String confirmPassword) {
-        if(confirmPassword.equalsIgnoreCase(password))
-        {
-            return true;
-        } else {
-            return false;
-        }
+        return confirmPassword.equalsIgnoreCase(password);
 
     }
 }
