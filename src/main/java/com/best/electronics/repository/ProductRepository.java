@@ -86,8 +86,6 @@ public class ProductRepository {
         return "Product Creation Failed! Please try again!";
     }
 
-<<<<<<< src/main/java/com/best/electronics/repository/ProductRepository.java
-=======
     public String createCategory(ProductCategory productCategory) {
         try{
             ArrayList<Object> updatedDetails = new ArrayList<>();
@@ -102,6 +100,4 @@ public class ProductRepository {
         }
         return "Product category Creation Failed! Please try again!";
     }
-    
->>>>>>> src/main/java/com/best/electronics/repository/ProductRepository.java
 }
