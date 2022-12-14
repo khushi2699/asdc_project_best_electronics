@@ -1,6 +1,7 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.exceptions.DataNotFoundException;
 import com.best.electronics.model.Admin;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
@@ -41,12 +42,11 @@ public class AdminRepository {
             return null;
         }
     }
+    // Fetching the orders, order items and product details for sending an order update status email
     public ArrayList<Order> getOrderDetails() {
-        ArrayList<Order> orderList = new ArrayList<>();
         try {
-            ArrayList<Map<String, Object>> orders = databasePersistence.loadData("Select * from OrderDetails", new ArrayList<>());
-            System.out.println("Order Details: " + orders);
-
+            ArrayList<Order> orderList = new ArrayList<>();
+            ArrayList<Map<String, Object>> orders = getAllOrderDetails();
             for (Map<String, Object> order : orders) {
                 Order o = new Order();
                 o.setOrderId((Integer) order.get("orderId"));
@@ -58,13 +58,11 @@ public class AdminRepository {
                 o.setUserId((Integer) order.get("userId"));
 
                 Integer orderId = (Integer) order.get("orderId");
-                ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("Select * from OrderItem where orderId=" + orderId, new ArrayList<>());
+                ArrayList<Map<String, Object>> orderItems = getOrderItems(orderId);
                 ArrayList<Product> product = new ArrayList<>();
-                for(Map<String, Object> orderItem: orderItems) {
+                for (Map<String, Object> orderItem : orderItems) {
                     Integer productId = (Integer) orderItem.get("productId");
-                    ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("Select * from Product where productId=" + productId, new ArrayList<>());
-                    Map<String, Object> productDetail = productDetails.get(0);
-
+                    Map<String, Object> productDetail = getOrderItemsByProduct(productId);
                     Product p = new Product();
                     p.setProductId((Integer) orderItem.get("productId"));
                     p.setProductQuantity((Integer) orderItem.get("quantity"));
@@ -74,25 +72,84 @@ public class AdminRepository {
                 }
                 o.setProducts(product);
                 Integer userId = (Integer) order.get("userId");
-                ArrayList<Map<String, Object>> userInfo = databasePersistence.loadData("Select * from User where userId=" + userId, new ArrayList<>());
-                System.out.println("User Details: " + userInfo);
-                Map<String, Object> user = userInfo.get(0);
-
+                Map<String, Object> user = getUserDetailsByID(userId);
                 User u = new User();
                 u.setFirstName((String) user.get("firstName"));
                 u.setLastName((String) user.get("lastName"));
                 u.setEmailAddress((String) user.get("emailAddress"));
                 u.setAddress((String) user.get("address"));
-
                 o.setUser(u);
                 orderList.add(o);
             }
             return orderList;
-
         } catch (Exception e) {
-            return orderList;
+            throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<Map<String, Object>> getAllOrderDetails() {
+        try {
+            ArrayList<Map<String, Object>> orders = databasePersistence.loadData("{call get_all_order_details()}", new ArrayList<>());
+            System.out.println("Order Details: " + orders);
+            if (orders.isEmpty()) {
+                throw new DataNotFoundException("Unable to load Order Details");
+            } else {
+                return orders;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public ArrayList<Map<String, Object>> getOrderItems(Integer orderId){
+        try {
+            ArrayList<Object> orderIDList = new ArrayList<>();
+            orderIDList.add(orderId);
+            ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("{call get_orderItem_by_order_id(?)}", orderIDList);
+            if (orderItems.isEmpty()) {
+                throw new DataNotFoundException("Unable to load Order Items");
+            } else {
+                return orderItems;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public Map<String, Object> getOrderItemsByProduct(Integer productId) {
+        try {
+            ArrayList<Object> productIDList = new ArrayList<>();
+            productIDList.add(productId);
+            ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("{call get_product_by_product_id(?)}", productIDList);
+            Map<String, Object> productDetail = productDetails.get(0);
+            if (productDetail.isEmpty()) {
+                throw new DataNotFoundException("Unable to load Product List");
+            } else {
+                return productDetail;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String, Object> getUserDetailsByID(Integer userId){
+        try {
+            ArrayList<Object> userIDList = new ArrayList<>();
+            userIDList.add(userId);
+            ArrayList<Map<String, Object>> userInfo = databasePersistence.loadData("{call get_user_details_by_user_id(?)}", userIDList);
+            System.out.println("User Details: " + userInfo);
+            Map<String, Object> user = userInfo.get(0);
+            if (user.isEmpty()) {
+                throw new DataNotFoundException("Unable to load User list");
+            } else {
+                return user;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     private Boolean isUsernameValid(String name) {
         String urlPattern = "^[a-zA-Z]{2,20}$";
