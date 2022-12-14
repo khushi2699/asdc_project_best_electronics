@@ -94,13 +94,13 @@
           <input type="text" id="cardType" name = "cardType" required>
           <br>
           <label for = "cardNumber"> Card Number: </label>
-          <input type = "text" id = "cardNumber" name = "cardNumber" required maxlength="16">
+          <input type = "text" id = "cardNumber" name = "cardNumber" pattern="[0-9]+" required maxlength="16">
           <br>
           <label for = "cardExpiry"> Card Expiry (mm/yy): </label>
-          <input type="text" id="cardExpiry" name = "cardExpiry" required maxlength="5">
+          <input type="text" id="cardExpiry" name = "cardExpiry" pattern="[0-9/]+"required maxlength="5">
           <br>
           <label for = "securityCode"> Security code: </label>
-          <input type="text" id="securityCode" name = "securityCode" required maxlength="3">
+          <input type="text" id="securityCode" name = "securityCode" pattern="[0-9]+" required maxlength="3">
           <button type = "submit" >Add card details</button>
         </form>
       </div>
@@ -120,5 +120,3 @@
 </script>
 </body>
 </html>
-
-
