@@ -9,20 +9,19 @@ import com.best.electronics.security.EncryptPassword;
 public class ChangePasswordHandler implements IChangePassword {
 
     @Override
-    public ForgotPasswordState storeNewPassword(String password, String confirmPassword, String email) throws Exception {
+    public ForgotPasswordState storeNewPassword(String password, String confirmPassword, String email, String type) throws Exception {
 
         IInvalidPasswordFormat iInvalidPasswordFormat = new GenericPassword();
-        ForgotPasswordEmailHandler forgotPasswordEmailHandler = new InvalidPasswordFormatAuthHandler(password, confirmPassword, email, iInvalidPasswordFormat);
-        forgotPasswordEmailHandler.setNextHandler(new PasswordMissMatchAuthHandler(password, confirmPassword, email, iInvalidPasswordFormat));
+        ForgotPasswordEmailHandler forgotPasswordEmailHandler = new InvalidPasswordFormatAuthHandler(iInvalidPasswordFormat);
+        forgotPasswordEmailHandler.setNextHandler(new PasswordMissMatchAuthHandler(iInvalidPasswordFormat));
         ForgotPasswordState forgotPasswordState = forgotPasswordEmailHandler.doHandler(password, confirmPassword, email);
         System.out.println(forgotPasswordState.getStatus());
 
-        if (forgotPasswordState.getStatus().equalsIgnoreCase("Done")) {
+        if (forgotPasswordState.getStatus().equalsIgnoreCase("Password changed")) {
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             password = EncryptPassword.getInstance().encryptString(password);
-
             PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
-            passwordRepository.saveNewpassword(password, email);
+            passwordRepository.saveNewpassword(password, email, type);
             return forgotPasswordState;
 
         }

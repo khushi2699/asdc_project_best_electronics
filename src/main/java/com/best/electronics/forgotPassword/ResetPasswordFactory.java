@@ -10,7 +10,7 @@ public class ResetPasswordFactory {
         switch (medium){
             case "Email":
                 return new SendMailForForgotPassword();
-                default:
+            default:
                     throw new IllegalArgumentException("Unknown medium "+ medium);
 
         }

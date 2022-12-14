@@ -11,11 +11,11 @@ import java.util.Map;
 public class ResetPasswordCombinationValidationHandler implements ICheckCombination {
 
     @Override
-    public boolean checkCombination(Integer token, String email) {
+    public boolean checkCombination(Integer token, String email, String type) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
         try {
-            ArrayList<Map<String, Object>> result = passwordRepository.checkCombination(token,email);
+            ArrayList<Map<String, Object>> result = passwordRepository.checkCombination(token,email,type);
             if(result.size() == 0){
                 return false;
             }
@@ -28,6 +28,5 @@ public class ResetPasswordCombinationValidationHandler implements ICheckCombinat
 
         }
     }
-
 }
 

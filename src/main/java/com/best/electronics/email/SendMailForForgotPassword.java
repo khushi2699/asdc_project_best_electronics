@@ -20,40 +20,41 @@ public class SendMailForForgotPassword implements GetCode {
     MimeMessage mimeMessage = null;
 
     @Override
-    public void generateCode(String medium) throws Exception {
-        emailControl(medium);
+    public void generateCode(String type ,String medium) throws Exception {
+        emailControl(type, medium);
     }
 
-    public void emailControl (String email) throws Exception {
+    public void emailControl (String type, String email) throws Exception {
         GenerateRandomNumber generateRandomNumber = GenerateRandomNumber.getInstance();
         int randomNumber = generateRandomNumber.generateRandomNumber();
         SendMail sendMail = new SendMail();
         newSession = sendMail.setUpProperties();
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
-        ArrayList<Map<String, Object>> result= passwordRepository.getEmailCheck(email);
+        ArrayList<Map<String, Object>> result = new ArrayList<>();
+        result = passwordRepository.getEmailCheck(email,type);
         if(result.size()== 1){
             //checking if email is valid or not, if valid set random token, draft email and send.
-            saveToDB(randomNumber,email);
-            draftEmail(randomNumber,email);
+            saveToDB(randomNumber,email,type);
+            draftEmail(randomNumber,email,type);
             sendMail.setMimeMessage(mimeMessage);
             sendMail.sendMail();
         }
     }
 
-    public MimeMessage draftEmail(int randomNumber, String email) throws MessagingException {
+    public MimeMessage draftEmail(int randomNumber, String email, String type) throws MessagingException {
         String toEmail = email;
         String emailSubject = "Token for new password request";
         mimeMessage = new MimeMessage(newSession);
         mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
         mimeMessage.setSubject(emailSubject);
         mimeMessage.setText("We have received a password change request from your ID. Below is your code: "+randomNumber+". " +
-                "Go to below link to change your password: http://localhost:8080/user/resetPassword");
+                "Go to below link to change your password: http://localhost:8080/"+type.toLowerCase()+"/resetPassword");
         return mimeMessage;
     }
-    private void saveToDB(int randomNumber, String email){
+    private void saveToDB(int randomNumber, String email,String type){
         EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
-        emailControllerPinResetStore.storePinToDB(randomNumber,email);
+        emailControllerPinResetStore.storePinToDB(randomNumber,email,type);
     }
 
 

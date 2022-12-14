@@ -1,18 +1,10 @@
 package com.best.electronics.forgotPassword;
 
 public class PasswordMissMatchAuthHandler extends ForgotPasswordEmailHandler{
-
-    private String password;
-    private String confirmPassword;
-    private String email;
-
     private final IInvalidPasswordFormat iInvalidPasswordFormat;
 
 
-    public PasswordMissMatchAuthHandler(String password, String confirmPassword, String email, IInvalidPasswordFormat iInvalidPasswordFormat){
-        this.password = password;
-        this.confirmPassword = confirmPassword;
-        this.email = email;
+    public PasswordMissMatchAuthHandler(IInvalidPasswordFormat iInvalidPasswordFormat){
         this.iInvalidPasswordFormat = iInvalidPasswordFormat;
     }
 

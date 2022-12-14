@@ -14,33 +14,29 @@ public class Invoker {
     }
 
     public void Add(){
-        if(this.cartItem != null && this.cartItem.getIdentifier().equalsIgnoreCase("Cart")){
-            //here adding product to cart logic
-            CartAddCommand cartAddCommand = new CartAddCommand(this.cartItem);
-            cartAddCommand.execute();
-        }
-        else if (this.wishListItem.getIdentifier().equalsIgnoreCase("Wishlist")){
+        if(this.cartItem == null && this.wishListItem.getIdentifier().equalsIgnoreCase("Wishlist")){
             //here adding product to wishlist logic
-            WishlistAddCommand wishlistAddCommand = new WishlistAddCommand(this.wishListItem);
-            wishlistAddCommand.execute();
-        } else {
+            WishlistAdd wishlistAdd = new WishlistAdd(this.wishListItem);
+            wishlistAdd.execute();
 
+        }
+        else if (this.cartItem.getIdentifier().equalsIgnoreCase("Cart") && this.wishListItem == null){
+            //here adding product to cart logic
+            CartAdd cartAdd = new CartAdd(this.cartItem);
+            cartAdd.execute();
         }
     }
 
     public void Remove(){
-        if(this.cartItem != null && this.cartItem.getIdentifier().equalsIgnoreCase("Cart")){
-            //here removing product from cart logic
-            CartRemoveCommand cartRemoveCommand = new CartRemoveCommand(this.cartItem);
-            cartRemoveCommand.execute();
-        }
-        else if (this.wishListItem.getIdentifier().equalsIgnoreCase("Wishlist")){
+        if(this.cartItem == null && this.wishListItem.getIdentifier().equalsIgnoreCase("Wishlist")){
             //here removing product from wishlist logic
-            WishlistRemoveCommand wishlistRemoveCommand = new WishlistRemoveCommand(this.wishListItem);
-            wishlistRemoveCommand.execute();
-        } else {
-
+            WishlistRemove wishlistRemove = new WishlistRemove(this.wishListItem);
+            wishlistRemove.execute();
+        }
+        else if (this.cartItem.getIdentifier().equalsIgnoreCase("Cart") && this.wishListItem == null){
+            //here removing product from cart logic
+            CartRemove cartRemove = new CartRemove(this.cartItem);
+            cartRemove.execute();
         }
     }
-
 }
