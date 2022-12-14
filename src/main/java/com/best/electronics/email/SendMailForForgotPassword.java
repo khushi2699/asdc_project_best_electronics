@@ -60,5 +60,4 @@ public class SendMailForForgotPassword implements GetCode {
         emailControllerPinResetStore.storePinToDB(randomNumber,email);
     }
 
-
 }

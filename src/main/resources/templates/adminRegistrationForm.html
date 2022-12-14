@@ -73,8 +73,7 @@
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">E-mail: </label>
                                 <div class="col-8">
-                                    <input type="email" th:field="*{emailAddress}" class="form-control" required
-                                           data-error="Please enter valid Email Address!"/>
+                                    <input type="email" th:field="*{emailAddress}" class="form-control" required/>
                                 </div>
                             </div>
 
@@ -83,6 +82,7 @@
                                 <div class="col-8">
                                     <input type="password" th:field="*{password}" id="password" class="form-control"
                                            required/>
+                                    <small class="form-text text-muted">Please use a combination of upper, lower letters and at lease one special character. Minimum 8 length.</small>
                                 </div>
                             </div>
 
