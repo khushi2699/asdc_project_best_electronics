@@ -26,13 +26,15 @@ public class SendReportDelegatorTest {
 
 
     @Test
-    public void smtpEmailSendReportSuccess(){
+    public void smtpEmailSendReportSuccess() {
         Session session = Session.getDefaultInstance(new Properties(), null);
         MimeMessage mimeMessage = new MimeMessage(session);
         try (MockedConstruction<SendMail> mocked = Mockito.mockConstruction(SendMail.class,
-                (mock, context) -> {when(mock.setUpProperties()).thenReturn(Session.getDefaultInstance(new Properties(), null));
+                (mock, context) -> {
+                    when(mock.setUpProperties()).thenReturn(Session.getDefaultInstance(new Properties(), null));
                     doNothing().when(mock).setMimeMessage(mimeMessage);
-                   when(mock.sendMail()).thenReturn(true);})) {
+                    when(mock.sendMail()).thenReturn(true);
+                })) {
             SendReportDelegator sendReportDelegator = new SendReportDelegator();
             ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
             Boolean status = sendReport.sendReport(EMAIL_ADDRESS, FILE);
@@ -42,13 +44,15 @@ public class SendReportDelegatorTest {
     }
 
     @Test
-    public void smtpEmailSendReportFail(){
+    public void smtpEmailSendReportFail() {
         Session session = Session.getDefaultInstance(new Properties(), null);
         MimeMessage mimeMessage = new MimeMessage(session);
         try (MockedConstruction<SendMail> mocked = Mockito.mockConstruction(SendMail.class,
-                (mock, context) -> {when(mock.setUpProperties()).thenReturn(Session.getDefaultInstance(new Properties(), null));
+                (mock, context) -> {
+                    when(mock.setUpProperties()).thenReturn(Session.getDefaultInstance(new Properties(), null));
                     doNothing().when(mock).setMimeMessage(mimeMessage);
-                    doThrow().when(mock).sendMail();})) {
+                    doThrow().when(mock).sendMail();
+                })) {
             SendReportDelegator sendReportDelegator = new SendReportDelegator();
             ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
             Boolean status = sendReport.sendReport(EMAIL_ADDRESS, FILE);

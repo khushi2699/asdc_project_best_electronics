@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 
 public class SessionManager {
 
-    public HttpSession getSession(HttpServletRequest request){
+    public HttpSession getSession(HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             oldSession.invalidate();

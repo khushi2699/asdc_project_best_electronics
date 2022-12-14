@@ -37,12 +37,13 @@ public class SendOrderStatusEmail implements ISendStatusEmail{
         BodyPart messageBodyPart = new MimeBodyPart();
         Multipart multipart = new MimeMultipart();
 
-        String productDetails = null;
+        String productDetails = "";
         ArrayList<Product> products = (ArrayList<Product>) messageDetails.get("products");
-        for(Product productsList: products){
-            productDetails = "Product ID: " +  productsList.getProductId() + "\n\t" + "Product Name: " + productsList.getProductName();
+        for(Product product: products){
+            productDetails = productDetails + "\n\t" + "Product ID: " +  product.getProductId() + "\n\t" + "Product Name: " + product.getProductName();
+
         }
-        messageBodyPart.setText("This message is from BestElectronics. Please find the updates on your order!\n Order ID: "+ messageDetails.get("orderId") + "\n" + "Amount Paid: " +  messageDetails.get("orderAmount") + "\n" + "Date of Order: " + messageDetails.get("orderDateString") + "\n" + "Product Details: \n\t" +  productDetails + "\n" + "We have successfully accepted your order and the order has been placed.");
+        messageBodyPart.setText("This message is from BestElectronics. Please find the updates on your order!\n Order ID: "+ messageDetails.get("orderId") + "\n" + "Amount Paid: " +  messageDetails.get("orderAmount") + "\n" + "Date of Order: " + messageDetails.get("orderDate") + "\n" + "Product Details: \n\t" +  productDetails + "\n" + "We have successfully accepted your order and the order has been placed.");
         multipart.addBodyPart(messageBodyPart);
         mimeMessage.setContent(multipart);
     }

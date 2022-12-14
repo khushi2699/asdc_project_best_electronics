@@ -1,6 +1,7 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
+import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.ProductCategory;
 
@@ -16,21 +17,25 @@ public class ProductRepository {
         this.databasePersistence = databasePersistence;
     }
 
-    public ArrayList<Map<String, Object>> getProductDetails() throws Exception {
-        return databasePersistence.loadData("{call get_product_list()}", new ArrayList<>());
+    public ArrayList<Map<String, Object>> getProductDetails() {
+        try {
+            return databasePersistence.loadData("{call get_product_list()}", new ArrayList<>());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public String updateProductDetails(Product product){
-        try{
+    public String updateProductDetails(Product product) {
+        try {
             ArrayList<Object> updatedDetails = new ArrayList<>();
             updatedDetails.add(product.getProductId());
             updatedDetails.add(product.getProductQuantity());
             updatedDetails.add(product.getProductPrice());
-            if(databasePersistence.saveData("{call update_product_details(?, ?, ?)}", updatedDetails)){
+            if (databasePersistence.saveData("{call update_product_details(?, ?, ?)}", updatedDetails)) {
                 return "Product Details Updated Successfully";
             }
             return "Product details  Updated Failed! Please try again!";
-        }catch(Exception e){
+        } catch (Exception e) {
             return "Product details Updated Failed! Please try again!";
         }
     }
@@ -39,14 +44,14 @@ public class ProductRepository {
         return databasePersistence.loadData("{call get_product_category()}", new ArrayList<>());
     }
 
-    public ArrayList<Map<String, Object>> getProductByCategory(Integer categoryId){
+    public ArrayList<Map<String, Object>> getProductByCategory(Integer categoryId) {
         ArrayList<Map<String, Object>> productDetails = new ArrayList<>();
-        try{
+        try {
             ArrayList<Object> parameters = new ArrayList<>();
             parameters.add(categoryId);
-            productDetails =databasePersistence.loadData("{call get_products_by_category(?)}", parameters);
+            productDetails = databasePersistence.loadData("{call get_products_by_category(?)}", parameters);
             return productDetails;
-        }catch(Exception e){
+        } catch (Exception e) {
             return productDetails;
         }
     }
@@ -54,7 +59,7 @@ public class ProductRepository {
     public ArrayList<Map<String, Object>> getAllProductsAndTheirCategory() throws Exception {
         ArrayList<Map<String, Object>> categories = getProductCategory();
         ArrayList<Map<String, Object>> result = new ArrayList<>();
-        for(Map<String, Object> category: categories){
+        for (Map<String, Object> category : categories) {
             ArrayList<Map<String, Object>> allProductsBasedOnId = getProductByCategory((Integer) category.get("categoryId"));
             Map<String, Object> map = new HashMap<>();
             map.put("categoryId", category.get("categoryId"));
@@ -67,7 +72,7 @@ public class ProductRepository {
     }
 
     public String createProduct(Product product, Integer id) {
-        try{
+        try {
             ArrayList<Object> updatedDetails = new ArrayList<>();
             updatedDetails.add(id);
             updatedDetails.add(product.getProductCode());
@@ -80,7 +85,7 @@ public class ProductRepository {
             if(databasePersistence.saveData("{call create_product(?, ?, ?, ?, ?, ?, ?)}", updatedDetails)){
                 return "Product Created Successfully";
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             return "Product Creation Failed! Please try again!";
         }
         return "Product Creation Failed! Please try again!";

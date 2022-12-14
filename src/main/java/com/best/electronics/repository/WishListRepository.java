@@ -20,7 +20,7 @@ public class WishListRepository {
         return databasePersistence.loadData("{call getWishlistDetails(?)}", tokenDetails);
     }
 
-    public void removeProductFromWishlist(WishListItem wishListItem){
+    public void removeProductFromWishlist(WishListItem wishListItem) {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(wishListItem.getWishListItemIdNumber());
         try {
@@ -32,7 +32,7 @@ public class WishListRepository {
         }
     }
 
-    public void addProductsToWishlist(WishListItem wishListItem){
+    public void addProductsToWishlist(WishListItem wishListItem) {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(wishListItem.getUserId());
         tokenDetails.add(wishListItem.getWishListItemId());

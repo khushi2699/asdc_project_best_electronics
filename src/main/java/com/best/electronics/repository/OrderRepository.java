@@ -13,7 +13,7 @@ public class OrderRepository {
         this.databasePersistence = databasePersistence;
     }
 
-    public void saveOrderItems(ArrayList<Map<String, Object>> cartListResult, int orderId){
+    public void saveOrderItems(ArrayList<Map<String, Object>> cartListResult, int orderId) {
         for (Map<String, Object> stringObjectMap : cartListResult) {
             ArrayList<Object> tokenDetails = new ArrayList<>();
             tokenDetails.add(stringObjectMap.get("quantity"));
@@ -34,7 +34,7 @@ public class OrderRepository {
 
     }
 
-    public void placeOrder(Order order){
+    public void placeOrder(Order order) {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(order.getUserId());
         tokenDetails.add(order.getOrderAmount());
@@ -46,6 +46,20 @@ public class OrderRepository {
             if (databasePersistence.saveData("{call save_to_order_details(?,?,?,?,?,?)}", tokenDetails)) {
                 System.out.println("Done");
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String updateOrderStatus(String orderStatus, Integer orderId){
+        try{
+            ArrayList<Object> updatedDetails = new ArrayList<>();
+            updatedDetails.add(orderStatus);
+            updatedDetails.add(orderId);
+            if (databasePersistence.saveData("{call update_order_status(?, ?)}", updatedDetails)) {
+                return "Order Status Updated Successfully";
+            }
+            return "Order Status Update Failed! Please try again!";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

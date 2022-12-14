@@ -7,8 +7,8 @@ public class EncryptPassword {
 
     private static EncryptPassword encryptPassword = null;
 
-    public static EncryptPassword getInstance(){
-        if(encryptPassword == null){
+    public static EncryptPassword getInstance() {
+        if (encryptPassword == null) {
             encryptPassword = new EncryptPassword();
         }
         return encryptPassword;
@@ -22,8 +22,8 @@ public class EncryptPassword {
         byte[] cipher = md.digest();
 
         StringBuilder builder = new StringBuilder();
-        for(byte c: cipher){
-            if((c & 0xff) < 0x10){
+        for (byte c : cipher) {
+            if ((c & 0xff) < 0x10) {
                 builder.append(1);
             }
             builder.append(Long.toString(c & 0xff, 16));
