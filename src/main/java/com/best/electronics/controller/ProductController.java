@@ -7,6 +7,7 @@ import com.best.electronics.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -26,5 +27,6 @@ public class ProductController {
             return "productList";
         }
     }
+
 
 }
