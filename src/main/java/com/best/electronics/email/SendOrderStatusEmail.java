@@ -35,7 +35,7 @@ public class SendOrderStatusEmail implements ISendOrderStatusEmail{
         for(Product productslist:products){
             productDetails = "Product ID: " +  productslist.getProductId() + "\n\t" + "Product Name: " + productslist.getProductName();
         }
-        messageBodyPart.setText("This message is from BestElectronics. Please find the updates on your order!\n Order ID: "+ orderId + "\n" + "Amount Paid: " +  orderAmount + "\n" + "Date of Order: " + orderDateString + "\n" + "Product Details: \n\t" +  productDetails);
+        messageBodyPart.setText("This message is from BestElectronics. Please find the updates on your order!\n Order ID: "+ orderId + "\n" + "Amount Paid: " +  orderAmount + "\n" + "Date of Order: " + orderDateString + "\n" + "Product Details: \n\t" +  productDetails + "\n" + "We have successfully accepted your order and the order has been placed.");
         multipart.addBodyPart(messageBodyPart);
         mimeMessage.setContent(multipart);
     }
