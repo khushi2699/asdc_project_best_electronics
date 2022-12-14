@@ -14,12 +14,13 @@ public class GetTotalOfProduct {
         return getTotalOfProduct;
     }
 
+    //below function will calculate total of the products
     public double calculateTotalOfProducts(ArrayList<Map<String, Object>> cartListResult){
         double totalsum = 0;
-        for(int i = 0 ; i < cartListResult.size(); i++){
-            int quantity = (int) cartListResult.get(i).get("quantity");
+        for (Map<String, Object> stringObjectMap : cartListResult) {
+            int quantity = (int) stringObjectMap.get("quantity");
             System.out.println("Quantity " + quantity);
-            double productPrice = (double) cartListResult.get(i).get("productPrice");
+            double productPrice = (double) stringObjectMap.get("productPrice");
             double productsum = quantity * productPrice;
             totalsum = totalsum + productsum;
         }

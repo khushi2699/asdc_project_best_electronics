@@ -1,5 +1,4 @@
 package com.best.electronics.forgotPassword;
-
 public interface IInvalidPasswordFormat {
     Boolean isValidPassword(String password);
 

@@ -184,18 +184,9 @@ public class CartController {
                 } else {
                     //placing order here
                     OrderRepository orderRepository = new OrderRepository(databasePersistence);
-
-                    //adding data to order Item generating the code and then adding it into the orderDetails table
                     orderRepository.placeOrder(order);
-                    //order added to OrderDetails
-
-                    //fetching latest order for user to add data in orderItem
                     int latestOrderDetailsId = cartRepository.getOrderId(id);
-                    //using the extracted orderDetailsID to add orderItem
                     orderRepository.saveOrderItems(cartListResult, latestOrderDetailsId);
-                    //Order Items added to the db
-
-                    //Removing cart Items
                     cartRepository.removeFullCart(id);
                 }
             }
