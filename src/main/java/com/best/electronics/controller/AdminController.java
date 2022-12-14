@@ -64,7 +64,6 @@ public class AdminController {
             AdminProperties adminProperties = new AdminProperties();
             if(oldSession.getAttribute("id") == adminProperties.getId()){
                 model.addAttribute("isSuperAdmin", true);
-                System.out.println("Hello");
             }
 
         }
@@ -80,7 +79,6 @@ public class AdminController {
             AdminProperties adminProperties = new AdminProperties();
             if(oldSession.getAttribute("id") == adminProperties.getId()){
                 model.addAttribute("isSuperAdmin", true);
-                System.out.println("Hello");
             }
             return "adminLandingPage";
         }
@@ -176,15 +174,10 @@ public class AdminController {
         IDatabasePersistence db = new MySQLDatabasePersistence();
         ProductRepository productRepository = new ProductRepository(db);
         ArrayList<Map<String, Object>> productCategoryList = productRepository.getAllProductsAndTheirCategory();
-//        ArrayList<Map<String, Object>> productList = productRepository.getProductDetails();
         if(productCategoryList.isEmpty()){
             throw new NullPointerException("Products List could not be fetched from the database");
         }else {
-
-//            model.addAttribute("productcategory", new ProductCategory());
             model.addAttribute("listProductCategory", productCategoryList);
-//            model.addAttribute("product", new Product());
-//            model.addAttribute("listProducts", productList);
             return "adminCategoryProduct";
         }
     }
