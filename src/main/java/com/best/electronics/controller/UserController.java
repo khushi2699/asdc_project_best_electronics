@@ -105,7 +105,6 @@ public class UserController {
         }else{
             Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
@@ -115,6 +114,7 @@ public class UserController {
             Map<String, Object> userDetail = userRepository.getUserDetailsById(id);
             if(userDetail == null){
                 model.addAttribute("updatedStatus", "Some exception occurred! Please try again!");
+                return "editUserDetails";
             }else{
                 model.addAttribute("firstName", userDetail.get("firstName"));
                 model.addAttribute("lastName", userDetail.get("lastName"));

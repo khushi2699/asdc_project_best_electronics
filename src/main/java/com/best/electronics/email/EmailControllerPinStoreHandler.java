@@ -11,13 +11,7 @@ public class EmailControllerPinStoreHandler implements EmailControllerPinResetSt
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
         try {
-                if(passwordRepository.storePinToDB(token,email,type)){
-                    return true;
-                }
-                else {
-                    return false;
-                }
-
+            return passwordRepository.storePinToDB(token, email, type);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

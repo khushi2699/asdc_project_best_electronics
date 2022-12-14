@@ -23,8 +23,7 @@ public class SendOrderStatusEmail implements ISendStatusEmail{
             MimeMessage mimeMessage = new MimeMessage(session);
             draftEmail(mimeMessage, emailAddress, messageDetails);
             sendMail.setMimeMessage(mimeMessage);
-            sendMail.sendMail();
-            return true;
+            return sendMail.sendMail();
         } catch (Exception e){
             return false;
         }
