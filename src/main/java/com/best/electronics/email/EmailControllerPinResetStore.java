@@ -4,6 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface EmailControllerPinResetStore {
 
-    public void storePinToDB(Integer token, String email);
+    public boolean storePinToDB(Integer token, String email,String type);
 
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 
+@SpringBootTest
 public class SendReportDelegatorTest {
 
     public static final String EMAIL_ADDRESS = "test@gmail.com";
@@ -30,7 +32,7 @@ public class SendReportDelegatorTest {
         try (MockedConstruction<SendMail> mocked = Mockito.mockConstruction(SendMail.class,
                 (mock, context) -> {when(mock.setUpProperties()).thenReturn(Session.getDefaultInstance(new Properties(), null));
                     doNothing().when(mock).setMimeMessage(mimeMessage);
-                    doNothing().when(mock).sendMail();})) {
+                   when(mock.sendMail()).thenReturn(true);})) {
             SendReportDelegator sendReportDelegator = new SendReportDelegator();
             ISendReport sendReport = sendReportDelegator.identifySender("SMTP");
             Boolean status = sendReport.sendReport(EMAIL_ADDRESS, FILE);

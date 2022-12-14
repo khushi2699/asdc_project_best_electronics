@@ -29,11 +29,12 @@ public class SendMail {
         return newSession;
     }
 
-    public void sendMail() throws MessagingException {
+    public boolean sendMail() throws MessagingException {
         SendMailProperties sendMailProperties = new SendMailProperties();
         Transport transport = newSession.getTransport("smtp");
         transport.connect(sendMailProperties.getEmailHost(), sendMailProperties.getFromUser(), sendMailProperties.getFromUserPassword());
         transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
         transport.close();
+        return true;
     }
 }
