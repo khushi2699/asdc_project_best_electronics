@@ -79,7 +79,6 @@ public class CartController {
                 } else {
                     GetTotalOfProduct getTotalOfProduct = GetTotalOfProduct.getInstance();
                     double totalsum = getTotalOfProduct.calculateTotalOfProducts(cartListResult);
-                    System.out.println("Total sum "+ totalsum);
                     model.addAttribute("sumofcart",totalsum);
                     model.addAttribute("cart", new Product());
                     model.addAttribute("listCart", cartListResult);

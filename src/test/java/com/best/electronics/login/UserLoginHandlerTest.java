@@ -3,20 +3,16 @@ package com.best.electronics.login;
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.UserMockDatabasePersistence;
 import com.best.electronics.model.User;
-import com.best.electronics.session.SessionManager;
+import com.best.electronics.state.State;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class UserLoginHandlerTest {
@@ -41,9 +37,9 @@ public class UserLoginHandlerTest {
         User user = new User();
         user.setEmailAddress("p@gmail.com");
         user.setPassword("Newuser@123");
-        LoginState loginState = authHandler.doHandler(user, "user");
+        State loginState = authHandler.doHandler(user, "user");
         Assertions.assertEquals(loginState.getNextPage(), "userLandingPage");
-        Assertions.assertEquals(loginState.getLoginStatus(), "Successfully logged in");
+        Assertions.assertEquals(loginState.getStatus(), "Successfully logged in");
     }
 
     @Test
@@ -54,9 +50,9 @@ public class UserLoginHandlerTest {
         User user = new User();
         user.setEmailAddress("g@gmail.com");
         user.setPassword("Newuser@123");
-        LoginState loginState = authHandler.doHandler(user, "user");
+        State loginState = authHandler.doHandler(user, "user");
         Assertions.assertEquals(loginState.getNextPage(), "userLogin");
-        Assertions.assertEquals(loginState.getLoginStatus(), "EmailAddress does not Exists!");
+        Assertions.assertEquals(loginState.getStatus(), "EmailAddress does not Exists!");
     }
 
     @Test
@@ -67,9 +63,9 @@ public class UserLoginHandlerTest {
         User user = new User();
         user.setEmailAddress("p@gmail.com");
         user.setPassword("Newuser@125");
-        LoginState loginState = authHandler.doHandler(user, "user");
+        State loginState = authHandler.doHandler(user, "user");
         Assertions.assertEquals(loginState.getNextPage(), "userLogin");
-        Assertions.assertEquals(loginState.getLoginStatus(), "Password is incorrect!");
+        Assertions.assertEquals(loginState.getStatus(), "Password is incorrect!");
     }
 
     @Test
@@ -81,8 +77,8 @@ public class UserLoginHandlerTest {
         User user = new User();
         user.setEmailAddress("p@gmail.com");
         user.setPassword("Newuser@123");
-        LoginState loginState = authHandler.doHandler(user, "user");
+        State loginState = authHandler.doHandler(user, "user");
         Assertions.assertEquals(loginState.getNextPage(), "userLogin");
-        Assertions.assertEquals(loginState.getLoginStatus(), "Unexpected exception occurred! Please try again!");
+        Assertions.assertEquals(loginState.getStatus(), "Unexpected exception occurred! Please try again!");
     }
 }

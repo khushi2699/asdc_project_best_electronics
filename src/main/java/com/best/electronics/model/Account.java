@@ -18,6 +18,10 @@ public abstract class Account {
 
     public abstract String getEmailAddress();
 
+    public abstract String getGender();
+
+    public abstract void setGender(String gender);
+
     public abstract void setPassword(String password);
 
     public abstract String getPassword();

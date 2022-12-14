@@ -22,8 +22,8 @@
         <div class="ml-auto">
             <a class="nav-link nav-link active" href="/admin/orderDetails">Orders</a>
         </div>
-        <div class="ml-auto">
-            <a class="nav-link nav-link active" href="/admin/profile">Profile</a>
+        <div class="ml-auto" th:if="${isSuperAdmin} != null">
+            <a class="nav-link nav-link active" href="/admin/register">Register New Admin</a>
         </div>
         <div class="ml-auto">
             <a class="nav-link nav-link active" href="/reports">Generate & Send Report</a>
@@ -37,10 +37,13 @@
 
 <div class="container p-2 text-center">
     <div class="jumbotron">
+        <p th:if="${isSuperAdmin} != null" class="lead" style="color:red">Hello Super Admin</p>
+        <p th:if="${isSuperAdmin} == null" class="lead" style="color:red">Hello Admin</p>
         <h1 class="display-4">Welcome to BestElectronics Admin Panel!</h1>
         <p class="lead">One place to find all your Users, Products and Orders!...</p>
         <hr class="my-4">
         <h3><a class="btn btn-primary btn-lg"  th:href="@{/admin/profile}" role="button">My Account</a></h3>
+        <h3 th:if="${isSuperAdmin} != null"><a class="btn btn-primary btn-lg"  th:href="@{/admin/adminList}" role="button">View All Admins</a></h3>
     </div>
 </div>
 

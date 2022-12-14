@@ -10,6 +10,8 @@ public class Admin extends Account{
 
     private String emailAddress;
 
+    private String gender;
+
     private String password;
 
     private String confirmPassword;
@@ -47,6 +49,16 @@ public class Admin extends Account{
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    @Override
+    public String getGender() {
+        return gender;
+    }
+
+    @Override
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     @Override

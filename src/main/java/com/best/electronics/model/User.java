@@ -15,36 +15,45 @@ public class User extends Account{
     public Integer getAccountId() {
         return userId;
     }
+
     @Override
     public void setAccountId(Integer userId) {
         this.userId = userId;
     }
+
     @Override
     public String getFirstName() {
         return firstName;
     }
+
     @Override
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getEmailAddress() {
         return emailAddress;
     }
+
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
     @Override
     public String getPassword() {return password;}
     @Override
     public void setPassword(String password) {
         this.password = password;
     }
+
     @Override
     public String getConfirmPassword() {
         return confirmPassword;
@@ -53,21 +62,29 @@ public class User extends Account{
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
     public String getDateOfBirth() {
         return dateOfBirth;
     }
+
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
+    @Override
     public String getGender() {
         return gender;
     }
+
+    @Override
     public void setGender(String gender) {
         this.gender = gender;
     }
+
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -75,6 +92,7 @@ public class User extends Account{
     public Integer getToken() {
         return token;
     }
+
     @Override
     public void setToken(Integer token) {
         this.token = token;
