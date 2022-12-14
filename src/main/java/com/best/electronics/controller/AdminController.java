@@ -154,7 +154,6 @@ public class AdminController {
             return "adminLogin";
         }else{
             String updatedStatus = (String) oldSession.getAttribute("msg");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("msg");
             }
@@ -177,7 +176,6 @@ public class AdminController {
         }else{
             String updatedStatus = (String) oldSession.getAttribute("msg");
             Integer id = (Integer) oldSession.getAttribute("id");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("msg");
             }
@@ -261,7 +259,6 @@ public class AdminController {
         }else{
             Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
@@ -306,7 +303,6 @@ public class AdminController {
             return "adminProductList";
         }else{
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
@@ -344,7 +340,6 @@ public class AdminController {
             return "adminLogin";
         }else{
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }
@@ -372,7 +367,6 @@ public class AdminController {
             return "adminCategoryProduct";
         } else {
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if (updatedStatus != null) {
                 oldSession.removeAttribute("updatedStatus");
             }
@@ -386,8 +380,6 @@ public class AdminController {
         if(oldSession == null){
             return "adminCategoryProducts";
         }else{
-            Integer id = (Integer) oldSession.getAttribute("id");
-            System.out.println("This is category id from /addproduct"+id);
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ProductRepository productRepository = new ProductRepository(databasePersistence);
             String message = productRepository.createCategory(productCategory);
