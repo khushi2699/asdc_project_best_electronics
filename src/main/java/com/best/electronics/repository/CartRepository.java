@@ -36,7 +36,7 @@ public class CartRepository {
         return databasePersistence.loadData("{call getCardDetails(?)}", tokenDetails);
     }
 
-    public void removeProductFromCart(CartItem cartItem){
+    public void removeProductFromCart(CartItem cartItem) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(cartItem.getCartItemId());
@@ -50,7 +50,7 @@ public class CartRepository {
         }
     }
 
-    public void addProductsToCart(CartItem cartItem){
+    public void addProductsToCart(CartItem cartItem) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(cartItem.getUserId());
@@ -66,7 +66,7 @@ public class CartRepository {
         }
     }
 
-    public void removeFullCart(Integer id){
+    public void removeFullCart(Integer id) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(id);
@@ -79,7 +79,7 @@ public class CartRepository {
         }
     }
 
-    public void saveCard(CardDetails cardDetails){
+    public void saveCard(CardDetails cardDetails) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(cardDetails.getCardName());

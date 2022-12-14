@@ -13,7 +13,7 @@ public class EncryptPasswordTest {
     private static EncryptPassword encryptPassword;
 
     @BeforeAll
-    public static void init(){
+    public static void init() {
         encryptPassword = EncryptPassword.getInstance();
     }
 
