@@ -2,7 +2,6 @@ package com.best.electronics.email;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
-import com.best.electronics.email.ICheckCombination;
 import com.best.electronics.repository.PasswordRepository;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class ResetPasswordCombinationValidationHandler implements ICheckCombinat
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-
         }
     }
 }

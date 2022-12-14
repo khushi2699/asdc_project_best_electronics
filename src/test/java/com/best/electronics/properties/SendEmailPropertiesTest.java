@@ -11,7 +11,7 @@ public class SendEmailPropertiesTest {
         SendMailProperties sendMailProperties = new SendMailProperties();
 
         Assertions.assertEquals("smtp.gmail.com", sendMailProperties.getEmailHost());
-        Assertions.assertEquals("khshah2699@gmail.com", sendMailProperties.getFromUser());
-        Assertions.assertEquals("negftgxahztglvpm", sendMailProperties.getFromUserPassword());
+        Assertions.assertEquals("best.electronics.dal@gmail.com", sendMailProperties.getFromUser());
+        Assertions.assertEquals("qwxgvjnfuaalsewc", sendMailProperties.getFromUserPassword());
     }
 }

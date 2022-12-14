@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 
+@SpringBootTest
 public class SendReportDelegatorTest {
 
     public static final String EMAIL_ADDRESS = "test@gmail.com";

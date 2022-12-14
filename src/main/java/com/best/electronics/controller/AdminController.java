@@ -2,6 +2,12 @@ package com.best.electronics.controller;
 
 import com.best.electronics.database.IDatabasePersistence;
 import com.best.electronics.database.MySQLDatabasePersistence;
+import com.best.electronics.email.ChangePasswordHandler;
+import com.best.electronics.email.ISendStatusEmail;
+import com.best.electronics.email.ResetPasswordCombinationValidationHandler;
+import com.best.electronics.forgotPassword.ForgotPasswordState;
+import com.best.electronics.forgotPassword.GetCode;
+import com.best.electronics.forgotPassword.ResetPasswordFactory;
 import com.best.electronics.login.AdminLoginHandler;
 import com.best.electronics.login.ILoginHandler;
 import com.best.electronics.properties.AdminProperties;
@@ -16,15 +22,10 @@ import com.best.electronics.register.IRegisterHandler;
 import com.best.electronics.repository.AdminRepository;
 import com.best.electronics.repository.ProductRepository;
 import com.best.electronics.repository.UserRepository;
-import com.best.electronics.email.ISendOrderStatusEmail;
 import com.best.electronics.email.SendOrderStatusEmail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -359,11 +360,11 @@ public class AdminController {
     @PostMapping("/addProduct")
     public String processAddProduct(Product product, HttpServletRequest request) {
         HttpSession oldSession = request.getSession(false);
-        Integer id = (Integer) oldSession.getAttribute("id");
-        System.out.println("This is category id from /addproduct"+id);
         if(oldSession == null){
             return "adminCategoryProducts";
         }else{
+            Integer id = (Integer) oldSession.getAttribute("id");
+            System.out.println("This is category id from /addproduct"+id);
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             ProductRepository productRepository = new ProductRepository(databasePersistence);
             String message = productRepository.createProduct(product, id);
