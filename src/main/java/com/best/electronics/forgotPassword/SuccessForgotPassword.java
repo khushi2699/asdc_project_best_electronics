@@ -12,7 +12,7 @@ public class SuccessForgotPassword extends ForgotPasswordState{
 
     @Override
     public void setNextPage() {
-        nextPage = "redirect:/user/login";
+        nextPage = "changePassword";
 
     }
 

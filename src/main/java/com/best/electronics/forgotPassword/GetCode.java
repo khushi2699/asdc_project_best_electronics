@@ -1,5 +1,5 @@
 package com.best.electronics.forgotPassword;
 
 public interface GetCode {
-    void generateCode(String medium);
+    void generateCode(String type, String medium) throws Exception;
 }

@@ -1,5 +1,6 @@
 package com.best.electronics.email;
 
 public interface ICheckCombination {
-    boolean checkCombination(Integer token, String email);
+    public boolean checkCombination(Integer token, String email, String type);
+
 }

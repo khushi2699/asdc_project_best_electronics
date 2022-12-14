@@ -33,16 +33,16 @@ public class ForgotPasswordController {
     public String enterNewPassword(@ModelAttribute User user, Model model) throws Exception {
         model.addAttribute("login", new User());
         ChangePasswordHandler changePasswordHandler = new ChangePasswordHandler();
-        ForgotPasswordState forgotPasswordState = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress());
+        ForgotPasswordState forgotPasswordState = changePasswordHandler.storeNewPassword(user.getPassword(), user.getConfirmPassword(), user.getEmailAddress(), "User");
         model.addAttribute("msg", forgotPasswordState.getStatus());
         return forgotPasswordState.getNextPage();
     }
     @PostMapping("/getCode")
-    public String getCode(@ModelAttribute User user, Model model){
+    public String getCode(@ModelAttribute User user, Model model) throws Exception {
         //implementing an open approach to send codes through either email or text message. But implementation is of email
         ResetPasswordFactory resetPasswordFactory = new ResetPasswordFactory();
         GetCode getCode = resetPasswordFactory.sendCodeThrough("Email");
-        getCode.generateCode(user.getEmailAddress());
+        getCode.generateCode("User",user.getEmailAddress());
 
         model.addAttribute("login", new User());
         model.addAttribute("msg", "Password reset link and token will be sent to you email if the email exists!");
@@ -54,13 +54,13 @@ public class ForgotPasswordController {
         ResetPasswordCombinationValidationHandler resetPasswordCombinationValidationHandler = new ResetPasswordCombinationValidationHandler();
         model.addAttribute("login", new User());
         model.addAttribute("emailAddress", user.getEmailAddress());
-        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress())){
+        if(resetPasswordCombinationValidationHandler.checkCombination(user.getToken(), user.getEmailAddress(),"User")){
             return "changePassword";
         }
         else {
             model.addAttribute("msg","Please enter correct combination");
             return "resetPassword";
-
         }
+
     }
 }

@@ -10,11 +10,17 @@ import java.util.ArrayList;
 public class EmailControllerPinStoreHandler implements EmailControllerPinResetStore {
 
     @Override
-    public void storePinToDB(Integer token, String email) {
+    public boolean storePinToDB(Integer token, String email,String type) {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         PasswordRepository passwordRepository = new PasswordRepository(databasePersistence);
         try {
-            passwordRepository.storePinToDB(token,email);
+                if(passwordRepository.storePinToDB(token,email,type)){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
