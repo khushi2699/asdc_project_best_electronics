@@ -105,7 +105,6 @@ public class UserController {
         }else{
             Integer id = (Integer) oldSession.getAttribute("id");
             String updatedStatus = (String) oldSession.getAttribute("updatedStatus");
-            System.out.println(updatedStatus);
             if(updatedStatus != null){
                 oldSession.removeAttribute("updatedStatus");
             }

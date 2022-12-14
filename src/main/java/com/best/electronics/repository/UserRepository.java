@@ -24,7 +24,6 @@ public class UserRepository {
             ArrayList<Object> userIdList = new ArrayList<>();
             userIdList.add(userId);
             ArrayList<Map<String, Object>> orders = databasePersistence.loadData("{call get_order_details(?)}", userIdList);
-            System.out.println("Order Details: " + orders);
             for(Map<String, Object> order: orders){
                 Order o = new Order();
                 o.setOrderId((Integer) order.get("orderId"));
