@@ -45,8 +45,10 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
         }catch (Exception e){
             System.out.println("Exception occurred while executing query: " + e.getMessage());
         } finally{
-            smt.close();
-            conn.close();
+            if(smt != null){
+                smt.close();
+                conn.close();
+            }
         }
         return result;
     }
@@ -74,8 +76,10 @@ public class MySQLDatabasePersistence implements IDatabasePersistence{
             System.out.println("Exception occurred while executing query: " + e.getMessage());
             return false;
         } finally{
-            smt.close();
-            conn.close();
+            if(smt != null){
+                smt.close();
+                conn.close();
+            }
         }
         return false;
     }

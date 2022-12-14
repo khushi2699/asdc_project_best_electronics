@@ -10,8 +10,6 @@ public class OrderItem {
 
     private Double productPrice;
 
-    private Double subTotal;
-
     private Order order;
 
     public Integer getOrderItemId() {
@@ -52,13 +50,5 @@ public class OrderItem {
 
     public void setProductPrice(Double productPrice) {
         this.productPrice = productPrice;
-    }
-
-    public Double getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(Double subTotal) {
-        this.subTotal = subTotal;
     }
 }

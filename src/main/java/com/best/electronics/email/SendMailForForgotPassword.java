@@ -12,7 +12,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Random;
 
 public class SendMailForForgotPassword implements GetCode {
 
@@ -20,8 +19,13 @@ public class SendMailForForgotPassword implements GetCode {
     MimeMessage mimeMessage = null;
 
     @Override
-    public void generateCode(String medium) throws Exception {
-        emailControl(medium);
+    public void generateCode(String medium) {
+        try{
+            emailControl(medium);
+        }catch (Exception e){
+            System.out.println("Some exception occurred while generating code");
+        }
+
     }
 
     public void emailControl (String email) throws Exception {
@@ -42,15 +46,15 @@ public class SendMailForForgotPassword implements GetCode {
     }
 
     public MimeMessage draftEmail(int randomNumber, String email) throws MessagingException {
-        String toEmail = email;
         String emailSubject = "Token for new password request";
         mimeMessage = new MimeMessage(newSession);
-        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
         mimeMessage.setSubject(emailSubject);
         mimeMessage.setText("We have received a password change request from your ID. Below is your code: "+randomNumber+". " +
                 "Go to below link to change your password: http://localhost:8080/user/resetPassword");
         return mimeMessage;
     }
+
     private void saveToDB(int randomNumber, String email){
         EmailControllerPinResetStore emailControllerPinResetStore = new EmailControllerPinStoreHandler();
         emailControllerPinResetStore.storePinToDB(randomNumber,email);

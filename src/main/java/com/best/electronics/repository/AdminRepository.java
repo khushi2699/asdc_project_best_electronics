@@ -1,13 +1,13 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.exceptions.DataNotFoundException;
 import com.best.electronics.model.Admin;
 import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,31 +88,25 @@ public class AdminRepository {
     }
 
     public ArrayList<Map<String, Object>> getAllOrderDetails() {
+        ArrayList<Map<String, Object>> orders = new ArrayList<>();
         try {
-            ArrayList<Map<String, Object>> orders = databasePersistence.loadData("{call get_all_order_details()}", new ArrayList<>());
+            orders = databasePersistence.loadData("{call get_all_order_details()}", new ArrayList<>());
             System.out.println("Order Details: " + orders);
-            if (orders.isEmpty()) {
-                throw new DataNotFoundException("Unable to load Order Details");
-            } else {
-                return orders;
-            }
+            return orders;
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            return orders;
         }
     }
 
     public ArrayList<Map<String, Object>> getOrderItems(Integer orderId){
+        ArrayList<Map<String, Object>> orderItems = new ArrayList<>();
         try {
             ArrayList<Object> orderIDList = new ArrayList<>();
             orderIDList.add(orderId);
-            ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("{call get_orderItem_by_order_id(?)}", orderIDList);
-            if (orderItems.isEmpty()) {
-                throw new DataNotFoundException("Unable to load Order Items");
-            } else {
-                return orderItems;
-            }
+            orderItems = databasePersistence.loadData("{call get_orderItem_by_order_id(?)}", orderIDList);
+            return orderItems;
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            return orderItems;
         }
     }
 
@@ -121,15 +115,13 @@ public class AdminRepository {
             ArrayList<Object> productIDList = new ArrayList<>();
             productIDList.add(productId);
             ArrayList<Map<String, Object>> productDetails = databasePersistence.loadData("{call get_product_by_product_id(?)}", productIDList);
-            Map<String, Object> productDetail = productDetails.get(0);
-            if (productDetail.isEmpty()) {
-                throw new DataNotFoundException("Unable to load Product List");
-            } else {
-                return productDetail;
+            if(productDetails.isEmpty()){
+                return new HashMap<>();
+            }else{
+                return productDetails.get(0);
             }
-
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return new HashMap<>();
         }
     }
 
@@ -138,15 +130,13 @@ public class AdminRepository {
             ArrayList<Object> userIDList = new ArrayList<>();
             userIDList.add(userId);
             ArrayList<Map<String, Object>> userInfo = databasePersistence.loadData("{call get_user_details_by_user_id(?)}", userIDList);
-            System.out.println("User Details: " + userInfo);
-            Map<String, Object> user = userInfo.get(0);
-            if (user.isEmpty()) {
-                throw new DataNotFoundException("Unable to load User list");
-            } else {
-                return user;
+            if(userInfo.isEmpty()){
+                return new HashMap<>();
+            }else{
+                return userInfo.get(0);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return new HashMap<>();
         }
     }
 

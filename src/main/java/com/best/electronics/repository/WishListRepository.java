@@ -1,13 +1,13 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.database.MySQLDatabasePersistence;
 import com.best.electronics.model.WishListItem;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class WishListRepository {
+
     private final IDatabasePersistence databasePersistence;
 
     public WishListRepository(IDatabasePersistence databasePersistence) {
@@ -15,14 +15,12 @@ public class WishListRepository {
     }
 
     public ArrayList<Map<String, Object>> getWishListDetails(int id) throws Exception {
-        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(id);
         return databasePersistence.loadData("{call getWishlistDetails(?)}", tokenDetails);
     }
 
     public void removeProductFromWishlist(WishListItem wishListItem){
-        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(wishListItem.getWishListItemIdNumber());
         try {
@@ -35,7 +33,6 @@ public class WishListRepository {
     }
 
     public void addProductsToWishlist(WishListItem wishListItem){
-        IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(wishListItem.getUserId());
         tokenDetails.add(wishListItem.getWishListItemId());

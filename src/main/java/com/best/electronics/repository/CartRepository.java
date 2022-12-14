@@ -23,20 +23,17 @@ public class CartRepository {
 
     public Integer getOrderId(int id) throws Exception {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> result = new ArrayList<>();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(id);
-        result = databasePersistence.loadData("{call getOrderId(?)}", tokenDetails);
+        ArrayList<Map<String, Object>> result = databasePersistence.loadData("{call getOrderId(?)}", tokenDetails);
         return (Integer) result.get(0).get("orderId");
     }
 
     public ArrayList<Map<String, Object>> getCardDetails(int userId) throws Exception {
         IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
-        ArrayList<Map<String, Object>> result = new ArrayList<>();
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(userId);
-        result = databasePersistence.loadData("{call getCardDetails(?)}", tokenDetails);
-        return result;
+        return databasePersistence.loadData("{call getCardDetails(?)}", tokenDetails);
     }
 
     public void removeProductFromCart(CartItem cartItem){
