@@ -48,7 +48,6 @@ public class AdminRepository {
         ArrayList<Order> orderList = new ArrayList<>();
         try {
 
-            ArrayList<Order> orderList = new ArrayList<>();
             ArrayList<Map<String, Object>> orders = getAllOrderDetails();
             for (Map<String, Object> order : orders) {
                 Order o = new Order();

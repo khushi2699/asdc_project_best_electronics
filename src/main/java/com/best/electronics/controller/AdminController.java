@@ -17,6 +17,7 @@ import com.best.electronics.model.Order;
 import com.best.electronics.model.ProductCategory;
 import com.best.electronics.properties.AdminProperties;
 import com.best.electronics.register.AdminRegisterHandler;
+import com.best.electronics.repository.OrderRepository;
 import com.best.electronics.state.State;
 import com.best.electronics.login.UserLoginHandler;
 import com.best.electronics.register.IRegisterHandler;
@@ -403,9 +404,6 @@ public class AdminController {
             IDatabasePersistence databasePersistence = new MySQLDatabasePersistence();
             OrderRepository orderRepository = new OrderRepository(databasePersistence);
             orderRepository.updateOrderStatus(orderStatus, orderId);
-            System.out.println("heloooooooIIIII");
-            System.out.println(orderId);
-
             AdminRepository adminRepository = new AdminRepository(databasePersistence);
             ArrayList<Product> products = adminRepository.getProductDetails(orderId);
             ISendStatusEmail email = new SendOrderStatusEmail();
@@ -415,8 +413,6 @@ public class AdminController {
             messageDetails.put("orderDate", orderDate);
             messageDetails.put("orderStatus", orderStatus);
             messageDetails.put("products", products);
-            System.out.println("helooooooo");
-            System.out.println(messageDetails);
             if (email.sendEmail(emailAddress, messageDetails)) {
                 oldSession.setAttribute("msg", "Email is successfully sent!");
                 return "redirect:/admin/orderDetails";
