@@ -1,9 +1,9 @@
 package com.best.electronics.email;
 
 import com.best.electronics.repository.PasswordRepository;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +13,10 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class EmailControllerPinStoreHandlerTest {
 
-    EmailControllerPinStoreHandler emailControllerPinStoreHandler;
+    static EmailControllerPinStoreHandler emailControllerPinStoreHandler;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         emailControllerPinStoreHandler = new EmailControllerPinStoreHandler();
     }
     @Test

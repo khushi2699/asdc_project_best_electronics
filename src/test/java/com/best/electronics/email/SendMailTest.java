@@ -1,9 +1,9 @@
 package com.best.electronics.email;
 
 import com.best.electronics.properties.EmailProperties;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import javax.mail.Session;
 import java.util.Properties;
@@ -12,10 +12,10 @@ import java.util.Properties;
 @SpringBootTest
 public class SendMailTest {
 
-    SendMail sendMail;
+    static SendMail sendMail;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         sendMail = new SendMail();
     }
 
