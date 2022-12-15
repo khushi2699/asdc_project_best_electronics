@@ -1,16 +1,17 @@
 package com.best.electronics.email;
 
-import org.junit.Before;
-import org.junit.Test;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class GenerateRandomNumberTest {
-    GenerateRandomNumber generateRandomNumber;
+    static GenerateRandomNumber generateRandomNumber;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         generateRandomNumber = new GenerateRandomNumber();
     }
 

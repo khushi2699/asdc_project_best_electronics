@@ -18,14 +18,13 @@ import static org.mockito.Mockito.*;
 
 
 
-
-    public class SendOrderStatusEmailTest {
+public class SendOrderStatusEmailTest {
         public static final String EMAIL_ADDRESS = "test@gmail.com";
 
         @Test
         public void SendEmailSuccess() {
-            HashMap<String, Object> messageDetails = new HashMap<String, Object>();
-            ArrayList<Product> products = new ArrayList<Product>();
+            HashMap<String, Object> messageDetails = new HashMap<>();
+            ArrayList<Product> products = new ArrayList<>();
             Product product = new Product();
             product.setProductQuantity(100);
             product.setProductName("Keyboard");
@@ -55,8 +54,8 @@ import static org.mockito.Mockito.*;
 
         @Test
         public void SendEmailFail() {
-            HashMap<String, Object> messageDetails = new HashMap<String, Object>();
-            ArrayList<Product> products = new ArrayList<Product>();
+            HashMap<String, Object> messageDetails = new HashMap<>();
+            ArrayList<Product> products = new ArrayList<>();
             Product product = new Product();
             product.setProductQuantity(100);
             product.setProductName("Keyboard");
@@ -86,8 +85,8 @@ import static org.mockito.Mockito.*;
         @Test
         public void checkSendEmailSuccess(){
 
-            HashMap<String, Object> messageDetails = new HashMap<String, Object>();
-            ArrayList<Product> products = new ArrayList<Product>();
+            HashMap<String, Object> messageDetails = new HashMap<>();
+            ArrayList<Product> products = new ArrayList<>();
             Product product = new Product();
             product.setProductQuantity(100);
             product.setProductName("Keyboard");
@@ -117,8 +116,8 @@ import static org.mockito.Mockito.*;
         @Test
         public void checkSendEmailFailure() {
 
-            HashMap<String, Object> messageDetails = new HashMap<String, Object>();
-            ArrayList<Product> products = new ArrayList<Product>();
+            HashMap<String, Object> messageDetails = new HashMap<>();
+            ArrayList<Product> products = new ArrayList<>();
             Product product = new Product();
             product.setProductQuantity(100);
             product.setProductName("Keyboard");

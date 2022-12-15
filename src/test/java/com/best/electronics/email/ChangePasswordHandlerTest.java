@@ -1,18 +1,19 @@
 package com.best.electronics.email;
 
 import com.best.electronics.forgotPassword.*;
-import org.junit.Before;
-import org.junit.Test;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ChangePasswordHandlerTest {
 
-    ChangePasswordHandler changePasswordHandler;
+    static ChangePasswordHandler changePasswordHandler;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         changePasswordHandler = new ChangePasswordHandler();
     }
 
