@@ -1,7 +1,6 @@
 package com.best.electronics.repository;
 
 import com.best.electronics.database.IDatabasePersistence;
-import com.best.electronics.model.Order;
 import com.best.electronics.model.Product;
 import com.best.electronics.model.ProductCategory;
 
@@ -81,7 +80,6 @@ public class ProductRepository {
             updatedDetails.add(product.getProductDescription());
             updatedDetails.add(product.getProductPrice());
             updatedDetails.add(product.getProductQuantity());
-            System.out.println("updatedDetails"+updatedDetails);
             if(databasePersistence.saveData("{call create_product(?, ?, ?, ?, ?, ?, ?)}", updatedDetails)){
                 return "Product Created Successfully";
             }
@@ -96,7 +94,6 @@ public class ProductRepository {
             ArrayList<Object> updatedDetails = new ArrayList<>();
             updatedDetails.add(productCategory.getProductCategoryName());
             updatedDetails.add(productCategory.getProductCategoryDescription());
-            System.out.println("updatedDetails"+updatedDetails);
             if(databasePersistence.saveData("{call create_category( ?, ?)}", updatedDetails)){
                 return "Product category Created Successfully";
             }

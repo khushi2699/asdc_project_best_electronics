@@ -29,7 +29,7 @@ public class SendOrderStatusEmail implements ISendStatusEmail{
         }
     }
 
-    private void draftEmail(MimeMessage mimeMessage, String toEmail, HashMap<String, Object> messageDetails) throws MessagingException {
+    public void draftEmail(MimeMessage mimeMessage, String toEmail, HashMap<String, Object> messageDetails) throws MessagingException {
         String emailSubject = "Order Status - "+ messageDetails.get("orderStatus");
         mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
         mimeMessage.setSubject(emailSubject);

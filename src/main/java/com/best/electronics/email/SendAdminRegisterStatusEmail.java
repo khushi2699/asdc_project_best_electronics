@@ -40,7 +40,7 @@ public class SendAdminRegisterStatusEmail implements ISendStatusEmail{
                 "emailAddress: " + emailAddress+ "\n" + "\n" +
                 "Temporary Password: " +  messageDetails.get("password") + "\n" + "\n\n" +
                 "**** Kindly immediately change your password using below link:" + "\n\t" + "\n" +
-                "Go to below link to change your password: http://localhost:8080/admin/resetPassword");
+                "Go to below link to change your password: http://localhost:8080/admin/forgotPassword");
         multipart.addBodyPart(messageBodyPart);
         mimeMessage.setContent(multipart);
     }
