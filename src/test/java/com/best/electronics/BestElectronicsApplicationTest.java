@@ -10,7 +10,6 @@ class BestElectronicsApplicationTest {
 
 	@Test
 	void contextLoads() {
-
 	}
 
 	@Test

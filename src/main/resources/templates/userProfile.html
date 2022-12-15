@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark py-3">
+    <span class="navbar-brand mb-0 h2" style="font-size: 30px">Best Electronics</span>
+    <div class="navbar-nav w-100">
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/user/home">Home</a>
+        </div>
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/wishList">WishList</a>
+        </div>
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/cart">Cart</a>
+        </div>
+        <div class="ml-auto">
+            <a class="nav-link nav-link active" href="/user/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container p-2 text-center">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card" style="width: auto; height: 100px; display: table; margin: auto;">
+                <div class="card-body">
+                    <h5>User Profile</h5>
+                    <p><a href="/user/editProfile">Edit</a></p>
+                    <table class="table table-dark">
+                        <tbody>
+                        <tr>
+                            <th scope="row">First Name</th>
+                            <td data-th-text="${firstName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Last Name</th>
+                            <td data-th-text="${lastName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date of Birth</th>
+                            <td data-th-text="${dateOfBirth}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td data-th-text="${email}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Address</th>
+                            <td data-th-text="${address}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(orders)}">
+                <h5 style="color: red;">No orders are placed yet!</h5>
+            </div>
+
+            <div th:if="${not #lists.isEmpty(orders)}">
+                <h1>List of Orders</h1>
+                <div class="card" style="width: auto; height: 100px; display: table; margin: auto;"
+                     th:each="order:${orders}">
+                    <div class="card-body">
+                        <table class="table table-dark">
+                            <thead>
+                            <tr>
+                                <th scope="col">Order Id</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Order Amount</th>
+                                <th scope="col">Payment Method</th>
+                                <th scope="col">Order Status</th>
+                                <th scope="col">Address</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td data-th-text="${order.orderId}"></td>
+                                <td data-th-text="${order.orderDate}"></td>
+                                <td data-th-text="${order.orderAmount}"></td>
+                                <td data-th-text="${order.paymentMethod}"></td>
+                                <td data-th-text="${order.orderStatus}"></td>
+                                <td data-th-text="${order.address}"></td>
+                                <table class="table table-light">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Product Code</th>
+                                        <th scope="col">Product Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Product Price</th>
+                                        <th scope="col">Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product:${order.products}">
+                                        <td data-th-text="${product.productCode}"></td>
+                                        <td data-th-text="${product.productName}"></td>
+                                        <td data-th-text="${product.productQuantity}"></td>
+                                        <td data-th-text="${product.productPrice}"></td>
+                                        <td data-th-text="${product.productSubtotal}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
