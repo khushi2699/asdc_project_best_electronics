@@ -29,9 +29,9 @@ public class DatabaseConnection {
         basicDataSource.setUrl(dbProperties.getUrl());
         basicDataSource.setUsername(dbProperties.getUsername());
         basicDataSource.setPassword(dbProperties.getPassword());
-        basicDataSource.setMinIdle(dbProperties.getMinIdle());
-        basicDataSource.setMaxIdle(dbProperties.getMaxIdle());
-        basicDataSource.setMaxOpenPreparedStatements(dbProperties.getMaxOpenPreparedStatements());
+        basicDataSource.setMinIdle(5);
+        basicDataSource.setMaxIdle(10);
+        basicDataSource.setMaxOpenPreparedStatements(100);
     }
 
     public Connection getDBConnection() throws SQLException {

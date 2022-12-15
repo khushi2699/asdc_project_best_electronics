@@ -132,7 +132,6 @@ public class AdminController {
             return "adminLogin";
         }else{
             AdminProperties adminProperties = new AdminProperties();
-            System.out.println("Adminnnnn id: " + oldSession.getAttribute("id"));
             if(oldSession.getAttribute("id").equals(adminProperties.getId())){
                 model.addAttribute("isSuperAdmin", true);
             }

@@ -20,9 +20,6 @@ public class PropertiesLoaderTest {
         properties.add("app.database.url");
         properties.add("app.database.username");
         properties.add("app.database.password");
-        properties.add("app.database.minIdle");
-        properties.add("app.database.maxIdle");
-        properties.add("app.database.maxOpenPreparedStatements");
         properties.add("app.report.excel.sheet");
         properties.add("app.email.mail.smtp.port");
         properties.add("app.email.mail.smtp.auth");

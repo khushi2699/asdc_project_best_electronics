@@ -19,7 +19,6 @@ public class GetTotalOfProduct {
         double totalsum = 0;
         for (Map<String, Object> stringObjectMap : cartListResult) {
             int quantity = (int) stringObjectMap.get("quantity");
-            System.out.println("Quantity " + quantity);
             double productPrice = (double) stringObjectMap.get("productPrice");
             double productsum = quantity * productPrice;
             totalsum = totalsum + productsum;
