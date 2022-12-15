@@ -1,17 +1,17 @@
 package com.best.electronics.forgotPassword;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class GenericPasswordTest {
 
-    GenericPassword genericPassword;
+    static GenericPassword genericPassword;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         genericPassword = new GenericPassword();
     }
 
