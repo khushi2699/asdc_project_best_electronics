@@ -1,8 +1,8 @@
 package com.best.electronics.cartandwishlist;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.Map;
 @SpringBootTest
 public class GetTotalofProductsTest {
 
-    GetTotalOfProduct getTotalOfProduct;
+    static GetTotalOfProduct getTotalOfProduct;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         getTotalOfProduct = new GetTotalOfProduct();
     }
 

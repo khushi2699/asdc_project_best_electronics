@@ -1,9 +1,8 @@
 package com.best.electronics.email;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.mail.MessagingException;
@@ -11,10 +10,10 @@ import javax.mail.MessagingException;
 @SpringBootTest
 public class SendMailForForgotPasswordTest {
 
-    SendMailForForgotPassword sendMailForForgotPassword;
+    static SendMailForForgotPassword sendMailForForgotPassword;
 
-    @Before
-    public void init(){
+    @BeforeAll
+    public static void init(){
         sendMailForForgotPassword = new SendMailForForgotPassword();
     }
 
