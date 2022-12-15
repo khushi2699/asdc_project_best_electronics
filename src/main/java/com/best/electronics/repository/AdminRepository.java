@@ -111,7 +111,6 @@ public class AdminRepository {
         ArrayList<Map<String, Object>> orders = new ArrayList<>();
         try {
             orders = databasePersistence.loadData("{call get_all_order_details()}", new ArrayList<>());
-            System.out.println("Order Details: " + orders);
             return orders;
         } catch (Exception ex) {
             return orders;

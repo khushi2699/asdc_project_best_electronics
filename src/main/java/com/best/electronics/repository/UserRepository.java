@@ -37,7 +37,6 @@ public class UserRepository {
                 orderIdList.add(order.get("orderId"));
                 ArrayList<Map<String, Object>> orderItems = databasePersistence.loadData("{call get_ordered_product_details(?)}", orderIdList);
                 ArrayList<Product> product = new ArrayList<>();
-                System.out.println(orderItems);
                 for (Map<String, Object> orderItem : orderItems) {
                     Product p = new Product();
                     p.setProductPrice((Double) orderItem.get("productPrice"));
