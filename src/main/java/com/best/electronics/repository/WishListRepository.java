@@ -24,9 +24,7 @@ public class WishListRepository {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(wishListItem.getWishListItemIdNumber());
         try {
-            if (databasePersistence.saveData("{call delete_item_from_wishlist(?)}", tokenDetails)) {
-                System.out.println("Done");
-            }
+            databasePersistence.saveData("{call delete_item_from_wishlist(?)}", tokenDetails);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -36,11 +34,8 @@ public class WishListRepository {
         ArrayList<Object> tokenDetails = new ArrayList<>();
         tokenDetails.add(wishListItem.getUserId());
         tokenDetails.add(wishListItem.getWishListItemId());
-
         try {
-            if (databasePersistence.saveData("{call save_product_to_wishlist(?,?)}", tokenDetails)) {
-                System.out.println("Done");
-            }
+            databasePersistence.saveData("{call save_product_to_wishlist(?,?)}", tokenDetails);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

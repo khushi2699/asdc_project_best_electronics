@@ -24,9 +24,7 @@ public class OrderRepository {
             double productPrice = (double) stringObjectMap.get("productPrice");
             tokenDetails.add(quantity * productPrice);
             try {
-                if (databasePersistence.saveData("{call saveOrderItem(?,?,?,?,?)}", tokenDetails)) {
-                    System.out.println("Done");
-                }
+                databasePersistence.saveData("{call saveOrderItem(?,?,?,?,?)}", tokenDetails);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -43,9 +41,7 @@ public class OrderRepository {
         tokenDetails.add(order.getAddress());
         tokenDetails.add(order.getOrderDate());
         try {
-            if (databasePersistence.saveData("{call save_to_order_details(?,?,?,?,?,?)}", tokenDetails)) {
-                System.out.println("Done");
-            }
+            databasePersistence.saveData("{call save_to_order_details(?,?,?,?,?,?)}", tokenDetails);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
